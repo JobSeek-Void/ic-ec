@@ -7,7 +7,8 @@ plugins {
 android {
     namespace = "team.jsv.data"
     compileSdk = Apps.compileSdk
-    /*defaultConfig {
+    /* TODO(ham2174) : 추후 서버 통신시 BASE URL 작성
+    defaultConfig {
         buildConfigFiled("String", "API_URL", "서버 통신 URL 예정")
     }*/
 }

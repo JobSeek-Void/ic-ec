@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "team.jsv.icec"
+    namespace = "team.jsv.presentation"
     compileSdk = Apps.compileSdk
 
     compileOptions {
