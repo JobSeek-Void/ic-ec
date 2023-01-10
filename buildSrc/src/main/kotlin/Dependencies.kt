@@ -31,6 +31,9 @@ object Dependencies {
 
     val CameraX = listOf(
         "androidx.camera:camera-core:${Versions.Jetpack.CameraX}",
+        "androidx.camera:camera-view:${Versions.Jetpack.CameraX}",
+        "androidx.camera:camera-camera2:${Versions.Jetpack.CameraX}",
+        "androidx.camera:camera-lifecycle:${Versions.Jetpack.CameraX}",
     )
 
     val UI = listOf(
