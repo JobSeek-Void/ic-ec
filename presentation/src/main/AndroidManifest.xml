@@ -3,7 +3,8 @@
 
     <application>
         <activity
-            android:name=".MainActivity"
+            android:name="team.jsv.icec.MainActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
