@@ -1,7 +1,6 @@
 package team.jsv.icec
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import team.jsv.presentation.databinding.ActivityMainBinding
 
