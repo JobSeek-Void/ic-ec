@@ -9,67 +9,72 @@
         android:id="@+id/logo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="151dp"
-        android:layout_marginLeft="161dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="161dp"
-        android:layout_marginRight="161dp"
+        app:layout_constraintBottom_toTopOf="@+id/camera_preview"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_wip" />
 
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/ratioButton"
+    <ImageButton
+        android:id="@+id/ratio_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="86dp"
         android:layout_marginRight="12dp"
+        android:background="#FFFFFFFF"
+        android:stateListAnimator="@null"
+        app:layout_constraintBottom_toTopOf="@+id/camera_preview"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ratiobutton" />
 
-    <ImageView
-        android:id="@+id/cameraPreView"
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/camera_preview"
         android:layout_width="match_parent"
         android:layout_height="440dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="48dp"
         android:background="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        tools:layout_editor_absoluteX="-16dp" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_launcher_foreground" >
 
-    <Button
-        android:id="@+id/galleryButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="62dp"
-        android:background="@drawable/shape_circle_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
+    </androidx.camera.view.PreviewView>
 
-    <Button
-        android:id="@+id/captureButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="62dp"
-        android:background="@drawable/shape_circle_capture_button"
-        app:layout_constraintEnd_toStartOf="@+id/reverseButton"
-        app:layout_constraintStart_toEndOf="@+id/galleryButton"
-        app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
-
-    <ImageButton
-        android:id="@+id/reverseButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginRight="40dp"
-        android:src="@drawable/reversevector"
-        android:background="@drawable/shape_circle_reverse_button"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/gallery_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="65dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_circle_button"
+            android:stateListAnimator="@null" />
+
+        <Button
+            android:id="@+id/capture_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="65dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_circle_capture_button"
+            android:stateListAnimator="@null" />
+
+        <ImageButton
+            android:id="@+id/reverse_button"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:background="@drawable/shape_circle_reverse_button"
+            android:src="@drawable/reversevector"
+            android:stateListAnimator="@null" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,7 +19,6 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
         viewBinding = true
     }
 }
@@ -34,5 +33,6 @@ dependencies {
     Dependencies.Ktx.forEach(::implementation)
     Dependencies.CameraX.forEach(::implementation)
     Dependencies.UI.forEach(::implementation)
-
+    Dependencies.JitPack.forEach(::implementation)
+    Dependencies.Glide.forEach(::implementation)
 }
