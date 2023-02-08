@@ -64,10 +64,13 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         getLastImageFromGallery()
         startCameraWithPermission()
-        initClickListener()
         settingQuickAction()
     }
 
+    override fun onResume() {
+        super.onResume()
+        initClickListener()
+    }
 
     private fun initClickListener() {
         viewBinding.ratioButton.setOnClickListener { view ->
