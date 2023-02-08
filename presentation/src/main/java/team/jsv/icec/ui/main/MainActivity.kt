@@ -1,11 +1,10 @@
 @file:SuppressLint("ResourceType")
+
 package team.jsv.icec
 
 import android.Manifest
-import android.R
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Color
@@ -13,7 +12,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.provider.MediaStore.Images.Media.getBitmap
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -30,14 +28,25 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import me.piruin.quickaction.ActionItem
 import me.piruin.quickaction.QuickAction
+import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMainBinding
-import java.io.FileNotFoundException
-import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
+/*
+* 함수화
+* 1. 재사용 목적
+* 2. 가독성 목적, 분리를 위함
+* DRY 원칙, Don't Repeat Yourself 절대 반복하지마라
+* */
+
+enum class Ratio(val id: Int) {
+    OneOnOne(1),
+    FourOnThree(2),
+    SixteenOnNine(3)
+}
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class MainActivity : AppCompatActivity() {
@@ -46,9 +55,6 @@ class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
-    private val ID_UP = 1
-    private val ID_DOWN = 2
-
     private var quickAction: QuickAction? = null
 
 
@@ -56,14 +62,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+        getLastImageFromGallery()
+        startCameraWithPermission()
+        initClickListener()
+        settingQuickAction()
+    }
 
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            ActivityCompat.requestPermissions (
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
+
+    private fun initClickListener() {
+        viewBinding.ratioButton.setOnClickListener { view ->
+            quickAction!!.show(view)
         }
-        //init()
 
         viewBinding.captureButton.setOnClickListener {
             // 사진 찍기 버튼
@@ -82,15 +91,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         viewBinding.galleryButton.setOnClickListener {
-            getLastImageFromGallery()
-        }
 
-        //기본 색상 구성
+        }
+    }
+
+    private fun settingQuickAction() {
         QuickAction.setDefaultColor(Color.GRAY)
         QuickAction.setDefaultTextColor(Color.BLACK)
 
-        val nextItem = ActionItem(ID_DOWN, "Next", R.drawable.arrow_down_float)
-        val prevItem = ActionItem(ID_UP, "Prev", R.drawable.arrow_up_float)
+        val nextItem = ActionItem(Ratio.OneOnOne.id, "Next", R.drawable.ratiobutton)
+        val prevItem = ActionItem(Ratio.FourOnThree.id, "Prev", R.drawable.logo_wip)
 
         //setSticky(true)를 사용하여 항목을 클릭한 후 QuickAction 대화 상자가 닫히지 않도록 합니다.
         prevItem.isSticky = true
@@ -99,7 +109,7 @@ class MainActivity : AppCompatActivity() {
         // 가로 세로 정하기
         quickAction = QuickAction(this, QuickAction.HORIZONTAL)
 
-        quickAction!!.setColorRes(R.color.holo_purple)
+        quickAction!!.setColorRes(R.color.MainColor)
         quickAction!!.setTextColorRes(R.color.white)
 
         quickAction!!.addActionItem(nextItem, prevItem)
@@ -120,44 +130,9 @@ class MainActivity : AppCompatActivity() {
             if (!item.isSticky) quickAction!!.remove(item)
         }
 
-        val sendIntent = Intent()
-        sendIntent.action = Intent.ACTION_SEND
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "This is my text to send.")
-        sendIntent.type = "text/plain"
-
-        viewBinding.ratioButton.setOnClickListener { view ->
-            quickAction!!.show(view)
-        }
-
-        cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
-
-    fun init() {
-        viewBinding.ratioButton.setOnClickListener {
-            // 비율 옵션 버튼
-        }
-
-        viewBinding.galleryButton.setOnClickListener {
-            // 갤러리 버튼
-        }
-
-        viewBinding.captureButton.setOnClickListener {
-            // 사진 찍기 버튼
-            takePhoto()
-        }
-
-        viewBinding.reverseButton.setOnClickListener {
-            // 좌우 반전 버튼
-            if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
-                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-            } else {
-                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-            }
-        }
-    }
-
-    private fun getLastImageFromGallery(){
+    private fun getLastImageFromGallery() {
         val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
         val projection = arrayOf(
@@ -166,7 +141,8 @@ class MainActivity : AppCompatActivity() {
             MediaStore.Images.ImageColumns.DATE_ADDED,
             MediaStore.Images.ImageColumns.MIME_TYPE
         )
-        val cursor: Cursor = this.contentResolver.query(uriExternal, projection, null,
+        val cursor: Cursor = this.contentResolver.query(
+            uriExternal, projection, null,
             null, MediaStore.Images.ImageColumns.DATE_ADDED + " DESC"
         )!!
 
@@ -187,7 +163,6 @@ class MainActivity : AppCompatActivity() {
 
             Glide.with(this)
                 .load(imageURI)
-                .transform(CenterCrop(), RoundedCorners(90))
                 .into(viewBinding.galleryButton)
         }
         cursor.close()
@@ -195,7 +170,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
         ContextCompat.checkSelfPermission(
-            baseContext, it) == PackageManager.PERMISSION_GRANTED
+            baseContext, it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun startCamera() {
@@ -216,11 +192,23 @@ class MainActivity : AppCompatActivity() {
                 cameraProvider.unbindAll()
 
                 cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageCapture)
+                    this, cameraSelector, preview, imageCapture
+                )
             } catch (e: Exception) {
                 Log.e("cameraError", "Use case binding failed ", e)
             }
         }, ContextCompat.getMainExecutor(this))
+        cameraExecutor = Executors.newSingleThreadExecutor()
+    }
+
+    private fun startCameraWithPermission() {
+        if (allPermissionsGranted()) {
+            startCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
+        }
     }
 
     private fun takePhoto() {
@@ -238,9 +226,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         val outputOptions = ImageCapture.OutputFileOptions
-            .Builder(contentResolver,
+            .Builder(
+                contentResolver,
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues)
+                contentValues
+            )
             .build()
 
         imageCapture.takePicture(
@@ -251,10 +241,9 @@ class MainActivity : AppCompatActivity() {
                     Log.e("captureError", "Photo capture failed: ${exc.message}", exc)
                 }
 
-                override fun
-                        onImageSaved(output: ImageCapture.OutputFileResults){
+                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
                     val msg = "Photo capture succeeded: ${output.savedUri}"
-                    Toast.makeText(baseContext, msg, Toast.LENGTH_SHORT).show()
+                    getLastImageFromGallery()
                 }
             }
         )
@@ -263,7 +252,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private val REQUIRED_PERMISSIONS =
-            mutableListOf (
+            mutableListOf(
                 Manifest.permission.CAMERA
             ).apply {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
