@@ -16,7 +16,7 @@ abstract class BaseFragment<T : ViewDataBinding>(
     @LayoutRes val layoutRes: Int,
 ) : Fragment() {
     private lateinit var _binding: T
-    val binding: T get() = _binding
+    protected val binding: T get() = _binding
 
     protected val navController: NavController get() = NavHostFragment.findNavController(this)
 
@@ -48,5 +48,6 @@ abstract class BaseFragment<T : ViewDataBinding>(
 
     override fun onDestroyView() {
         super.onDestroyView()
+        binding.unbind()
     }
 }
