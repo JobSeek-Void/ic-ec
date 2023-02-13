@@ -15,8 +15,8 @@ import androidx.navigation.fragment.NavHostFragment
 abstract class BaseFragment<T : ViewDataBinding>(
     @LayoutRes val layoutRes: Int,
 ) : Fragment() {
-    private lateinit var _binding: T
-    protected val binding: T get() = _binding
+    private var _binding: T? = null
+    protected val binding: T get() = _binding!!
 
     protected val navController: NavController get() = NavHostFragment.findNavController(this)
 
@@ -42,12 +42,11 @@ abstract class BaseFragment<T : ViewDataBinding>(
     fun popBackStack() {
         navController.popBackStack()
     }
-
-    //view 초기화
+    
     abstract fun initView()
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding.unbind()
+        _binding = null
     }
 }
