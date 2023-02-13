@@ -8,13 +8,17 @@ import androidx.annotation.LayoutRes
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-
+import androidx.navigation.NavController
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.NavHostFragment
 
 abstract class BaseFragment<T : ViewDataBinding>(
     @LayoutRes val layoutRes: Int,
 ) : Fragment() {
     private lateinit var _binding: T
     val binding: T get() = _binding
+
+    protected val navController: NavController get() = NavHostFragment.findNavController(this)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -31,7 +35,18 @@ abstract class BaseFragment<T : ViewDataBinding>(
         initView()
     }
 
+    fun navigate(direction: NavDirections) {
+        navController.navigate(direction)
+    }
+
+    fun popBackStack() {
+        navController.popBackStack()
+    }
+
     //view 초기화
     abstract fun initView()
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+    }
 }
