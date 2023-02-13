@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             android:id="@+id/nav_graph"
+    app:startDestination="@id/selectMosaicEditFragment">
+
+    <fragment
+        android:id="@+id/selectMosaicEditFragment"
+        android:name="team.jsv.icec.ui.fragment.SelectMosaicEditFragment"
+        android:label="SelectMosaicEditFragment" >
+        <action
+            android:id="@+id/action_selectMosaicEditFragment_to_faceSelectFragment"
+            app:destination="@id/faceSelectFragment" />
+        <action
+            android:id="@+id/action_selectMosaicEditFragment_to_photoEditFragment"
+            app:destination="@id/photoEditFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/faceSelectFragment"
+        android:name="team.jsv.icec.ui.fragment.mosaic.SelectFaceFragment"
+        android:label="FaceSelectFragment" />
+
+    <fragment
+        android:id="@+id/photoEditFragment"
+        android:name="team.jsv.icec.ui.fragment.edit.PhotoEditFragment"
+        android:label="PhotoEditFragment" />
+
+</navigation>
