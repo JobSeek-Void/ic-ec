@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ICEC</string>
+    <string name="edit_text">편집</string>
+    <string name="mosaic_text">모자이크</string>
 </resources>
