@@ -1,75 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="151dp"
-        android:layout_marginLeft="161dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="161dp"
-        android:layout_marginRight="161dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/logo_wip" />
-
-    <androidx.appcompat.widget.AppCompatImageButton
-        android:id="@+id/ratioButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="86dp"
-        android:layout_marginRight="12dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ratiobutton" />
-
-    <ImageView
-        android:id="@+id/cameraPreView"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="440dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/logo"
-        app:srcCompat="@drawable/ic_launcher_foreground"
-        tools:layout_editor_absoluteX="-16dp" />
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/galleryButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="38dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="62dp"
-        android:background="@drawable/shape_circle_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="151dp"
+            android:layout_marginLeft="161dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="161dp"
+            android:layout_marginRight="161dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/logo_wip" />
 
-    <Button
-        android:id="@+id/captureButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="62dp"
-        android:background="@drawable/shape_circle_capture_button"
-        app:layout_constraintEnd_toStartOf="@+id/reverseButton"
-        app:layout_constraintStart_toEndOf="@+id/galleryButton"
-        app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/ratioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="86dp"
+            android:layout_marginRight="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ratiobutton" />
 
-    <ImageButton
-        android:id="@+id/reverseButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginTop="62dp"
-        android:layout_marginEnd="46dp"
-        android:layout_marginRight="40dp"
-        android:src="@drawable/reversevector"
-        android:background="@drawable/shape_circle_reverse_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageView
+            android:id="@+id/cameraPreView"
+            android:layout_width="match_parent"
+            android:layout_height="440dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/black"
+            app:layout_constraintTop_toBottomOf="@+id/logo"
+            app:srcCompat="@drawable/ic_launcher_foreground"
+            tools:layout_editor_absoluteX="-16dp" />
+
+        <Button
+            android:id="@+id/galleryButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="38dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="62dp"
+            android:background="@drawable/shape_circle_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
+
+        <Button
+            android:id="@+id/captureButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="62dp"
+            android:background="@drawable/shape_circle_capture_button"
+            app:layout_constraintEnd_toStartOf="@+id/reverseButton"
+            app:layout_constraintStart_toEndOf="@+id/galleryButton"
+            app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
+
+        <ImageButton
+            android:id="@+id/reverseButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="62dp"
+            android:layout_marginEnd="46dp"
+            android:layout_marginRight="40dp"
+            android:background="@drawable/shape_circle_reverse_button"
+            android:src="@drawable/reversevector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cameraPreView" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

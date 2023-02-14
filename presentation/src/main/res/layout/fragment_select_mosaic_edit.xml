@@ -1,45 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<layout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/mosaic_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:outlineProvider="none"
-        android:text="@string/mosaic_text"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:backgroundTint="@color/MainColor"
-        app:cornerRadius="10dp"
-        app:icon="@drawable/mosaic_icon"
-        app:iconGravity="start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/edit_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UnusedAttribute" />
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/edit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:outlineProvider="none"
-        android:text="@string/edit_text"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:backgroundTint="@color/MainColor"
-        app:cornerRadius="10dp"
-        app:icon="@drawable/edit_icon"
-        app:iconGravity="start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mosaic_button"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="UnusedAttribute" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mosaic_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:outlineProvider="none"
+            android:text="@string/mosaic_text"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:backgroundTint="@color/MainColor"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/mosaic_icon"
+            app:iconGravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/edit_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnusedAttribute" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/edit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:outlineProvider="none"
+            android:text="@string/edit_text"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            app:backgroundTint="@color/MainColor"
+            app:cornerRadius="10dp"
+            app:icon="@drawable/edit_icon"
+            app:iconGravity="start"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/mosaic_button"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnusedAttribute" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
