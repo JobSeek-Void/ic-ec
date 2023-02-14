@@ -4,7 +4,7 @@
     <application android:theme="@style/ICECLightTheme">
 
         <activity
-            android:name="team.jsv.icec.MainActivity"
+            android:name="team.jsv.icec.ui.main.MainActivity"
             android:exported="true">
         </activity>
 
