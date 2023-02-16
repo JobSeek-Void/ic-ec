@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.library")
     id("kotlin-android")
@@ -7,10 +9,11 @@ plugins {
 android {
     namespace = "team.jsv.data"
     compileSdk = Apps.compileSdk
-    /* TODO(ham2174) : 추후 서버 통신시 BASE URL 작성
+
     defaultConfig {
-        buildConfigFiled("String", "API_URL", "서버 통신 URL 예정")
-    }*/
+        buildConfigField("String", "API_URL",
+            gradleLocalProperties(rootDir).getProperty("server.key"))
+    }
 }
 
 dependencies {
@@ -22,6 +25,4 @@ dependencies {
     Dependencies.Essential.forEach(::implementation)
     Dependencies.Network.forEach(::implementation)
     Dependencies.Test.forEach(::testImplementation)
-
-
 }
