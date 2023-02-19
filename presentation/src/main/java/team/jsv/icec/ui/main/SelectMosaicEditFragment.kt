@@ -16,6 +16,10 @@ class SelectMosaicEditFragment :
     override fun onResume() {
         super.onResume()
 
+        initView()
+    }
+
+    override fun initView() {
         binding.mosaicButton.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_faceSelectFragment)
             viewModel.originalImage.value?.let { it1 -> viewModel.getFaceList(it1) }
@@ -25,7 +29,4 @@ class SelectMosaicEditFragment :
             navController.navigate(R.id.action_selectMosaicEditFragment_to_photoEditFragment)
         }
     }
-
-
-    override fun initView() {}
 }
