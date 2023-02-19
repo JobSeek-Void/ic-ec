@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">ICEC</string>
+
+    <!-- fragment_select_mosaic_edit.xml -->
     <string name="edit_text">편집</string>
     <string name="mosaic_text">모자이크</string>
+
+    <!-- MainActivity.kt -->
+    <string name="accept_permission">%s 권한을 허용하였습니다.</string>
+    <string name="reject_permission">%s 권한을 거부하였습니다.</string>
 </resources>
