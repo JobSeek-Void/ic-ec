@@ -24,8 +24,9 @@ class MosaicViewModel @Inject constructor(
     private val _originalImage = MutableLiveData<File>()
     val originalImage: LiveData<File> get() = _originalImage
 
-    private val currentTime = SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
-        .format(System.currentTimeMillis())
+    private val currentTime: String
+        get() = SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
+            .format(System.currentTimeMillis())
 
     fun setImage(data: File) {
         _originalImage.value = data
@@ -35,7 +36,7 @@ class MosaicViewModel @Inject constructor(
         image: File
     ) = viewModelScope.launch {
         getFaceListUseCase(
-            currentTime = currentTime.toString(),
+            currentTime = currentTime,
             image = image
         ).onSuccess {
             _faces.postValue(it.toList())
