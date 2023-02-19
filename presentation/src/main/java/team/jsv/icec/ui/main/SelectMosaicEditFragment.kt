@@ -20,12 +20,12 @@ class SelectMosaicEditFragment :
     }
 
     override fun initView() {
-        binding.mosaicButton.setOnClickListener {
+        binding.buttonMosaic.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_faceSelectFragment)
             viewModel.originalImage.value?.let { it1 -> viewModel.getFaceList(it1) }
         }
 
-        binding.editButton.setOnClickListener {
+        binding.buttonEdit.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_photoEditFragment)
         }
     }
