@@ -5,17 +5,17 @@ package team.jsv.icec
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -24,28 +24,16 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.resource.bitmap.CenterCrop
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import me.piruin.quickaction.ActionItem
-import me.piruin.quickaction.QuickAction
-import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMainBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-/*
-* 함수화
-* 1. 재사용 목적
-* 2. 가독성 목적, 분리를 위함
-* DRY 원칙, Don't Repeat Yourself 절대 반복하지마라
-* */
-
-enum class Ratio(val id: Int) {
+enum class RatioId(val id: Int) {
     OneOnOne(1),
     FourOnThree(2),
-    SixteenOnNine(3)
+    NineOnSixteen(3)
 }
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -55,34 +43,47 @@ class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
-    private var quickAction: QuickAction? = null
-
+    //    private var quickAction: QuickAction? = null
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        getLastImageFromGallery()
         startCameraWithPermission()
-        settingQuickAction()
+        getLastImageFromGallery()
+        //settingQuickAction()
     }
 
     override fun onResume() {
         super.onResume()
         initClickListener()
+        resizeCameraView(RatioId.FourOnThree.id)
     }
 
     private fun initClickListener() {
-        viewBinding.ratioButton.setOnClickListener { view ->
-            quickAction!!.show(view)
+        viewBinding.imageviewOneOnOne.setOnClickListener {
+            resizeCameraView(RatioId.OneOnOne.id)
         }
 
-        viewBinding.captureButton.setOnClickListener {
+        viewBinding.imageviewThreeOnFour.setOnClickListener {
+            resizeCameraView(RatioId.FourOnThree.id)
+        }
+
+        viewBinding.imageviewNineOnSixteen.setOnClickListener {
+            resizeCameraView(RatioId.NineOnSixteen.id)
+        }
+
+//        viewBinding.ratioButton.setOnClickListener { view ->
+//            quickAction!!.show(view)
+//        }
+
+        viewBinding.buttonCapture.setOnClickListener {
             // 사진 찍기 버튼
             takePhoto()
         }
 
-        viewBinding.reverseButton.setOnClickListener {
+        viewBinding.buttonReverse.setOnClickListener {
             // 좌우 반전 버튼
             if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
                 cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
@@ -93,46 +94,73 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewBinding.galleryButton.setOnClickListener {
-
+        viewBinding.imageviewGallery.setOnClickListener {
+            openGallery()
         }
     }
 
-    private fun settingQuickAction() {
-        QuickAction.setDefaultColor(Color.GRAY)
-        QuickAction.setDefaultTextColor(Color.BLACK)
+//    private fun settingQuickAction() {
+//        QuickAction.setDefaultColor(Color.GRAY)
+//        QuickAction.setDefaultTextColor(Color.BLACK)
+//
+//        val oneOnOneItem = ActionItem(Ratio.OneOnOne.id, "", R.drawable.one_on_one)
+//        val fourOnThreeItem = ActionItem(Ratio.FourOnThree.id, "", R.drawable.four_on_three)
+//        val nineOnSixteenItem = ActionItem(Ratio.NineOnSixteen.id, "", R.drawable.nine_on_sixteen)
+//
+//        //setSticky(true)를 사용하여 항목을 클릭한 후 QuickAction 대화 상자가 닫히지 않도록 합니다.
+//        oneOnOneItem.isSticky = true
+//        fourOnThreeItem.isSticky = true
+//        nineOnSixteenItem.isSticky = true
+//
+//        // 가로 세로 정하기
+//        quickAction = QuickAction(this, QuickAction.HORIZONTAL)
+//
+//        quickAction!!.setColorRes(R.color.MainColor)
+//        quickAction!!.setTextColorRes(R.color.white)
+//
+//        quickAction!!.addActionItem(oneOnOneItem, fourOnThreeItem, nineOnSixteenItem)
+//
+//
+//        quickAction!!.setOnActionItemClickListener { item -> //here we can filter which action item was clicked with pos or actionId parameter
+//            val id = item.actionId
+//
+//            when(id) {
+//                Ratio.OneOnOne.id -> {
+//                    resizeCameraView(Ratio.OneOnOne.id)
+//                }
+//                Ratio.FourOnThree.id -> {
+//                    resizeCameraView(Ratio.FourOnThree.id)
+//                }
+//                Ratio.NineOnSixteen.id -> {
+//                    resizeCameraView(Ratio.NineOnSixteen.id)
+//                }
+//            }
+//
+//            if (!item.isSticky) quickAction!!.remove(item)
+//        }
+//    }
 
-        val nextItem = ActionItem(Ratio.OneOnOne.id, "Next", R.drawable.ratiobutton)
-        val prevItem = ActionItem(Ratio.FourOnThree.id, "Prev", R.drawable.logo_wip)
+    private fun resizeCameraView(id: Int) {
+        val display = viewBinding.root.resources?.displayMetrics
+        val deviceWidth = display?.widthPixels
 
-        //setSticky(true)를 사용하여 항목을 클릭한 후 QuickAction 대화 상자가 닫히지 않도록 합니다.
-        prevItem.isSticky = true
-        nextItem.isSticky = true
+        val layoutParams = viewBinding.cameraPreview.layoutParams
 
-        // 가로 세로 정하기
-        quickAction = QuickAction(this, QuickAction.HORIZONTAL)
-
-        quickAction!!.setColorRes(R.color.MainColor)
-        quickAction!!.setTextColorRes(R.color.white)
-
-        quickAction!!.addActionItem(nextItem, prevItem)
-
-        quickAction!!.setOnActionItemClickListener { item -> //here we can filter which action item was clicked with pos or actionId parameter
-            val title = item.title
-
-            if (title == "Next") {
-                val layoutParams = viewBinding.cameraPreview.layoutParams
-                layoutParams.height = 1500
-                viewBinding.cameraPreview.layoutParams = layoutParams
-            } else {
-                val layoutParams = viewBinding.cameraPreview.layoutParams
-                layoutParams.height = 800
-                viewBinding.cameraPreview.layoutParams = layoutParams
+        when (id) {
+            RatioId.OneOnOne.id -> {
+                layoutParams.height = deviceWidth!!
             }
 
-            if (!item.isSticky) quickAction!!.remove(item)
+            RatioId.FourOnThree.id -> {
+                layoutParams.height = deviceWidth!! / 3 * 4
+            }
+
+            RatioId.NineOnSixteen.id -> {
+                layoutParams.height = deviceWidth!! / 9 * 16
+            }
         }
 
+        viewBinding.cameraPreview.layoutParams = layoutParams
     }
 
     private fun getLastImageFromGallery() {
@@ -155,18 +183,9 @@ class MainActivity : AppCompatActivity() {
             val imageId: Long = cursor.getLong(columnIndexID)
             val imageURI = Uri.withAppendedPath(uriExternal, "" + imageId)
 
-//            try {
-//                val bitmap = getBitmap(contentResolver, imageURI)
-//                viewBinding.galleryButton.setImageBitmap(bitmap)
-//            } catch (e: FileNotFoundException) {
-//                e.printStackTrace()
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-
             Glide.with(this)
                 .load(imageURI)
-                .into(viewBinding.galleryButton)
+                .into(viewBinding.imageviewGallery)
         }
         cursor.close()
     }
@@ -189,7 +208,9 @@ class MainActivity : AppCompatActivity() {
                     it.setSurfaceProvider(viewBinding.cameraPreview.surfaceProvider)
                 }
 
-            imageCapture = ImageCapture.Builder().build()
+            imageCapture = ImageCapture.Builder().apply {
+                setTargetAspectRatio(RATIO_4_3)
+            }.build()
 
             try {
                 cameraProvider.unbindAll()
@@ -202,16 +223,6 @@ class MainActivity : AppCompatActivity() {
             }
         }, ContextCompat.getMainExecutor(this))
         cameraExecutor = Executors.newSingleThreadExecutor()
-    }
-
-    private fun startCameraWithPermission() {
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
-            )
-        }
     }
 
     private fun takePhoto() {
@@ -252,17 +263,45 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+    private fun startCameraWithPermission() {
+        if (allPermissionsGranted()) {
+            startCamera()
+        } else {
+            ActivityCompat.requestPermissions(
+                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+            )
+        }
+    }
+
+    private fun openGallery() {
+        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+        startActivityForResult(gallery, PICK_IMAGE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        imageUri = data?.data ?: return
+        //      고른 이미지 처리
+    }
+
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 10
+        private const val PICK_IMAGE = 100
         private val REQUIRED_PERMISSIONS =
             mutableListOf(
                 Manifest.permission.CAMERA
             ).apply {
-                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
-                    add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                }
+                add(getImageStoragePermission())
             }.toTypedArray()
 
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    }
+}
+
+fun getImageStoragePermission(): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
     }
 }
