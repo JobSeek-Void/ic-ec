@@ -9,6 +9,10 @@ android {
     namespace = "team.jsv.presentation"
     compileSdk = Apps.compileSdk
 
+    defaultConfig {
+        minSdk = Apps.minSdk
+    }
+
     compileOptions {
         sourceCompatibility = Apps.sourceCompatibility
         targetCompatibility = Apps.targetCompatibility
