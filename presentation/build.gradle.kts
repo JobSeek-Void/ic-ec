@@ -9,6 +9,10 @@ android {
     namespace = "team.jsv.presentation"
     compileSdk = Apps.compileSdk
 
+    defaultConfig {
+        minSdk = Apps.minSdk
+    }
+
     compileOptions {
         sourceCompatibility = Apps.sourceCompatibility
         targetCompatibility = Apps.targetCompatibility
@@ -20,7 +24,6 @@ android {
 
     buildFeatures {
         dataBinding = true
-        viewBinding = true
     }
 }
 
@@ -29,6 +32,9 @@ dependencies {
 
     kapt(Dependencies.Hilt.Kapt)
     implementation(Dependencies.Hilt.Android)
+
+    implementation(Dependencies.Glide.Glide)
+    annotationProcessor(Dependencies.Glide.Annotation)
 
     Dependencies.Essential.forEach(::implementation)
     Dependencies.Ktx.forEach(::implementation)

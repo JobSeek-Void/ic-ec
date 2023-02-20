@@ -4,12 +4,12 @@
     <application android:theme="@style/ICECLightTheme">
 
         <activity
-            android:name="team.jsv.icec.ui.main.MainActivity"
+            android:name="team.jsv.icec.ui.takepicture.TakePictureActivity"
             android:exported="true">
         </activity>
 
         <activity
-            android:name="team.jsv.icec.ui.activity.SelectMosaicEditActivity"
+            android:name="team.jsv.icec.ui.main.MainActivity"
             android:exported="true">
 
             <intent-filter>
