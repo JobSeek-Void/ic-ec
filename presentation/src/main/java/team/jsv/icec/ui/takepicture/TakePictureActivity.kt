@@ -1,6 +1,6 @@
 @file:SuppressLint("ResourceType")
 
-package team.jsv.icec.ui.main
+package team.jsv.icec.ui.takepicture
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -15,7 +15,6 @@ import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -24,7 +23,9 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
-import team.jsv.presentation.databinding.ActivityMainBinding
+import team.jsv.icec.base.BaseActivity
+import team.jsv.presentation.R
+import team.jsv.presentation.databinding.ActivityTakePictureBinding
 import java.text.SimpleDateFormat
 import java.util.Locale
 import java.util.concurrent.ExecutorService
@@ -37,8 +38,8 @@ enum class RatioId(val id: Int) {
 }
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-class MainActivity : AppCompatActivity() {
-    private lateinit var viewBinding: ActivityMainBinding
+class TakePictureActivity :
+    BaseActivity<ActivityTakePictureBinding>(R.layout.activity_take_picture) {
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
     private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
@@ -47,8 +48,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(viewBinding.root)
         startCameraWithPermission()
         getLastImageFromGallery()
     }
@@ -60,23 +59,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initClickListener() {
-        viewBinding.imageviewOneOnOne.setOnClickListener {
+        binding.imageviewOneOnOne.setOnClickListener {
             resizeCameraView(RatioId.OneOnOne.id)
         }
 
-        viewBinding.imageviewThreeOnFour.setOnClickListener {
+        binding.imageviewThreeOnFour.setOnClickListener {
             resizeCameraView(RatioId.FourOnThree.id)
         }
 
-        viewBinding.imageviewNineOnSixteen.setOnClickListener {
+        binding.imageviewNineOnSixteen.setOnClickListener {
             resizeCameraView(RatioId.NineOnSixteen.id)
         }
 
-        viewBinding.buttonCapture.setOnClickListener {
+        binding.buttonCapture.setOnClickListener {
             takePhoto()
         }
 
-        viewBinding.buttonReverse.setOnClickListener {
+        binding.buttonReverse.setOnClickListener {
             if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
                 cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
                 startCamera()
@@ -86,16 +85,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewBinding.imageviewGallery.setOnClickListener {
+        binding.imageviewGallery.setOnClickListener {
             openGallery()
         }
     }
 
     private fun resizeCameraView(id: Int) {
-        val display = viewBinding.root.resources?.displayMetrics
+        val display = binding.root.resources?.displayMetrics
         val deviceWidth = display?.widthPixels
 
-        val layoutParams = viewBinding.cameraPreview.layoutParams
+        val layoutParams = binding.cameraPreview.layoutParams
 
         when (id) {
             RatioId.OneOnOne.id -> {
@@ -111,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        viewBinding.cameraPreview.layoutParams = layoutParams
+        binding.cameraPreview.layoutParams = layoutParams
     }
 
     private fun getLastImageFromGallery() {
@@ -135,7 +134,7 @@ class MainActivity : AppCompatActivity() {
 
             Glide.with(this)
                 .load(imageURI)
-                .into(viewBinding.imageviewGallery)
+                .into(binding.imageviewGallery)
         }
         cursor.close()
     }
@@ -155,7 +154,7 @@ class MainActivity : AppCompatActivity() {
             val preview = Preview.Builder()
                 .build()
                 .also {
-                    it.setSurfaceProvider(viewBinding.cameraPreview.surfaceProvider)
+                    it.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
                 }
 
             imageCapture = ImageCapture.Builder().apply {
