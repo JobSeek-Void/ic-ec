@@ -50,11 +50,4 @@ object Dependencies {
         "com.google.android.material:material:${Versions.UI.Material}",
     )
 
-    val JitPack = listOf(
-        "com.github.piruin:quickaction:${Versions.JitPack.QuickAction}"
-    )
-
-    val Glide = listOf(
-        "com.github.bumptech.glide:glide:${Versions.Glide.Glide}"
-    )
 }
