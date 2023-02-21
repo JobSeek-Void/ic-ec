@@ -1,13 +1,15 @@
-<<<<<<<< HEAD:presentation/src/main/java/team/jsv/icec/ui/takepicture/TakePictureActivity.kt
 @file:SuppressLint("ResourceType")
 
 package team.jsv.icec.ui.takepicture
-========
-package team.jsv.icec.ui.main
->>>>>>>> 661e1b4 (refactor: Acitivity 이름 변경 및 databinding 적용):presentation/src/main/java/team/jsv/icec/ui/main/MainActivity.kt
 
+import android.annotation.SuppressLint
+import android.content.ContentValues
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-<<<<<<<< HEAD:presentation/src/main/java/team/jsv/icec/ui/takepicture/TakePictureActivity.kt
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
@@ -21,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import team.jsv.icec.base.BaseActivity
+import team.jsv.icec.util.PermissionUtil
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityTakePictureBinding
 import java.text.SimpleDateFormat
@@ -40,27 +43,10 @@ class TakePictureActivity :
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
     private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-========
-import androidx.activity.viewModels
-import dagger.hilt.android.AndroidEntryPoint
-import team.jsv.icec.base.BaseActivity
-import team.jsv.icec.ui.main.mosaic.MosaicViewModel
-import team.jsv.icec.util.PermissionUtil
-import team.jsv.icec.util.requestPermissions
-import team.jsv.presentation.R
-import team.jsv.presentation.databinding.ActivityMainBinding
-import java.io.File
-
-@AndroidEntryPoint
-class MainActivity :
-    BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
->>>>>>>> 661e1b4 (refactor: Acitivity 이름 변경 및 databinding 적용):presentation/src/main/java/team/jsv/icec/ui/main/MainActivity.kt
-
-    private val viewModel: MosaicViewModel by viewModels()
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-<<<<<<<< HEAD:presentation/src/main/java/team/jsv/icec/ui/takepicture/TakePictureActivity.kt
         startCameraWithPermission()
         getLastImageFromGallery()
     }
@@ -152,7 +138,7 @@ class MainActivity :
         cursor.close()
     }
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+    private fun allPermissionsGranted() = PermissionUtil.getPermissions().all {
         ContextCompat.checkSelfPermission(
             baseContext, it
         ) == PackageManager.PERMISSION_GRANTED
@@ -229,7 +215,7 @@ class MainActivity :
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+                this, PermissionUtil.getPermissions().toTypedArray(), REQUEST_CODE_PERMISSIONS
             )
         }
     }
@@ -248,22 +234,7 @@ class MainActivity :
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private const val PICK_IMAGE = 100
-        private val REQUIRED_PERMISSIONS =
-            mutableListOf(
-                Manifest.permission.CAMERA
-            ).apply {
-                add(getImageStoragePermission())
-            }.toTypedArray()
 
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-    }
-}
-========
-
-        // TODO(ham2174) : 갤러리 혹은 카메라로 찍은 사진 데이터를 가져와야함. TakePictureActivity -> MainActivity 이미지 데이터 전달 필요
-        requestPermissions(PermissionUtil.getPermissions())
->>>>>>>> 661e1b4 (refactor: Acitivity 이름 변경 및 databinding 적용):presentation/src/main/java/team/jsv/icec/ui/main/MainActivity.kt
-
-        viewModel.setImage(File("/storage/emulated/0/Pictures/test_4.jpg"))
     }
 }
