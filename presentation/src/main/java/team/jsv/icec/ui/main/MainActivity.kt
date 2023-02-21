@@ -1,6 +1,6 @@
 @file:SuppressLint("ResourceType")
 
-package team.jsv.icec
+package team.jsv.icec.ui.main
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -13,9 +13,9 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
+import android.util.Size
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.AspectRatio.RATIO_4_3
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() {
     private var imageCapture: ImageCapture? = null
     private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
 
-    //    private var quickAction: QuickAction? = null
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +51,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(viewBinding.root)
         startCameraWithPermission()
         getLastImageFromGallery()
-        //settingQuickAction()
     }
 
     override fun onResume() {
@@ -74,17 +72,11 @@ class MainActivity : AppCompatActivity() {
             resizeCameraView(RatioId.NineOnSixteen.id)
         }
 
-//        viewBinding.ratioButton.setOnClickListener { view ->
-//            quickAction!!.show(view)
-//        }
-
         viewBinding.buttonCapture.setOnClickListener {
-            // 사진 찍기 버튼
             takePhoto()
         }
 
         viewBinding.buttonReverse.setOnClickListener {
-            // 좌우 반전 버튼
             if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
                 cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
                 startCamera()
@@ -98,47 +90,6 @@ class MainActivity : AppCompatActivity() {
             openGallery()
         }
     }
-
-//    private fun settingQuickAction() {
-//        QuickAction.setDefaultColor(Color.GRAY)
-//        QuickAction.setDefaultTextColor(Color.BLACK)
-//
-//        val oneOnOneItem = ActionItem(Ratio.OneOnOne.id, "", R.drawable.one_on_one)
-//        val fourOnThreeItem = ActionItem(Ratio.FourOnThree.id, "", R.drawable.four_on_three)
-//        val nineOnSixteenItem = ActionItem(Ratio.NineOnSixteen.id, "", R.drawable.nine_on_sixteen)
-//
-//        //setSticky(true)를 사용하여 항목을 클릭한 후 QuickAction 대화 상자가 닫히지 않도록 합니다.
-//        oneOnOneItem.isSticky = true
-//        fourOnThreeItem.isSticky = true
-//        nineOnSixteenItem.isSticky = true
-//
-//        // 가로 세로 정하기
-//        quickAction = QuickAction(this, QuickAction.HORIZONTAL)
-//
-//        quickAction!!.setColorRes(R.color.MainColor)
-//        quickAction!!.setTextColorRes(R.color.white)
-//
-//        quickAction!!.addActionItem(oneOnOneItem, fourOnThreeItem, nineOnSixteenItem)
-//
-//
-//        quickAction!!.setOnActionItemClickListener { item -> //here we can filter which action item was clicked with pos or actionId parameter
-//            val id = item.actionId
-//
-//            when(id) {
-//                Ratio.OneOnOne.id -> {
-//                    resizeCameraView(Ratio.OneOnOne.id)
-//                }
-//                Ratio.FourOnThree.id -> {
-//                    resizeCameraView(Ratio.FourOnThree.id)
-//                }
-//                Ratio.NineOnSixteen.id -> {
-//                    resizeCameraView(Ratio.NineOnSixteen.id)
-//                }
-//            }
-//
-//            if (!item.isSticky) quickAction!!.remove(item)
-//        }
-//    }
 
     private fun resizeCameraView(id: Int) {
         val display = viewBinding.root.resources?.displayMetrics
@@ -177,7 +128,6 @@ class MainActivity : AppCompatActivity() {
             null, MediaStore.Images.ImageColumns.DATE_ADDED + " DESC"
         )!!
 
-        Log.i("Cursor Last", cursor.moveToLast().toString())
         if (cursor.moveToFirst()) {
             val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
             val imageId: Long = cursor.getLong(columnIndexID)
@@ -209,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             imageCapture = ImageCapture.Builder().apply {
-                setTargetAspectRatio(RATIO_4_3)
+                setTargetResolution(Size(1080, 1080))
             }.build()
 
             try {
@@ -256,7 +206,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    val msg = "Photo capture succeeded: ${output.savedUri}"
                     getLastImageFromGallery()
                 }
             }
