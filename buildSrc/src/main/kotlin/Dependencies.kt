@@ -3,6 +3,12 @@ object Dependencies {
     object Hilt {
         const val Kapt = "com.google.dagger:hilt-android-compiler:${Versions.Jetpack.Hilt}"
         const val Android = "com.google.dagger:hilt-android:${Versions.Jetpack.Hilt}"
+        const val Core = "com.google.dagger:hilt-core:${Versions.Jetpack.Hilt}"
+    }
+
+    object Glide {
+        const val Glide = "com.github.bumptech.glide:glide:${Versions.Glide.Glide}"
+        const val Annotation = "com.github.bumptech.glide:compiler:${Versions.Glide.Glide}"
     }
 
     val Essential = listOf(
@@ -43,11 +49,4 @@ object Dependencies {
         "androidx.navigation:navigation-ui-ktx:${Versions.Jetpack.Navigation}",
     )
 
-    val JitPack = listOf(
-        "com.github.piruin:quickaction:${Versions.JitPack.QuickAction}"
-    )
-
-    val Glide = listOf(
-        "com.github.bumptech.glide:glide:${Versions.Glide.Glide}"
-    )
 }

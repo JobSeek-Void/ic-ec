@@ -33,11 +33,8 @@ object Versions {
         const val ConstraintLayout = "2.1.3"
     }
 
-    object JitPack {
-        const val QuickAction = "2.4.3"
-    }
-
     object Glide {
         const val Glide = "4.14.2"
     }
+
 }

@@ -2,7 +2,6 @@
 
 package team.jsv.icec.ui.takepicture
 
-import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
@@ -24,6 +23,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import team.jsv.icec.base.BaseActivity
+import team.jsv.icec.util.PermissionUtil
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityTakePictureBinding
 import java.text.SimpleDateFormat
@@ -43,7 +43,6 @@ class TakePictureActivity :
     private lateinit var cameraExecutor: ExecutorService
     private var imageCapture: ImageCapture? = null
     private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-
     private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -139,7 +138,7 @@ class TakePictureActivity :
         cursor.close()
     }
 
-    private fun allPermissionsGranted() = REQUIRED_PERMISSIONS.all {
+    private fun allPermissionsGranted() = PermissionUtil.getPermissions().all {
         ContextCompat.checkSelfPermission(
             baseContext, it
         ) == PackageManager.PERMISSION_GRANTED
@@ -216,7 +215,7 @@ class TakePictureActivity :
             startCamera()
         } else {
             ActivityCompat.requestPermissions(
-                this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS
+                this, PermissionUtil.getPermissions().toTypedArray(), REQUEST_CODE_PERMISSIONS
             )
         }
     }
@@ -235,21 +234,7 @@ class TakePictureActivity :
     companion object {
         private const val REQUEST_CODE_PERMISSIONS = 10
         private const val PICK_IMAGE = 100
-        private val REQUIRED_PERMISSIONS =
-            mutableListOf(
-                Manifest.permission.CAMERA
-            ).apply {
-                add(getImageStoragePermission())
-            }.toTypedArray()
 
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
-    }
-}
-
-fun getImageStoragePermission(): String {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        Manifest.permission.READ_MEDIA_IMAGES
-    } else {
-        Manifest.permission.READ_EXTERNAL_STORAGE
     }
 }
