@@ -18,6 +18,7 @@ android {
 
 dependencies {
     implementation(project(Modules.Domain))
+    implementation(project(Modules.UtilKotlin))
 
     kapt(Dependencies.Hilt.Kapt)
     implementation(Dependencies.Hilt.Android)

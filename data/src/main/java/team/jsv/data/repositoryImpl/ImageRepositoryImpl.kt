@@ -14,7 +14,7 @@ class ImageRepositoryImpl @Inject constructor(
     override suspend fun getFaceList(
         currentTime: String,
         image: File
-    ): List<Face> {
+    ): Face {
         return imageDataSource.getFaceList(
             currentTime = currentTime,
             image = image
