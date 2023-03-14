@@ -1,6 +1,12 @@
 package team.jsv.domain.model
 
-@JvmInline
-value class Face(
-    val image: String
+data class Face(
+    val code: Int,
+    val originalImage: String,
+    val faceList: List<DetectFaceInfo>
+)
+
+data class DetectFaceInfo(
+    val url: String,
+    val coordinates: List<Int>
 )
