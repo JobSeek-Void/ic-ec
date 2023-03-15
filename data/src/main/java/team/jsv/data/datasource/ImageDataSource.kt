@@ -10,12 +10,12 @@ import javax.inject.Inject
 class ImageDataSource @Inject constructor(
     private val icecApi: ICECApi
 ) {
-    suspend fun getFaceList(
+    suspend fun getDetectedFace(
         currentTime: String,
         image: File
     ): FaceResponse {
         try {
-            return icecApi.getFaceList(
+            return icecApi.getDetectedFace(
                 currentTime = currentTime,
                 image = image.toMultipartImage()
             )
