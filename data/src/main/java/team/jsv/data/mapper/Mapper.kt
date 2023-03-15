@@ -11,16 +11,16 @@ import java.io.File
 
 internal fun FaceResponse.toDomain(): Face {
     return Face(
-        code = this.code,
-        originalImage = this.originalImage,
-        faceList = this.faceList.map { it.toDomainModel() }
+        code = code,
+        originalImage = originalImage,
+        faceList = faceList.map { it.toDomainModel() }
     )
 }
 
 internal fun FaceInfo.toDomainModel(): DetectFaceInfo {
     return DetectFaceInfo(
-        url = this.url,
-        coordinates = this.coordinates
+        url = url,
+        coordinates = coordinates
     )
 }
 

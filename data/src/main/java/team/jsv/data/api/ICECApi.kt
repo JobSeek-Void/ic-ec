@@ -10,7 +10,7 @@ interface ICECApi {
 
     @Multipart
     @POST("/faceList")
-    suspend fun getFaceList(
+    suspend fun getDetectedFace(
         @Part("currentTime") currentTime: String,
         @Part image: MultipartBody.Part,
     ): FaceResponse
