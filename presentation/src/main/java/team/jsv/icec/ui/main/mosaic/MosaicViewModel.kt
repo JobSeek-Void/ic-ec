@@ -9,7 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import team.jsv.domain.model.Face
 import team.jsv.domain.usecase.GetFaceListUseCase
-import team.jsv.presentation.R
+import team.jsv.util_kotlin.IcecNetworkException
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -20,12 +20,14 @@ class MosaicViewModel @Inject constructor(
     private val getFaceListUseCase: GetFaceListUseCase
 ) : ViewModel() {
 
-    private val _faces = MutableLiveData<List<Face>>()
-    val faces: LiveData<List<Face>> get() = _faces
+    private val _detectFaces = MutableLiveData<Face>()
+    val detectFaces: LiveData<Face> get() = _detectFaces
+
     private val _originalImage = MutableLiveData<File>()
     val originalImage: LiveData<File> get() = _originalImage
-    private val _errorMessage = MutableLiveData<String?>()
-    val errorMessage: LiveData<String?> get() = _errorMessage
+
+    private val _event = MutableLiveData<MosaicEvent>()
+    val event: LiveData<MosaicEvent> get() = _event
 
     private val currentTime: String
         get() = SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
@@ -42,11 +44,12 @@ class MosaicViewModel @Inject constructor(
             currentTime = currentTime,
             image = image
         ).onSuccess {
-            _faces.postValue(it.toList())
-            _errorMessage.value = null
+            _detectFaces.postValue(it)
         }.onFailure {
-            Log.d("실패", it.message.toString())
-            _errorMessage.value = "다시 시도해주세요."
+            if (it is IcecNetworkException) {
+                Log.d("실패", it.toString())
+            }
+            _event.postValue(MosaicEvent.SendToast(it.message.toString()))
         }
     }
 

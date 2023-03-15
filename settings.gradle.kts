@@ -21,4 +21,5 @@ include(
     ":data",
     ":domain",
     ":presentation",
+    ":util-kotlin"
 )

@@ -15,12 +15,12 @@ class SelectFaceFragment :
     private val viewModel: MosaicViewModel by activityViewModels()
 
     override fun initView() {
-        viewModel.faces.observe(this) {
-            Log.d("얼굴 리스트", it.toString())
+        viewModel.detectFaces.observe(this) {
+            Log.d("얼굴 리스트", it.faceList.toString())
         }
-        viewModel.errorMessage.observe(this) {
-            if (it != null) {
-                binding.root.context.showToast(it)
+        viewModel.event.observe(this) {
+            when (it) {
+                is MosaicEvent.SendToast -> binding.root.context.showToast(it.message)
             }
         }
     }

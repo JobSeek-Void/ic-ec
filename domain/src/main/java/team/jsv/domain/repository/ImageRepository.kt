@@ -8,6 +8,6 @@ interface ImageRepository {
     suspend fun getFaceList(
         currentTime: String,
         image: File
-    ): List<Face>
+    ): Face
 
 }
