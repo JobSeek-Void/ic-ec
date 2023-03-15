@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import team.jsv.domain.model.Face
-import team.jsv.domain.usecase.GetFaceListUseCase
+import team.jsv.domain.usecase.GetDetectedFaceUseCase
 import team.jsv.util_kotlin.IcecNetworkException
 import java.io.File
 import java.text.SimpleDateFormat
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MosaicViewModel @Inject constructor(
-    private val getFaceListUseCase: GetFaceListUseCase
+    private val getDetectedFaceUseCase: GetDetectedFaceUseCase
 ) : ViewModel() {
 
     private val _detectFaces = MutableLiveData<Face>()
@@ -40,7 +40,7 @@ class MosaicViewModel @Inject constructor(
     fun getFaceList(
         image: File
     ) = viewModelScope.launch {
-        getFaceListUseCase(
+        getDetectedFaceUseCase(
             currentTime = currentTime,
             image = image
         ).onSuccess {

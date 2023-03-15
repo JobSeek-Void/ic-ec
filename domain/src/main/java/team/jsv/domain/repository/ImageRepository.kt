@@ -5,7 +5,7 @@ import java.io.File
 
 interface ImageRepository {
 
-    suspend fun getFaceList(
+    suspend fun getDetectedFace(
         currentTime: String,
         image: File
     ): Face

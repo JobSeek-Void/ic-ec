@@ -11,11 +11,11 @@ class ImageRepositoryImpl @Inject constructor(
     private val imageDataSource: ImageDataSource
 ) : ImageRepository {
 
-    override suspend fun getFaceList(
+    override suspend fun getDetectedFace(
         currentTime: String,
         image: File
     ): Face {
-        return imageDataSource.getFaceList(
+        return imageDataSource.getDetectedFace(
             currentTime = currentTime,
             image = image
         ).toDomain()

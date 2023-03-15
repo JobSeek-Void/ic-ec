@@ -4,14 +4,14 @@ import team.jsv.domain.repository.ImageRepository
 import java.io.File
 import javax.inject.Inject
 
-class GetFaceListUseCase @Inject constructor(
+class GetDetectedFaceUseCase @Inject constructor(
     private val repository: ImageRepository
 ) {
     suspend operator fun invoke(
         currentTime: String,
         image: File
     ) = runCatching {
-        repository.getFaceList(
+        repository.getDetectedFace(
             currentTime = currentTime,
             image = image
         )
