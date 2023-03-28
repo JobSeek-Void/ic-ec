@@ -18,12 +18,21 @@
 
     <fragment
         android:id="@+id/faceSelectFragment"
-        android:name="team.jsv.icec.ui.main.mosaic.SelectFaceFragment"
-        android:label="FaceSelectFragment" />
+        android:name="team.jsv.icec.ui.main.mosaic.selectFace.SelectFaceFragment"
+        android:label="FaceSelectFragment" >
+        <action
+            android:id="@+id/action_faceSelectFragment_to_faceMosaicFragment"
+            app:destination="@id/faceMosaicFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/photoEditFragment"
         android:name="team.jsv.icec.ui.main.edit.PhotoEditFragment"
+        android:label="PhotoEditFragment" />
+
+    <fragment
+        android:id="@+id/faceMosaicFragment"
+        android:name="team.jsv.icec.ui.main.mosaic.mosaicFace.MosaicFaceFragment"
         android:label="PhotoEditFragment" />
 
 </navigation>

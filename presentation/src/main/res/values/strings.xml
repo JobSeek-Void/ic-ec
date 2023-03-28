@@ -12,4 +12,5 @@
     <!-- MainActivity.kt -->
     <string name="accept_permission">%s 권한을 허용하였습니다.</string>
     <string name="reject_permission">%s 권한을 거부하였습니다.</string>
+    <string name="next_text">다음</string>
 </resources>
