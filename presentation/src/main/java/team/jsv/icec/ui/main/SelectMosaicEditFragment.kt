@@ -4,6 +4,7 @@ import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
+import team.jsv.icec.ui.main.mosaic.ScreenStep
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentSelectMosaicEditBinding
 
@@ -22,11 +23,13 @@ class SelectMosaicEditFragment :
     override fun initView() {
         binding.buttonMosaic.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_faceSelectFragment)
-            viewModel.originalImage.value?.let { it1 -> viewModel.getFaceList(it1) }
+            viewModel.setScreen(ScreenStep.SelectFace)
+            viewModel.originalImage.value?.let { originalImage -> viewModel.getFaceList(originalImage) }
         }
 
         binding.buttonEdit.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_photoEditFragment)
         }
+
     }
 }
