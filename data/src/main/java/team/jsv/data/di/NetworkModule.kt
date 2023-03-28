@@ -10,6 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import team.jsv.data.BuildConfig
 import team.jsv.data.api.ICECApi
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 @Module
@@ -38,6 +39,7 @@ internal class NetworkModule {
     ): OkHttpClient = if (BuildConfig.DEBUG) {
         OkHttpClient.Builder()
             .addInterceptor(httpLoggingInterceptor)
+            .connectTimeout(2L, TimeUnit.SECONDS)
             .build()
     } else {
         OkHttpClient.Builder()
