@@ -29,6 +29,10 @@ internal class MosaicViewModel @Inject constructor(
     private val getMosaicImageUseCase: GetMosaicImageUseCase
 ) : BaseViewModel() {
 
+    companion object {
+        const val DEFAULT_MOSAIC_STRENGTH = 20f
+    }
+
     private val currentTime: String =
         SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
             .format(System.currentTimeMillis())
@@ -42,7 +46,7 @@ internal class MosaicViewModel @Inject constructor(
     private val _mosaicImage = MutableLiveData<Event<String>>()
     val mosaicImage: LiveData<Event<String>> get() = _mosaicImage
 
-    private val _pixelSize = MutableLiveData<Float>().apply { postValue(20f) }
+    private val _pixelSize = MutableLiveData<Float>().apply { postValue(DEFAULT_MOSAIC_STRENGTH) }
     val pixelSize: LiveData<Float> get() = _pixelSize
 
     private val _screenStep =
@@ -128,7 +132,7 @@ internal class MosaicViewModel @Inject constructor(
     private fun handleException(exception: Throwable) {
         if (exception is IcecNetworkException) {
             Log.d("실패", exception.toString())
+            _mosaicEvent.postValue(Event(MosaicEvent.SendToast(exception.message)))
         }
-        _mosaicEvent.postValue(Event(MosaicEvent.SendToast(exception.message.toString())))
     }
 }
