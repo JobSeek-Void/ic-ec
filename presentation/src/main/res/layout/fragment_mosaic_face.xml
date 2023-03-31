@@ -7,23 +7,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_next"
-            android:layout_width="60dp"
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_mosaic_figure"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:outlineProvider="none"
-            android:text="@string/next_text"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            app:backgroundTint="@color/MainColor"
-            app:cornerRadius="8dp"
-            app:iconGravity="start"
+            android:stepSize="10"
+            android:valueTo="100"
+            android:valueFrom="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="UnusedAttribute" />
+            app:thumbColor="@color/MainColor"
+            app:trackColor="@color/MainColor" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

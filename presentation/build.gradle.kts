@@ -34,7 +34,6 @@ dependencies {
     kapt(Dependencies.Hilt.Kapt)
     implementation(Dependencies.Hilt.Android)
 
-    implementation(Dependencies.Glide.Glide)
     annotationProcessor(Dependencies.Glide.Annotation)
 
     Dependencies.Essential.forEach(::implementation)

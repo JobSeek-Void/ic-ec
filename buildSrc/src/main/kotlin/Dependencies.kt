@@ -7,7 +7,6 @@ object Dependencies {
     }
 
     object Glide {
-        const val Glide = "com.github.bumptech.glide:glide:${Versions.Glide.Glide}"
         const val Annotation = "com.github.bumptech.glide:compiler:${Versions.Glide.Glide}"
     }
 
@@ -47,6 +46,8 @@ object Dependencies {
         "androidx.constraintlayout:constraintlayout:${Versions.UI.ConstraintLayout}",
         "androidx.navigation:navigation-fragment-ktx:${Versions.Jetpack.Navigation}",
         "androidx.navigation:navigation-ui-ktx:${Versions.Jetpack.Navigation}",
+        "com.github.bumptech.glide:glide:${Versions.Glide.Glide}",
+        "com.google.android.material:material:${Versions.UI.Material}",
     )
 
 }
