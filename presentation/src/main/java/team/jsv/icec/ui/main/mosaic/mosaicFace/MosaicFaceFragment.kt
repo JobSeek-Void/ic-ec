@@ -1,9 +1,9 @@
 package team.jsv.icec.ui.main.mosaic.mosaicFace
 
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -42,11 +42,12 @@ class MosaicFaceFragment :
             addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
-                    debounceJobGetMosaicImage?.cancel() // 이전 작업 취소
-                    debounceJobGetMosaicImage = CoroutineScope(Dispatchers.Main).launch {
-                        delay(debounceDelay) // 디바운스 시간 동안 대기
-                        viewModel.getMosaicImage() // 디바운스 시간이 경과한 후 실행
-                    }
+                    debounceJobGetMosaicImage?.cancel()
+                    debounceJobGetMosaicImage =
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            delay(debounceDelay)
+                            viewModel.getMosaicImage()
+                        }
                 }
             })
         }

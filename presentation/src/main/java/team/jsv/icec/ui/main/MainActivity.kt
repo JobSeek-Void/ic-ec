@@ -57,7 +57,7 @@ class MainActivity :
                 ScreenStep.SelectMosaicEdit ->
                     finish()
                 else -> {
-                    viewModel.apply {
+                    viewModel.run {
                         backPress()
                         setImageAboutScreenStep()
                     }

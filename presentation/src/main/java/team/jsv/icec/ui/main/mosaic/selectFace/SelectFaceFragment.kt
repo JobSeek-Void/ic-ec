@@ -22,7 +22,7 @@ class SelectFaceFragment :
 
         binding.buttonNext.setOnClickListener {
             navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
-            viewModel.apply {
+            viewModel.run {
                 setScreen(ScreenStep.MosaicFace)
                 getMosaicImage()
             }
