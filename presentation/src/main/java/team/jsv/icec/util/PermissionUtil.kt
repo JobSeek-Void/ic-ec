@@ -10,7 +10,7 @@ import team.jsv.icec.base.showToast
 import team.jsv.presentation.R
 
 object PermissionUtil {
-    /*
+    /**
     * ICEC에서 사용하는 권한을 요청하는 함수입니다.
     * return mutalbeListof(사용하려는 권한들)...
     * */
