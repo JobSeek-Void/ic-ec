@@ -27,10 +27,10 @@ class MainActivity :
         // TODO(ham2174) : 갤러리 혹은 카메라로 찍은 사진 데이터를 가져와야함. TakePictureActivity -> MainActivity 이미지 데이터 전달 필요
         viewModel.setImage(File("/storage/emulated/0/Pictures/dicdic6.jpg"))
 
-        viewModel.mosaicEvent.observe(this, EventObserver{
-            when(it) {
+        viewModel.mosaicEvent.observe(this, EventObserver {
+            when (it) {
                 is MosaicEvent.SendToast -> {
-                   binding.root.context.showToast(it.message)
+                    binding.root.context.showToast(it.message)
                 }
             }
         })
