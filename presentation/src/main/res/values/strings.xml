@@ -2,8 +2,8 @@
     <string name="app_name">ICEC</string>
 
     <!-- fragment_select_mosaic_edit.xml -->
-    <string name="edit_text">편집</string>
-    <string name="mosaic_text">모자이크</string>
+    <string name="edit_text">Edit</string>
+    <string name="mosaic_text">Blur</string>
 
     <!-- top_bar.xml -->
     <string name="share_text">공유</string>
