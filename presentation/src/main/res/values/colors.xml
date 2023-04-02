@@ -8,4 +8,8 @@
     <color name="Gray400">#FFF6F6F6</color>
     <color name="MainColor">#FFFA9A85</color>
     <color name="SubColor">#99FA9A85</color>
+
+    <!-- System Theme Color -->
+    <color name="WindowBackGroundColor">#FFFFFFFF</color>
+    <color name="StatusBarColor">#121212</color>
 </resources>
