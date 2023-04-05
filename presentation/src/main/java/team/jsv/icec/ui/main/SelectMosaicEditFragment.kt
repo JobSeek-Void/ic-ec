@@ -16,12 +16,7 @@ class SelectMosaicEditFragment :
     private val viewModel: MosaicViewModel by activityViewModels()
 
     override fun initView() {
-        val currentTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
-
-        if (currentTheme == Configuration.UI_MODE_NIGHT_NO) {
-            binding.buttonEdit.strokeWidth = 0
-            binding.buttonMosaic.strokeWidth = 0
-        }
+        setButtonStroke()
     }
 
     override fun onResume() {
@@ -35,6 +30,13 @@ class SelectMosaicEditFragment :
 
         binding.buttonEdit.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_photoEditFragment)
+        }
+    }
+
+    private fun setButtonStroke() {
+        if (currentTheme == Configuration.UI_MODE_NIGHT_NO) {
+            binding.buttonEdit.strokeWidth = 0
+            binding.buttonMosaic.strokeWidth = 0
         }
     }
 
