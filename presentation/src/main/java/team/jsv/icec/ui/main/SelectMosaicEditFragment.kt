@@ -1,5 +1,6 @@
 package team.jsv.icec.ui.main
 
+import android.content.res.Configuration
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import team.jsv.icec.base.BaseFragment
@@ -14,13 +15,18 @@ class SelectMosaicEditFragment :
 
     private val viewModel: MosaicViewModel by activityViewModels()
 
+    override fun initView() {
+        val currentTheme = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
+
+        if (currentTheme == Configuration.UI_MODE_NIGHT_NO) {
+            binding.buttonEdit.strokeWidth = 0
+            binding.buttonMosaic.strokeWidth = 0
+        }
+    }
+
     override fun onResume() {
         super.onResume()
 
-        initView()
-    }
-
-    override fun initView() {
         binding.buttonMosaic.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_faceSelectFragment)
             viewModel.setScreen(ScreenStep.SelectFace)
@@ -30,6 +36,6 @@ class SelectMosaicEditFragment :
         binding.buttonEdit.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_photoEditFragment)
         }
-
     }
+
 }
