@@ -1,5 +1,6 @@
 package team.jsv.icec.base
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ abstract class BaseFragment<T : ViewDataBinding>(
     private var _binding: T? = null
     protected val binding: T get() = _binding!!
 
+    protected val currentTheme: Int get() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
     protected val navController: NavController get() = NavHostFragment.findNavController(this)
 
     override fun onCreateView(
