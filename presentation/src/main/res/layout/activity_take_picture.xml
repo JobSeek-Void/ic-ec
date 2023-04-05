@@ -1,126 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
+        android:layout_height="match_parent"
+        android:background="@color/black">
 
         <androidx.camera.view.PreviewView
             android:id="@+id/camera_preview"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:background="@color/black"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="h,3:4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@+id/button_capture"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.312"
+            app:layout_constraintTop_toBottomOf="@+id/imageview_reverse"
             app:srcCompat="@drawable/ic_launcher_foreground">
-
         </androidx.camera.view.PreviewView>
 
         <ImageView
-            android:id="@+id/imageview_logo"
+            android:id="@+id/imageview_close"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:clickable="true"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_reverse"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageview_reverse"
+            app:srcCompat="@drawable/bt_close_32" />
+
+        <ImageView
+            android:id="@+id/imageview_reverse"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_marginTop="38dp"
+            android:clickable="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/bt_reverse_32" />
+
+        <ImageView
+            android:id="@+id/imageview_ratio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:clickable="true"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageview_reverse"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/logo_wip" />
+            app:layout_constraintTop_toTopOf="@+id/imageview_reverse"
+            app:srcCompat="@drawable/bt_one_on_one_22_33" />
 
-        <ImageView
-            android:id="@+id/imageview_one_on_one"
-            android:layout_width="24dp"
-            android:layout_height="18dp"
-            android:layout_marginLeft="54dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:clickable="true"
-            app:layout_constraintStart_toEndOf="@+id/imageview_logo"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/one_on_one" />
 
-        <ImageView
-            android:id="@+id/imageview_three_on_four"
-            android:layout_width="24dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:clickable="true"
-            app:layout_constraintEnd_toStartOf="@+id/imageview_nine_on_sixteen"
-            app:layout_constraintStart_toEndOf="@+id/imageview_one_on_one"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/three_on_four" />
-
-        <ImageView
-            android:id="@+id/imageview_nine_on_sixteen"
-            android:layout_width="24dp"
-            android:layout_height="18dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginBottom="15dp"
-            android:clickable="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/nine_on_sixteen" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardview_gallery"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="40dp"
-            android:clickable="true"
-            app:cardCornerRadius="50dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/camera_preview"
-            app:strokeColor="@color/black"
-            app:strokeWidth="1dp"
-            tools:ignore="MissingConstraints">
-
-            <ImageView
-                android:id="@+id/imageview_gallery"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop"
-                android:stateListAnimator="@null" />
-
-        </com.google.android.material.card.MaterialCardView>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_capture"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
+            android:layout_marginBottom="23dp"
             android:background="@drawable/shape_circle_capture_button"
             android:stateListAnimator="@null"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_reverse"
-            app:layout_constraintStart_toEndOf="@+id/cardview_gallery"
-            app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
-
-        <ImageButton
-            android:id="@+id/button_reverse"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="40dp"
-            android:layout_weight="1"
-            android:background="@drawable/shape_circle_reverse_button"
-            android:src="@drawable/reverse_vector"
-            android:stateListAnimator="@null"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/camera_preview" />
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

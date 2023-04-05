@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import team.jsv.icec.data.RecyclerViewData
-import team.jsv.presentation.databinding.ActivityMainMosaicStep1Binding
+import team.jsv.presentation.databinding.ActivityDetectFaceBinding
 
 class RecyclerViewAdapter(val itemList: ArrayList<RecyclerViewData>) :
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
@@ -16,7 +16,7 @@ class RecyclerViewAdapter(val itemList: ArrayList<RecyclerViewData>) :
 
     var itemClickListener:OnItemClickListener?=null
 
-    inner class ViewHolder(val binding: ActivityMainMosaicStep1Binding):RecyclerView.ViewHolder(binding.root){
+    inner class ViewHolder(val binding: ActivityDetectFaceBinding):RecyclerView.ViewHolder(binding.root){
         init {
             binding.root.setOnClickListener {
                 itemClickListener?.OnItemClick(itemList[adapterPosition].imgBitmap)
@@ -25,7 +25,7 @@ class RecyclerViewAdapter(val itemList: ArrayList<RecyclerViewData>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = ActivityMainMosaicStep1Binding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val view = ActivityDetectFaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(view)
     }
 
@@ -37,6 +37,7 @@ class RecyclerViewAdapter(val itemList: ArrayList<RecyclerViewData>) :
     }
 
     override fun getItemCount(): Int {
+        return 1
 //        return items.size
     }
 }

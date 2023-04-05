@@ -3,9 +3,9 @@ package team.jsv.icec.ui.main.mosaic
 import android.os.Bundle
 import team.jsv.icec.base.BaseActivity
 import team.jsv.presentation.R
-import team.jsv.presentation.databinding.ActivityMainMosaicStep1Binding
+import team.jsv.presentation.databinding.ActivityDetectFaceBinding
 
-class DetectFaceActivity : BaseActivity<ActivityMainMosaicStep1Binding>(R.layout.activity_detect_face) {
+class DetectFaceActivity : BaseActivity<ActivityDetectFaceBinding>(R.layout.activity_detect_face) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

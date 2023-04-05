@@ -13,14 +13,21 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
+import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.camera.core.AspectRatio.Ratio
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
+import androidx.constraintlayout.widget.ConstraintSet.Constraint
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginTop
 import com.bumptech.glide.Glide
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.util.PermissionUtil
@@ -33,8 +40,9 @@ import java.util.concurrent.Executors
 
 enum class RatioId(val id: Int) {
     OneOnOne(1),
-    FourOnThree(2),
-    NineOnSixteen(3)
+    ThreeOnFour(2),
+    NineOnSixteen(3),
+    Full(4)
 }
 
 @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -44,49 +52,99 @@ class TakePictureActivity :
     private var imageCapture: ImageCapture? = null
     private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
     private var imageUri: Uri? = null
+    private var ratioState = RatioId.OneOnOne.id
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         startCameraWithPermission()
-        getLastImageFromGallery()
     }
 
     override fun onResume() {
         super.onResume()
         initClickListener()
-        resizeCameraView(RatioId.FourOnThree.id)
+        resizeCameraView(RatioId.OneOnOne.id)
+        ratioState = RatioId.OneOnOne.id
     }
 
     private fun initClickListener() {
-        binding.imageviewOneOnOne.setOnClickListener {
-            resizeCameraView(RatioId.OneOnOne.id)
+        binding.imageviewReverse.setOnClickListener {
+            cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
+                CameraSelector.DEFAULT_BACK_CAMERA
+            } else {
+                CameraSelector.DEFAULT_FRONT_CAMERA
+            }
+
+            startCamera()
         }
 
-        binding.imageviewThreeOnFour.setOnClickListener {
-            resizeCameraView(RatioId.FourOnThree.id)
+        binding.imageviewClose.setOnClickListener {
+            finish()
         }
 
-        binding.imageviewNineOnSixteen.setOnClickListener {
-            resizeCameraView(RatioId.NineOnSixteen.id)
+        binding.imageviewRatio.setOnClickListener {
+            when (ratioState) {
+                RatioId.OneOnOne.id -> {
+                    ratioState = RatioId.ThreeOnFour.id
+                    binding.imageviewRatio.setImageResource(R.drawable.bt_three_on_four_22_33)
+                    resizeCameraView(RatioId.ThreeOnFour.id)
+                    reconnectView(RatioId.ThreeOnFour.id)
+                }
+
+                RatioId.ThreeOnFour.id -> {
+                    ratioState = RatioId.NineOnSixteen.id
+                    binding.imageviewRatio.setImageResource(R.drawable.bt_nine_on_sixteen_22_33)
+                    resizeCameraView(RatioId.NineOnSixteen.id)
+                    reconnectView(RatioId.NineOnSixteen.id)
+                }
+
+                RatioId.NineOnSixteen.id -> {
+                    ratioState = RatioId.Full.id
+                    binding.imageviewRatio.setImageResource(R.drawable.bt_full_22_33)
+                    resizeCameraView(RatioId.Full.id)
+                    reconnectView(RatioId.Full.id)
+                }
+
+                RatioId.Full.id -> {
+                    ratioState = RatioId.OneOnOne.id
+                    binding.imageviewRatio.setImageResource(R.drawable.bt_one_on_one_22_33)
+                    resizeCameraView(RatioId.OneOnOne.id)
+                    reconnectView(RatioId.OneOnOne.id)
+                }
+            }
         }
 
         binding.buttonCapture.setOnClickListener {
             takePhoto()
         }
+    }
 
-        binding.buttonReverse.setOnClickListener {
-            if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
-                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-                startCamera()
-            } else {
-                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-                startCamera()
+    private fun reconnectView(id: Int) {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.constraintLayout)
+
+        when (id) {
+            RatioId.OneOnOne.id -> {
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.TOP, binding.imageviewReverse.id, ConstraintSet.BOTTOM)
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT)
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT)
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.BOTTOM, binding.buttonCapture.id, ConstraintSet.TOP)
+            }
+
+            RatioId.NineOnSixteen.id -> {
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT)
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT)
+            }
+
+            RatioId.Full.id -> {
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP)
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.LEFT, ConstraintSet.PARENT_ID, ConstraintSet.LEFT)
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.RIGHT, ConstraintSet.PARENT_ID, ConstraintSet.RIGHT)
+                constraintSet.connect(binding.cameraPreview.id, ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM)
             }
         }
 
-        binding.imageviewGallery.setOnClickListener {
-            openGallery()
-        }
+        constraintSet.applyTo(binding.constraintLayout)
     }
 
     private fun resizeCameraView(id: Int) {
@@ -100,42 +158,21 @@ class TakePictureActivity :
                 layoutParams.height = deviceWidth!!
             }
 
-            RatioId.FourOnThree.id -> {
+            RatioId.ThreeOnFour.id -> {
                 layoutParams.height = deviceWidth!! / 3 * 4
             }
 
             RatioId.NineOnSixteen.id -> {
                 layoutParams.height = deviceWidth!! / 9 * 16
             }
+
+            RatioId.Full.id -> {
+                layoutParams.height = display?.heightPixels!!
+            }
         }
 
         binding.cameraPreview.layoutParams = layoutParams
-    }
-
-    private fun getLastImageFromGallery() {
-        val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-
-        val projection = arrayOf(
-            MediaStore.Images.ImageColumns._ID,
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.ImageColumns.DATE_ADDED,
-            MediaStore.Images.ImageColumns.MIME_TYPE
-        )
-        val cursor: Cursor = this.contentResolver.query(
-            uriExternal, projection, null,
-            null, MediaStore.Images.ImageColumns.DATE_ADDED + " DESC"
-        )!!
-
-        if (cursor.moveToFirst()) {
-            val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-            val imageId: Long = cursor.getLong(columnIndexID)
-            val imageURI = Uri.withAppendedPath(uriExternal, "" + imageId)
-
-            Glide.with(this)
-                .load(imageURI)
-                .into(binding.imageviewGallery)
-        }
-        cursor.close()
+        startCamera()
     }
 
     private fun allPermissionsGranted() = PermissionUtil.getPermissions().all {
@@ -156,8 +193,27 @@ class TakePictureActivity :
                     it.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
                 }
 
+            val display = binding.root.resources?.displayMetrics
+            val deviceWidth = display?.widthPixels
+
             imageCapture = ImageCapture.Builder().apply {
-                setTargetResolution(Size(1080, 1080))
+                when (ratioState) {
+                    RatioId.OneOnOne.id -> {
+                        setTargetResolution(Size(deviceWidth!!, deviceWidth))
+                    }
+
+                    RatioId.ThreeOnFour.id -> {
+                        setTargetResolution(Size(deviceWidth!!, deviceWidth / 3 * 4))
+                    }
+
+                    RatioId.NineOnSixteen.id -> {
+                        setTargetResolution(Size(deviceWidth!!, deviceWidth / 9 * 16))
+                    }
+
+                    RatioId.Full.id -> {
+                        setTargetResolution(Size(deviceWidth!!, display.heightPixels))
+                    }
+                }
             }.build()
 
             try {
@@ -187,6 +243,7 @@ class TakePictureActivity :
             }
         }
 
+
         val outputOptions = ImageCapture.OutputFileOptions
             .Builder(
                 contentResolver,
@@ -204,25 +261,10 @@ class TakePictureActivity :
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    getLastImageFromGallery()
+                    //TODO(jiiiiiyoon) : Photo화면으로 전환
                 }
             }
         )
-    }
-
-    private fun startCameraWithPermission() {
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            ActivityCompat.requestPermissions(
-                this, PermissionUtil.getPermissions().toTypedArray(), REQUEST_CODE_PERMISSIONS
-            )
-        }
-    }
-
-    private fun openGallery() {
-        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        startActivityForResult(gallery, PICK_IMAGE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -232,7 +274,6 @@ class TakePictureActivity :
     }
 
     companion object {
-        private const val REQUEST_CODE_PERMISSIONS = 10
         private const val PICK_IMAGE = 100
 
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
