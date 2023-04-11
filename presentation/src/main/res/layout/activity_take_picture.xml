@@ -29,7 +29,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageview_reverse"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageview_reverse"
-            app:srcCompat="@drawable/bt_close_32" />
+            app:srcCompat="@drawable/ic_close_32" />
 
         <ImageView
             android:id="@+id/imageview_reverse"
@@ -40,7 +40,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/bt_reverse_32" />
+            app:srcCompat="@drawable/ic_reverse_32" />
 
         <ImageView
             android:id="@+id/imageview_ratio"
@@ -51,7 +51,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/imageview_reverse"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imageview_reverse"
-            app:srcCompat="@drawable/bt_one_on_one_22_33" />
+            app:srcCompat="@drawable/ic_1_1_ratio_22_33" />
 
 
 
