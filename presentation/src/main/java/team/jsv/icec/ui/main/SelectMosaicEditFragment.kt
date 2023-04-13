@@ -15,21 +15,26 @@ class SelectMosaicEditFragment :
 
     private val viewModel: MosaicViewModel by activityViewModels()
 
-    override fun initView() {
-        setButtonStroke()
-    }
-
     override fun onResume() {
         super.onResume()
 
+        initView()
+    }
+
+    override fun initView() {
         binding.buttonMosaic.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_faceSelectFragment)
-            viewModel.setScreen(ScreenStep.SelectFace)
-            viewModel.originalImage.value?.let { originalImage -> viewModel.getFaceList(originalImage) }
+            viewModel.originalImage.value?.let { image -> viewModel.getFaceList(image) }
         }
 
         binding.buttonEdit.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_photoEditFragment)
+            viewModel.setScreen(ScreenStep.SelectFace)
+            viewModel.originalImage.value?.let { originalImage ->
+                viewModel.getFaceList(
+                    originalImage
+                )
+            }
         }
     }
 
@@ -39,5 +44,4 @@ class SelectMosaicEditFragment :
             binding.buttonMosaic.strokeWidth = 0
         }
     }
-
 }

@@ -5,25 +5,20 @@ package team.jsv.icec.ui.takepicture
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
-import androidx.annotation.RequiresApi
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.core.app.ActivityCompat
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
-import com.bumptech.glide.Glide
 import team.jsv.icec.base.BaseActivity
-import team.jsv.icec.util.PermissionUtil
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityTakePictureBinding
 import java.text.SimpleDateFormat
@@ -31,117 +26,206 @@ import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
-enum class RatioId(val id: Int) {
-    OneOnOne(1),
-    FourOnThree(2),
-    NineOnSixteen(3)
+enum class SettingRatio(val id: Int) {
+    RATIO_1_1(1),
+    RATIO_3_4(2),
+    RATIO_9_16(3),
+    RATIO_FULL(4);
+
+    companion object {
+        const val AMOUNT_1_1 = 1
+        const val AMOUNT_3_4 = 4 / 3
+        const val AMOUNT_9_16 = 16 / 9
+    }
 }
 
-@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 class TakePictureActivity :
     BaseActivity<ActivityTakePictureBinding>(R.layout.activity_take_picture) {
+
+    companion object {
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    }
+
     private lateinit var cameraExecutor: ExecutorService
+    private lateinit var cameraSelector: CameraSelector
     private var imageCapture: ImageCapture? = null
-    private var cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
     private var imageUri: Uri? = null
+    private var ratioState = SettingRatio.RATIO_1_1.id
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        startCameraWithPermission()
-        getLastImageFromGallery()
+        cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+        resizeCameraView(SettingRatio.RATIO_1_1.id)
+        ratioState = SettingRatio.RATIO_1_1.id
     }
 
     override fun onResume() {
         super.onResume()
         initClickListener()
-        resizeCameraView(RatioId.FourOnThree.id)
     }
 
     private fun initClickListener() {
-        binding.imageviewOneOnOne.setOnClickListener {
-            resizeCameraView(RatioId.OneOnOne.id)
+        binding.imageviewReverse.setOnClickListener {
+            cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
+                CameraSelector.DEFAULT_BACK_CAMERA
+            } else {
+                CameraSelector.DEFAULT_FRONT_CAMERA
+            }
+
+            startCamera()
         }
 
-        binding.imageviewThreeOnFour.setOnClickListener {
-            resizeCameraView(RatioId.FourOnThree.id)
+        binding.imageviewClose.setOnClickListener {
+            finish()
         }
 
-        binding.imageviewNineOnSixteen.setOnClickListener {
-            resizeCameraView(RatioId.NineOnSixteen.id)
+        binding.imageviewRatio.setOnClickListener {
+            when (ratioState) {
+                SettingRatio.RATIO_1_1.id -> {
+                    ratioState = SettingRatio.RATIO_3_4.id
+                    binding.imageviewRatio.setImageResource(R.drawable.ic_3_4_ratio_22_33)
+                    resizeCameraView(SettingRatio.RATIO_3_4.id)
+                    reconnectView(SettingRatio.RATIO_3_4.id)
+                }
+
+                SettingRatio.RATIO_3_4.id -> {
+                    ratioState = SettingRatio.RATIO_9_16.id
+                    binding.imageviewRatio.setImageResource(R.drawable.ic_9_16_ratio_22_33)
+                    resizeCameraView(SettingRatio.RATIO_9_16.id)
+                    reconnectView(SettingRatio.RATIO_9_16.id)
+                }
+
+                SettingRatio.RATIO_9_16.id -> {
+                    ratioState = SettingRatio.RATIO_FULL.id
+                    binding.imageviewRatio.setImageResource(R.drawable.ic_full_ratio_22_33)
+                    resizeCameraView(SettingRatio.RATIO_FULL.id)
+                    reconnectView(SettingRatio.RATIO_FULL.id)
+                }
+
+                SettingRatio.RATIO_FULL.id -> {
+                    ratioState = SettingRatio.RATIO_1_1.id
+                    binding.imageviewRatio.setImageResource(R.drawable.ic_1_1_ratio_22_33)
+                    resizeCameraView(SettingRatio.RATIO_1_1.id)
+                    reconnectView(SettingRatio.RATIO_1_1.id)
+                }
+            }
         }
 
         binding.buttonCapture.setOnClickListener {
             takePhoto()
         }
+    }
 
-        binding.buttonReverse.setOnClickListener {
-            if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
-                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
-                startCamera()
-            } else {
-                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-                startCamera()
+    private fun reconnectView(id: Int) {
+        val constraintSet = ConstraintSet()
+        constraintSet.clone(binding.constraintLayout)
+
+        when (id) {
+            SettingRatio.RATIO_1_1.id -> {
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.TOP,
+                    binding.imageviewReverse.id,
+                    ConstraintSet.BOTTOM
+                )
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.LEFT,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.LEFT
+                )
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.RIGHT,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.RIGHT
+                )
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.BOTTOM,
+                    binding.buttonCapture.id,
+                    ConstraintSet.TOP
+                )
+            }
+
+            SettingRatio.RATIO_9_16.id -> {
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.TOP,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.TOP
+                )
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.LEFT,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.LEFT
+                )
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.RIGHT,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.RIGHT
+                )
+            }
+
+            SettingRatio.RATIO_FULL.id -> {
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.TOP,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.TOP
+                )
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.LEFT,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.LEFT
+                )
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.RIGHT,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.RIGHT
+                )
+                constraintSet.connect(
+                    binding.cameraPreview.id,
+                    ConstraintSet.BOTTOM,
+                    ConstraintSet.PARENT_ID,
+                    ConstraintSet.BOTTOM
+                )
             }
         }
 
-        binding.imageviewGallery.setOnClickListener {
-            openGallery()
-        }
+        constraintSet.applyTo(binding.constraintLayout)
     }
 
     private fun resizeCameraView(id: Int) {
         val display = binding.root.resources?.displayMetrics
-        val deviceWidth = display?.widthPixels
+        val deviceWidth = display?.widthPixels ?: 0
 
         val layoutParams = binding.cameraPreview.layoutParams
 
         when (id) {
-            RatioId.OneOnOne.id -> {
-                layoutParams.height = deviceWidth!!
+            SettingRatio.RATIO_1_1.id -> {
+                layoutParams.height = deviceWidth * SettingRatio.AMOUNT_1_1
             }
 
-            RatioId.FourOnThree.id -> {
-                layoutParams.height = deviceWidth!! / 3 * 4
+            SettingRatio.RATIO_3_4.id -> {
+                layoutParams.height = deviceWidth * SettingRatio.AMOUNT_3_4
             }
 
-            RatioId.NineOnSixteen.id -> {
-                layoutParams.height = deviceWidth!! / 9 * 16
+            SettingRatio.RATIO_9_16.id -> {
+                layoutParams.height = deviceWidth * SettingRatio.AMOUNT_9_16
+            }
+
+            SettingRatio.RATIO_FULL.id -> {
+                layoutParams.height = display?.heightPixels ?: 0
             }
         }
 
         binding.cameraPreview.layoutParams = layoutParams
-    }
-
-    private fun getLastImageFromGallery() {
-        val uriExternal: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-
-        val projection = arrayOf(
-            MediaStore.Images.ImageColumns._ID,
-            MediaStore.Images.Media._ID,
-            MediaStore.Images.ImageColumns.DATE_ADDED,
-            MediaStore.Images.ImageColumns.MIME_TYPE
-        )
-        val cursor: Cursor = this.contentResolver.query(
-            uriExternal, projection, null,
-            null, MediaStore.Images.ImageColumns.DATE_ADDED + " DESC"
-        )!!
-
-        if (cursor.moveToFirst()) {
-            val columnIndexID = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
-            val imageId: Long = cursor.getLong(columnIndexID)
-            val imageURI = Uri.withAppendedPath(uriExternal, "" + imageId)
-
-            Glide.with(this)
-                .load(imageURI)
-                .into(binding.imageviewGallery)
-        }
-        cursor.close()
-    }
-
-    private fun allPermissionsGranted() = PermissionUtil.getPermissions().all {
-        ContextCompat.checkSelfPermission(
-            baseContext, it
-        ) == PackageManager.PERMISSION_GRANTED
+        startCamera()
     }
 
     private fun startCamera() {
@@ -156,13 +240,50 @@ class TakePictureActivity :
                     it.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
                 }
 
+            val display = binding.root.resources?.displayMetrics
+            val deviceWidth = display?.widthPixels ?: 0
+
             imageCapture = ImageCapture.Builder().apply {
-                setTargetResolution(Size(1080, 1080))
+                when (ratioState) {
+                    SettingRatio.RATIO_1_1.id -> {
+                        setTargetResolution(
+                            Size(
+                                deviceWidth,
+                                deviceWidth * SettingRatio.AMOUNT_1_1
+                            )
+                        )
+                    }
+
+                    SettingRatio.RATIO_3_4.id -> {
+                        setTargetResolution(
+                            Size(
+                                deviceWidth,
+                                deviceWidth * SettingRatio.AMOUNT_3_4
+                            )
+                        )
+                    }
+
+                    SettingRatio.RATIO_9_16.id -> {
+                        setTargetResolution(
+                            Size(
+                                deviceWidth,
+                                deviceWidth * SettingRatio.AMOUNT_9_16
+                            )
+                        )
+                    }
+
+                    SettingRatio.RATIO_FULL.id -> {
+                        setTargetResolution(
+                            Size(
+                                deviceWidth, display?.heightPixels ?: 0
+                            )
+                        )
+                    }
+                }
             }.build()
 
             try {
                 cameraProvider.unbindAll()
-
                 cameraProvider.bindToLifecycle(
                     this, cameraSelector, preview, imageCapture
                 )
@@ -204,37 +325,14 @@ class TakePictureActivity :
                 }
 
                 override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    getLastImageFromGallery()
+                    //TODO(jiiiiiyoon) : Photo화면으로 전환
                 }
             }
         )
     }
 
-    private fun startCameraWithPermission() {
-        if (allPermissionsGranted()) {
-            startCamera()
-        } else {
-            ActivityCompat.requestPermissions(
-                this, PermissionUtil.getPermissions().toTypedArray(), REQUEST_CODE_PERMISSIONS
-            )
-        }
-    }
-
-    private fun openGallery() {
-        val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
-        startActivityForResult(gallery, PICK_IMAGE)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         imageUri = data?.data ?: return
-        //      고른 이미지 처리
-    }
-
-    companion object {
-        private const val REQUEST_CODE_PERMISSIONS = 10
-        private const val PICK_IMAGE = 100
-
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 }
