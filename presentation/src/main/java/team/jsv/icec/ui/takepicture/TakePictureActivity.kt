@@ -5,7 +5,6 @@ package team.jsv.icec.ui.takepicture
 import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -20,8 +19,6 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import team.jsv.icec.base.BaseActivity
-import team.jsv.icec.util.PermissionUtil
-import team.jsv.icec.util.RatioCalculation
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityTakePictureBinding
 import java.text.SimpleDateFormat
@@ -33,11 +30,22 @@ enum class SettingRatio(val id: Int) {
     RATIO_1_1(1),
     RATIO_3_4(2),
     RATIO_9_16(3),
-    RATIO_FULL(4)
+    RATIO_FULL(4);
+
+    companion object {
+        const val AMOUNT_1_1 = 1
+        const val AMOUNT_3_4 = 4 / 3
+        const val AMOUNT_9_16 = 16 / 9
+    }
 }
 
 class TakePictureActivity :
     BaseActivity<ActivityTakePictureBinding>(R.layout.activity_take_picture) {
+
+    companion object {
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+    }
+
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var cameraSelector: CameraSelector
     private var imageCapture: ImageCapture? = null
@@ -200,15 +208,15 @@ class TakePictureActivity :
 
         when (id) {
             SettingRatio.RATIO_1_1.id -> {
-                layoutParams.height = deviceWidth
+                layoutParams.height = deviceWidth * SettingRatio.AMOUNT_1_1
             }
 
             SettingRatio.RATIO_3_4.id -> {
-                layoutParams.height = deviceWidth * RatioCalculation.RATIO_3_4
+                layoutParams.height = deviceWidth * SettingRatio.AMOUNT_3_4
             }
 
             SettingRatio.RATIO_9_16.id -> {
-                layoutParams.height = deviceWidth * RatioCalculation.RATIO_9_16
+                layoutParams.height = deviceWidth * SettingRatio.AMOUNT_9_16
             }
 
             SettingRatio.RATIO_FULL.id -> {
@@ -218,12 +226,6 @@ class TakePictureActivity :
 
         binding.cameraPreview.layoutParams = layoutParams
         startCamera()
-    }
-
-    private fun allPermissionsGranted() = PermissionUtil.getPermissions().all {
-        ContextCompat.checkSelfPermission(
-            baseContext, it
-        ) == PackageManager.PERMISSION_GRANTED
     }
 
     private fun startCamera() {
@@ -244,14 +246,19 @@ class TakePictureActivity :
             imageCapture = ImageCapture.Builder().apply {
                 when (ratioState) {
                     SettingRatio.RATIO_1_1.id -> {
-                        setTargetResolution(Size(deviceWidth, deviceWidth))
+                        setTargetResolution(
+                            Size(
+                                deviceWidth,
+                                deviceWidth * SettingRatio.AMOUNT_1_1
+                            )
+                        )
                     }
 
                     SettingRatio.RATIO_3_4.id -> {
                         setTargetResolution(
                             Size(
                                 deviceWidth,
-                                deviceWidth * RatioCalculation.RATIO_3_4
+                                deviceWidth * SettingRatio.AMOUNT_3_4
                             )
                         )
                     }
@@ -260,13 +267,17 @@ class TakePictureActivity :
                         setTargetResolution(
                             Size(
                                 deviceWidth,
-                                deviceWidth * RatioCalculation.RATIO_9_16
+                                deviceWidth * SettingRatio.AMOUNT_9_16
                             )
                         )
                     }
 
                     SettingRatio.RATIO_FULL.id -> {
-                        setTargetResolution(Size(deviceWidth, display?.heightPixels ?: 0))
+                        setTargetResolution(
+                            Size(
+                                deviceWidth, display?.heightPixels ?: 0
+                            )
+                        )
                     }
                 }
             }.build()
@@ -323,9 +334,5 @@ class TakePictureActivity :
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         imageUri = data?.data ?: return
-    }
-
-    companion object {
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
     }
 }
