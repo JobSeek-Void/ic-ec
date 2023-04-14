@@ -4,7 +4,7 @@
     <application android:theme="@style/ICECTheme">
 
         <activity
-            android:name="team.jsv.icec.ui.takepicture.TakePictureActivity"
+            android:name="team.jsv.icec.ui.camera.CameraActivity"
             android:exported="true">
 
         </activity>
