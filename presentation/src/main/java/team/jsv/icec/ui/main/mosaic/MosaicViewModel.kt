@@ -74,10 +74,6 @@ internal class MosaicViewModel @Inject constructor(
         when (_screenStep.value) {
             ScreenStep.MosaicFace -> {
                 _state.postValue(PictureState.File(_originalImage.value ?: File("")))
-                setScreen(ScreenStep.SelectFace)
-            }
-            ScreenStep.SelectFace -> {
-                setScreen(ScreenStep.SelectMosaicEdit)
             }
             else -> {}
         }

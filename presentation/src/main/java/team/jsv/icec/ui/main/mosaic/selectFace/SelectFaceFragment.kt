@@ -5,7 +5,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
-import team.jsv.icec.ui.main.mosaic.ScreenStep
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentSelectFaceBinding
 
@@ -19,13 +18,6 @@ class SelectFaceFragment :
         viewModel.backPress.observe(this, EventObserver {
             popBackStack()
         })
-
-        binding.buttonNext.setOnClickListener {
-            navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
-            viewModel.run {
-                setScreen(ScreenStep.MosaicFace)
-                getMosaicImage()
-            }
-        }
     }
+
 }

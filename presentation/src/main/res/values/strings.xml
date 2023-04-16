@@ -3,7 +3,7 @@
 
     <!-- fragment_select_mosaic_edit.xml -->
     <string name="edit_text">Edit</string>
-    <string name="mosaic_text">Blur</string>
+    <string name="mosaic_text">Mosaic</string>
 
     <!-- top_bar.xml -->
     <string name="share_text">공유</string>

@@ -7,7 +7,7 @@
     <color name="Gray300">#FFEFEFEF</color>
     <color name="Gray400">#FFF6F6F6</color>
     <color name="MainColor">#FFFA9A85</color>
-    <color name="SubColor">#99FA9A85</color>
+    <color name="SubColor">#0884FE</color>
 
     <!-- System Theme Color -->
     <color name="WindowBackGroundColor">#121212</color>
