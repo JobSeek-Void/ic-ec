@@ -43,23 +43,7 @@ class MainActivity :
     override fun onResume() {
         super.onResume()
 
-        binding.topBar.buttonBack.setOnClickListener {
-            handleScreenStepChange()
-        }
-
-        binding.topBar.buttonNext.setOnClickListener {
-            when (viewModel.screenStep.value) {
-                ScreenStep.SelectFace -> {
-                    navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
-                    viewModel.run {
-                        setScreen(ScreenStep.MosaicFace)
-                        setImageAboutScreenStep()
-                        getMosaicImage()
-                    }
-                }
-                else -> {}
-            }
-        }
+        initClickListeners()
     }
 
     private fun initTopBar() {
@@ -146,6 +130,26 @@ class MainActivity :
                 }
             }
             else -> {}
+        }
+    }
+
+    private fun initClickListeners() {
+        binding.topBar.buttonBack.setOnClickListener {
+            handleScreenStepChange()
+        }
+
+        binding.topBar.buttonNext.setOnClickListener {
+            when (viewModel.screenStep.value) {
+                ScreenStep.SelectFace -> {
+                    navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
+                    viewModel.run {
+                        setScreen(ScreenStep.MosaicFace)
+                        setImageAboutScreenStep()
+                        getMosaicImage()
+                    }
+                }
+                else -> {}
+            }
         }
     }
 
