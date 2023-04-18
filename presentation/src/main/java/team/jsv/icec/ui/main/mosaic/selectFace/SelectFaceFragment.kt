@@ -19,6 +19,7 @@ class SelectFaceFragment :
     override fun initView() {
         binding.rvDetectedFace.apply {
             adapter = detectedFaceAdapter
+            addItemDecoration(HorizontalSpaceItemDecoration(space = 12))
         }
 
         viewModel.backPress.observe(this, EventObserver {
