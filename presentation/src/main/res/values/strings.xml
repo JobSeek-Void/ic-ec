@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">ICEC</string>
+    <!-- fragment_select_face.xml -->
+    <string name="detected_face_count">%d명</string>
+    <string name="detect_face_text">얼굴 검출</string>
 
     <!-- fragment_select_mosaic_edit.xml -->
     <string name="edit_text">Edit</string>
