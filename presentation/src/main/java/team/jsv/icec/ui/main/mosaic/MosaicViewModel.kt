@@ -49,7 +49,8 @@ internal class MosaicViewModel @Inject constructor(
     private val _pixelSize = MutableLiveData<Float>().apply { postValue(DEFAULT_MOSAIC_STRENGTH) }
     val pixelSize: LiveData<Float> get() = _pixelSize
 
-    private val _screenStep = MutableLiveData<ScreenStep>().apply { postValue(ScreenStep.SelectMosaicEdit) }
+    private val _screenStep =
+        MutableLiveData<ScreenStep>().apply { postValue(ScreenStep.SelectMosaicEdit) }
     val screenStep: LiveData<ScreenStep> get() = _screenStep
 
     private val _mosaicEvent = MutableLiveData<Event<MosaicEvent>>()
@@ -78,20 +79,20 @@ internal class MosaicViewModel @Inject constructor(
         }
     }
 
-    internal fun getFaceList(
-        image: File
-    ) = viewModelScope.launch {
-        getDetectedFaceUseCase(
-            currentTime = currentTime,
-            image = image
-        ).onSuccess {
-            _detectFaces.postValue(it)
-        }.onFailure {
-            handleException(it)
+    internal fun getFaceList(image: File) {
+        viewModelScope.launch {
+            getDetectedFaceUseCase(
+                currentTime = currentTime,
+                image = image
+            ).onSuccess {
+                _detectFaces.postValue(it)
+            }.onFailure {
+                handleException(it)
+            }
         }
     }
 
-    internal fun getMosaicImage() =
+    internal fun getMosaicImage() {
         viewModelScope.launch {
             val originalImage = detectFaces.value?.originalImage ?: ""
             val coordinates = arrayListOf<List<Int>>().also { coordinates ->
@@ -123,6 +124,7 @@ internal class MosaicViewModel @Inject constructor(
                 }
             }
         }
+    }
 
     private fun handleException(exception: Throwable) {
         if (exception is IcecNetworkException) {
