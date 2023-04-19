@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="ICECTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowBackground">@color/WindowBackGroundColor</item>
         <item name="android:statusBarColor">@color/StatusBarColor</item>
+    </style>
+
+    <style name="ShapeAppearanceOverlay.MosaicImage" parent="">
+        <item name="cornerSize">8dp</item>
     </style>
 </resources>
