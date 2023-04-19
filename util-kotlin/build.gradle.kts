@@ -7,3 +7,7 @@ java {
     sourceCompatibility = Apps.sourceCompatibility
     targetCompatibility = Apps.targetCompatibility
 }
+
+dependencies {
+    Dependencies.Essential.forEach(::implementation)
+}
