@@ -6,16 +6,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import team.jsv.domain.model.Face
+import team.jsv.domain.model.MosaicType
 import team.jsv.domain.usecase.GetDetectedFaceUseCase
 import team.jsv.domain.usecase.GetMosaicImageUseCase
 import team.jsv.icec.base.BaseViewModel
 import team.jsv.icec.base.Event
+import team.jsv.icec.base.updateState
+import team.jsv.icec.ui.main.mosaic.mosaicFace.MosaicFaceState
 import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
 import team.jsv.icec.ui.main.mosaic.detect.model.toFaceViewItem
 import team.jsv.util_kotlin.IcecNetworkException
+import team.jsv.util_kotlin.MutableDebounceFlow
+import team.jsv.util_kotlin.debounceAction
 import team.jsv.util_kotlin.copy
 import java.io.File
 import java.text.SimpleDateFormat
@@ -31,11 +39,12 @@ enum class ScreenStep {
 @HiltViewModel
 internal class MosaicViewModel @Inject constructor(
     private val getDetectedFaceUseCase: GetDetectedFaceUseCase,
-    private val getMosaicImageUseCase: GetMosaicImageUseCase
+    private val getMosaicImageUseCase: GetMosaicImageUseCase,
 ) : BaseViewModel() {
 
     companion object {
-        const val DEFAULT_MOSAIC_STRENGTH = 20f
+        private const val DEFAULT_MOSAIC_STRENGTH = 20f
+        private const val debounceDelay: Long = 200L
     }
 
     private val currentTime: String =
@@ -66,6 +75,18 @@ internal class MosaicViewModel @Inject constructor(
 
     private val _detectedFaceIndexes = MutableStateFlow<List<Int>>(emptyList())
     val detectedFaceIndexes: StateFlow<List<Int>> = _detectedFaceIndexes.asStateFlow()
+
+    private val _mosaicFaceState = MutableStateFlow(MosaicFaceState())
+    val mosaicFaceState = _mosaicFaceState.asStateFlow()
+
+    private val mosaicDebounce = MutableDebounceFlow<Unit> {
+        debounceAction(
+            coroutineScope = viewModelScope,
+            timeoutMillis = debounceDelay,
+        ) {
+            getMosaicImage()
+        }
+    }
 
     fun setScreen(screenStep: ScreenStep) = _screenStep.postValue(screenStep)
 
@@ -123,6 +144,22 @@ internal class MosaicViewModel @Inject constructor(
             }.onFailure {
                 handleException(it)
             }
+    internal fun getFaceList(
+        image: File,
+    ) = viewModelScope.launch {
+        getDetectedFaceUseCase(
+            currentTime = currentTime,
+            image = image
+        ).onSuccess {
+            _detectFaces.postValue(it)
+        }.onFailure {
+            handleException(it)
+        }
+    }
+
+    fun emitMosaicEvent() {
+        viewModelScope.launch {
+            mosaicDebounce.emit(Unit)
         }
     }
 
@@ -138,7 +175,8 @@ internal class MosaicViewModel @Inject constructor(
                     currentTime = currentTime,
                     pixelSize = pixelSize.toInt(),
                     originalImage = originalImage,
-                    coordinates = coordinates
+                    coordinates = coordinates,
+                    mosaicType = mosaicFaceState.value.mosaicType
                 ).onSuccess {
                     when (screenStep.value) {
                         ScreenStep.MosaicFace -> {
@@ -156,6 +194,14 @@ internal class MosaicViewModel @Inject constructor(
                 }
             }
         }
+    }
+    }
+
+    fun setMosaicType(mosaicType: MosaicType) {
+        _mosaicFaceState.updateState {
+            copy(mosaicType = mosaicType)
+        }
+        emitMosaicEvent()
     }
 
     private fun handleException(exception: Throwable) {
