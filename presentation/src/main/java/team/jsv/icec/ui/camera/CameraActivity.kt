@@ -4,13 +4,12 @@ package team.jsv.icec.ui.camera
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
 import android.util.Size
+import androidx.activity.viewModels
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
@@ -19,6 +18,8 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import team.jsv.icec.base.BaseActivity
+import team.jsv.icec.util.SettingViewUtil.reconnectView
+import team.jsv.icec.util.SettingViewUtil.resizeView
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityCameraBinding
 import java.text.SimpleDateFormat
@@ -27,37 +28,26 @@ import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.roundToInt
 
-enum class SettingRatio(val id: Int) {
-    RATIO_1_1(1),
-    RATIO_3_4(2),
-    RATIO_9_16(3),
-    RATIO_FULL(4);
-
-    companion object {
-        const val AMOUNT_1_1 = 1.0
-        const val AMOUNT_3_4 = 4.0 / 3.0
-        const val AMOUNT_9_16 = 16.0 / 9.0
-    }
-}
-
 class CameraActivity :
     BaseActivity<ActivityCameraBinding>(R.layout.activity_camera) {
 
     companion object {
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HH-mm-ss-SSS"
+        private const val FILENAME_FORMAT = "yyyy-MM-dd-HHmmss"
     }
+
+    private val deviceHeight get() = binding.root.resources?.displayMetrics?.heightPixels ?: 0
+    private val deviceWidth get() = binding.root.resources?.displayMetrics?.widthPixels ?: 0
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var cameraSelector: CameraSelector
     private var imageCapture: ImageCapture? = null
-    private var imageUri: Uri? = null
-    private var ratioState = SettingRatio.RATIO_1_1.id
+    private val viewModel: CameraViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        viewModel.setRatioState(SettingRatio.RATIO_1_1.id)
         cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-        resizeCameraView(SettingRatio.RATIO_1_1.id)
-        ratioState = SettingRatio.RATIO_1_1.id
+        resizeCameraView()
     }
 
     override fun onResume() {
@@ -80,34 +70,54 @@ class CameraActivity :
             finish()
         }
 
+
         binding.imageviewRatio.setOnClickListener {
-            when (ratioState) {
+            when (viewModel.ratioState.value) {
                 SettingRatio.RATIO_1_1.id -> {
-                    ratioState = SettingRatio.RATIO_3_4.id
+                    viewModel.setRatioState(SettingRatio.RATIO_3_4.id)
                     binding.imageviewRatio.setImageResource(R.drawable.ic_3_4_ratio_22_33)
-                    resizeCameraView(SettingRatio.RATIO_3_4.id)
-                    reconnectView(SettingRatio.RATIO_3_4.id)
                 }
 
                 SettingRatio.RATIO_3_4.id -> {
-                    ratioState = SettingRatio.RATIO_9_16.id
+                    viewModel.setRatioState(SettingRatio.RATIO_9_16.id)
                     binding.imageviewRatio.setImageResource(R.drawable.ic_9_16_ratio_22_33)
-                    resizeCameraView(SettingRatio.RATIO_9_16.id)
-                    reconnectView(SettingRatio.RATIO_9_16.id)
+                    reconnectView(
+                        binding.constraintLayout,
+                        binding.cameraPreview,
+                        binding.constraintLayout,
+                        ConstraintSet.TOP,
+                        binding.constraintLayout,
+                        ConstraintSet.BOTTOM,
+                        ConnenctState.TOP.id
+                    )
                 }
 
                 SettingRatio.RATIO_9_16.id -> {
-                    ratioState = SettingRatio.RATIO_FULL.id
+                    viewModel.setRatioState(SettingRatio.RATIO_FULL.id)
                     binding.imageviewRatio.setImageResource(R.drawable.ic_full_ratio_22_33)
-                    resizeCameraView(SettingRatio.RATIO_FULL.id)
-                    reconnectView(SettingRatio.RATIO_FULL.id)
+                    reconnectView(
+                        binding.constraintLayout,
+                        binding.cameraPreview,
+                        binding.constraintLayout,
+                        ConstraintSet.TOP,
+                        binding.constraintLayout,
+                        ConstraintSet.BOTTOM,
+                        ConnenctState.TOPBOTTOM.id
+                    )
                 }
 
                 SettingRatio.RATIO_FULL.id -> {
-                    ratioState = SettingRatio.RATIO_1_1.id
+                    viewModel.setRatioState(SettingRatio.RATIO_1_1.id)
                     binding.imageviewRatio.setImageResource(R.drawable.ic_1_1_ratio_22_33)
-                    resizeCameraView(SettingRatio.RATIO_1_1.id)
-                    reconnectView(SettingRatio.RATIO_1_1.id)
+                    reconnectView(
+                        binding.constraintLayout,
+                        binding.cameraPreview,
+                        binding.imageviewReverse,
+                        ConstraintSet.BOTTOM,
+                        binding.buttonCapture,
+                        ConstraintSet.TOP,
+                        ConnenctState.TOPBOTTOM.id
+                    )
                 }
             }
         }
@@ -117,116 +127,14 @@ class CameraActivity :
         }
     }
 
-    private fun reconnectView(id: Int) {
-        val constraintSet = ConstraintSet()
-        constraintSet.clone(binding.constraintLayout)
+    private fun resizeCameraView() {
+        viewModel.ratioState.observe(this) { it ->
+            val layoutParams = binding.cameraPreview.layoutParams
 
-        when (id) {
-            SettingRatio.RATIO_1_1.id -> {
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.TOP,
-                    binding.imageviewReverse.id,
-                    ConstraintSet.BOTTOM
-                )
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.LEFT,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.LEFT
-                )
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.RIGHT,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.RIGHT
-                )
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.BOTTOM,
-                    binding.buttonCapture.id,
-                    ConstraintSet.TOP
-                )
-            }
-
-            SettingRatio.RATIO_9_16.id -> {
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.TOP,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.TOP
-                )
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.LEFT,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.LEFT
-                )
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.RIGHT,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.RIGHT
-                )
-            }
-
-            SettingRatio.RATIO_FULL.id -> {
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.TOP,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.TOP
-                )
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.LEFT,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.LEFT
-                )
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.RIGHT,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.RIGHT
-                )
-                constraintSet.connect(
-                    binding.cameraPreview.id,
-                    ConstraintSet.BOTTOM,
-                    ConstraintSet.PARENT_ID,
-                    ConstraintSet.BOTTOM
-                )
-            }
+            binding.cameraPreview.layoutParams =
+                resizeView(layoutParams, it, deviceWidth, deviceHeight)
+            startCamera()
         }
-
-        constraintSet.applyTo(binding.constraintLayout)
-    }
-
-    private fun resizeCameraView(id: Int) {
-        val display = binding.root.resources?.displayMetrics
-        val deviceWidth = display?.widthPixels ?: 0
-
-        val layoutParams = binding.cameraPreview.layoutParams
-
-        when (id) {
-            SettingRatio.RATIO_1_1.id -> {
-                layoutParams.height = (deviceWidth * SettingRatio.AMOUNT_1_1).roundToInt()
-            }
-
-            SettingRatio.RATIO_3_4.id -> {
-                layoutParams.height = (deviceWidth * SettingRatio.AMOUNT_3_4).roundToInt()
-            }
-
-            SettingRatio.RATIO_9_16.id -> {
-                layoutParams.height = (deviceWidth * SettingRatio.AMOUNT_9_16).roundToInt()
-            }
-
-            SettingRatio.RATIO_FULL.id -> {
-                layoutParams.height = display?.heightPixels ?: 0
-            }
-        }
-
-        binding.cameraPreview.layoutParams = layoutParams
-        startCamera()
     }
 
     private fun startCamera() {
@@ -241,11 +149,8 @@ class CameraActivity :
                     it.setSurfaceProvider(binding.cameraPreview.surfaceProvider)
                 }
 
-            val display = binding.root.resources?.displayMetrics
-            val deviceWidth = display?.widthPixels ?: 0
-
             imageCapture = ImageCapture.Builder().apply {
-                when (ratioState) {
+                when (viewModel.ratioState.value) {
                     SettingRatio.RATIO_1_1.id -> {
                         setTargetResolution(
                             Size(
@@ -276,7 +181,7 @@ class CameraActivity :
                     SettingRatio.RATIO_FULL.id -> {
                         setTargetResolution(
                             Size(
-                                deviceWidth, display?.heightPixels ?: 0
+                                deviceWidth, deviceHeight
                             )
                         )
                     }
@@ -298,7 +203,7 @@ class CameraActivity :
     private fun takePhoto() {
         val imageCapture = imageCapture ?: return
 
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale.KOREA)
+        val name = SimpleDateFormat(FILENAME_FORMAT, Locale("ko", "KR"))
             .format(System.currentTimeMillis())
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, name)
@@ -330,10 +235,5 @@ class CameraActivity :
                 }
             }
         )
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        imageUri = data?.data ?: return
     }
 }
