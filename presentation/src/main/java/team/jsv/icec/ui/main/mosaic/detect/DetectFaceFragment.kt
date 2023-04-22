@@ -1,4 +1,4 @@
-package team.jsv.icec.ui.main.mosaic.selectFace
+package team.jsv.icec.ui.main.mosaic.detect
 
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -7,14 +7,15 @@ import team.jsv.icec.base.EventObserver
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
 import team.jsv.icec.util.HorizontalSpaceItemDecoration
 import team.jsv.presentation.R
-import team.jsv.presentation.databinding.FragmentSelectFaceBinding
+import team.jsv.presentation.databinding.FragmentDetectFaceBinding
 
 @AndroidEntryPoint
-class SelectFaceFragment :
-    BaseFragment<FragmentSelectFaceBinding>(R.layout.fragment_select_face) {
+class DetectFaceFragment :
+    BaseFragment<FragmentDetectFaceBinding>(R.layout.fragment_detect_face) {
 
     private val viewModel: MosaicViewModel by activityViewModels()
     private val detectedFaceAdapter by lazy { DetectedFaceAdapter() }
+    private var isSelect: Boolean = false
 
     override fun initView() {
         binding.rvDetectedFace.apply {
@@ -33,6 +34,7 @@ class SelectFaceFragment :
             binding.tvDetectedFaceCount.text =
                 getString(R.string.detected_face_count, detectedFaceCount)
         }
+
     }
 
 }

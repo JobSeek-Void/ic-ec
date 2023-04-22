@@ -1,4 +1,4 @@
-package team.jsv.icec.ui.main.mosaic.selectFace
+package team.jsv.icec.ui.main.mosaic.detect
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import team.jsv.domain.model.DetectFaceInfo
-import team.jsv.domain.model.Face
 import team.jsv.icec.util.loadImage
 import team.jsv.presentation.databinding.ViewholderDetectedFaceBinding
 
