@@ -12,3 +12,10 @@ enum class SettingRatio(val id: Int) {
         const val AMOUNT_9_16 = 16.0 / 9.0
     }
 }
+
+enum class ConnenctState(val id: Int) {
+    TOP(0),
+    BOTTOM(1),
+    TOPBOTTOM(2),
+}
+
