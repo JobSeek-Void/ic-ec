@@ -56,7 +56,7 @@ class CameraActivity :
     }
 
     private fun initClickListener() {
-        binding.imageviewReverse.setOnClickListener {
+        binding.ivRatio.setOnClickListener {
             cameraSelector = if (cameraSelector == CameraSelector.DEFAULT_FRONT_CAMERA) {
                 CameraSelector.DEFAULT_BACK_CAMERA
             } else {
@@ -66,21 +66,21 @@ class CameraActivity :
             startCamera()
         }
 
-        binding.imageviewClose.setOnClickListener {
+        binding.ivClose.setOnClickListener {
             finish()
         }
 
 
-        binding.imageviewRatio.setOnClickListener {
+        binding.ivRatio.setOnClickListener {
             when (viewModel.ratioState.value) {
                 SettingRatio.RATIO_1_1.id -> {
                     viewModel.setRatioState(SettingRatio.RATIO_3_4.id)
-                    binding.imageviewRatio.setImageResource(R.drawable.ic_3_4_ratio_22_33)
+                    binding.ivRatio.setImageResource(R.drawable.ic_3_4_ratio_22_33)
                 }
 
                 SettingRatio.RATIO_3_4.id -> {
                     viewModel.setRatioState(SettingRatio.RATIO_9_16.id)
-                    binding.imageviewRatio.setImageResource(R.drawable.ic_9_16_ratio_22_33)
+                    binding.ivRatio.setImageResource(R.drawable.ic_9_16_ratio_22_33)
                     reconnectView(
                         binding.constraintLayout,
                         binding.cameraPreview,
@@ -94,7 +94,7 @@ class CameraActivity :
 
                 SettingRatio.RATIO_9_16.id -> {
                     viewModel.setRatioState(SettingRatio.RATIO_FULL.id)
-                    binding.imageviewRatio.setImageResource(R.drawable.ic_full_ratio_22_33)
+                    binding.ivRatio.setImageResource(R.drawable.ic_full_ratio_22_33)
                     reconnectView(
                         binding.constraintLayout,
                         binding.cameraPreview,
@@ -108,13 +108,13 @@ class CameraActivity :
 
                 SettingRatio.RATIO_FULL.id -> {
                     viewModel.setRatioState(SettingRatio.RATIO_1_1.id)
-                    binding.imageviewRatio.setImageResource(R.drawable.ic_1_1_ratio_22_33)
+                    binding.ivRatio.setImageResource(R.drawable.ic_1_1_ratio_22_33)
                     reconnectView(
                         binding.constraintLayout,
                         binding.cameraPreview,
-                        binding.imageviewReverse,
+                        binding.ivReverse,
                         ConstraintSet.BOTTOM,
-                        binding.buttonCapture,
+                        binding.btCapture,
                         ConstraintSet.TOP,
                         ConnenctState.TOPBOTTOM.id
                     )
@@ -122,7 +122,7 @@ class CameraActivity :
             }
         }
 
-        binding.buttonCapture.setOnClickListener {
+        binding.btCapture.setOnClickListener {
             takePhoto()
         }
     }
