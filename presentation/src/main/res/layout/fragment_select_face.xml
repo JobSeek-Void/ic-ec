@@ -9,69 +9,95 @@
         android:layout_height="match_parent"
         tools:layout_height="250dp">
 
-        <ImageView
-            android:id="@+id/iv_initialization"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
-
         <TextView
             android:id="@+id/tv_detected_face_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginBottom="21dp"
             android:fontFamily="@font/pretendard_medium"
-            android:text="0명"
             android:textColor="@color/white"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_initialization"
+            app:layout_constraintBottom_toTopOf="@+id/rv_detected_face"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_initialization"
             tools:text="5명" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_group_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:letterSpacing="0"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:text="@string/all_select_text"
+            android:textColor="@color/gray6"
+            android:textSize="12sp"
+            app:backgroundTint="@color/gray1"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/iv_initialization"
+            app:layout_constraintTop_toTopOf="@+id/tv_detected_face_count"
+            app:rippleColor="@android:color/transparent"
+            app:strokeColor="@color/gray2"
+            app:strokeWidth="1dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_detected_face"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
             android:clipToPadding="false"
             android:orientation="horizontal"
             android:overScrollMode="never"
             android:paddingHorizontal="16dp"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toTopOf="@+id/tv_detect_face"
-            app:layout_constraintTop_toBottomOf="@+id/tv_detected_face_count"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             tools:listitem="@layout/viewholder_detected_face" />
 
         <TextView
             android:id="@+id/tv_detect_face"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
             android:fontFamily="@font/pretendard_medium"
             android:text="@string/detect_face_text"
             android:textColor="@color/white"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/sd_detect_face"
-            app:layout_constraintStart_toStartOf="@+id/tv_detected_face_count"
-            app:layout_constraintTop_toBottomOf="@+id/rv_detected_face" />
+            app:layout_constraintStart_toStartOf="@+id/tv_detected_face_count" />
+
+        <ImageView
+            android:id="@+id/iv_initialization"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_initialization_25_25"
+            app:layout_constraintEnd_toEndOf="@+id/sd_detect_face"
+            app:layout_constraintTop_toTopOf="@+id/tv_detect_face"
+            tools:ignore="ContentDescription" />
 
         <com.google.android.material.slider.Slider
             android:id="@+id/sd_detect_face"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="26dp"
             android:stepSize="10"
-            android:valueFrom="0"
-            android:valueTo="100"
+            android:valueFrom="10"
+            android:valueTo="90"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:thumbColor="@color/MainColor"
-            app:trackColor="@color/MainColor" />
+            app:thumbColor="@color/white"
+            app:tickVisible="false"
+            app:trackColorActive="@color/MainColor"
+            app:trackColorInactive="@color/gray3"
+            tools:value="50" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
