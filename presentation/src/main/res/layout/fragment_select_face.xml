@@ -15,7 +15,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:layout_marginEnd="12dp"
-            android:src="@drawable/ic_initialization_28_28"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="ContentDescription" />
@@ -58,6 +57,7 @@
             app:layout_constraintBottom_toTopOf="@+id/sd_detect_face"
             app:layout_constraintStart_toStartOf="@+id/tv_detected_face_count"
             app:layout_constraintTop_toBottomOf="@+id/rv_detected_face" />
+            android:src="@drawable/ic_initialization_25_25"
 
         <com.google.android.material.slider.Slider
             android:id="@+id/sd_detect_face"
