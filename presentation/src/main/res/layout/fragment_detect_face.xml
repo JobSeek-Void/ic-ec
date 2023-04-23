@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="ContentDescription">
 
+    <data>
+        <variable
+            name="detectFaceViewModel"
+            type="team.jsv.icec.ui.main.mosaic.detect.DetectFaceViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -33,18 +39,20 @@
             android:letterSpacing="0"
             android:minWidth="0dp"
             android:minHeight="0dp"
+            android:onClick="@{() -> detectFaceViewModel.setOnGroupSelectButton()}"
+            android:outlineProvider="none"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
-            android:text="@string/all_select_text"
+            android:text="@{detectFaceViewModel.isAllSelect ? @string/deselect_all_text : @string/select_all_text}"
             android:textColor="@color/gray6"
             android:textSize="12sp"
-            app:backgroundTint="@color/gray1"
+            app:allSelectBackground="@{detectFaceViewModel.isAllSelect()}"
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_detected_face_count"
-            app:rippleColor="@android:color/transparent"
             app:strokeColor="@color/gray2"
-            app:strokeWidth="1dp" />
+            app:strokeWidth="1dp"
+            tools:text="전체 선택" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_detected_face"

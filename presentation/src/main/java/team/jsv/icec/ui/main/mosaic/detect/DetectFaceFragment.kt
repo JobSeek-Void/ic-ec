@@ -1,5 +1,7 @@
 package team.jsv.icec.ui.main.mosaic.detect
 
+import android.os.Bundle
+import android.view.View
 import androidx.fragment.app.activityViewModels
 import dagger.hilt.android.AndroidEntryPoint
 import team.jsv.icec.base.BaseFragment
@@ -14,8 +16,13 @@ class DetectFaceFragment :
     BaseFragment<FragmentDetectFaceBinding>(R.layout.fragment_detect_face) {
 
     private val viewModel: MosaicViewModel by activityViewModels()
+    private val detectFaceViewModel: DetectFaceViewModel by activityViewModels()
     private val detectedFaceAdapter by lazy { DetectedFaceAdapter() }
-    private var isSelect: Boolean = false
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.detectFaceViewModel = detectFaceViewModel
+    }
 
     override fun initView() {
         binding.rvDetectedFace.apply {
@@ -35,6 +42,10 @@ class DetectFaceFragment :
                 getString(R.string.detected_face_count, detectedFaceCount)
         }
 
+        binding.btGroupSelect.setOnClickListener {
+            it.isSelected = !it.isSelected
+        }
     }
+
 
 }
