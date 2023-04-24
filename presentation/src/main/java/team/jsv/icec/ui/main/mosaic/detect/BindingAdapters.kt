@@ -10,6 +10,6 @@ fun MaterialButton.changeBackground(isAllSelect: Boolean) {
     if (isAllSelect) {
         setBackgroundColor(ResourcesCompat.getColor(resources, R.color.SubColor, null))
     } else {
-        setBackgroundColor(ResourcesCompat.getColor(resources, R.color.gray2, null))
+        setBackgroundColor(ResourcesCompat.getColor(resources, R.color.gray1, null))
     }
 }

@@ -52,7 +52,8 @@
             app:layout_constraintTop_toTopOf="@+id/tv_detected_face_count"
             app:strokeColor="@color/gray2"
             app:strokeWidth="1dp"
-            tools:text="전체 선택" />
+            tools:text="전체 선택"
+            tools:backgroundTint="@color/gray1"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_detected_face"
