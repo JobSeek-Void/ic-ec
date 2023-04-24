@@ -4,9 +4,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import team.jsv.icec.ui.camera.ConnenctState
 import team.jsv.icec.ui.camera.SettingRatio
 import kotlin.math.roundToInt
+
+enum class ConnenctState(val id: Int) {
+    TOP(0),
+    BOTTOM(1),
+    TOPBOTTOM(2),
+}
 
 object SettingViewUtil {
     fun resizeView(
@@ -45,7 +50,6 @@ object SettingViewUtil {
         bottomViewSet: Int,
         connectStateValue: Int
     ) {
-
         val constraintSet = ConstraintSet()
         constraintSet.clone(constraintLayout)
 
