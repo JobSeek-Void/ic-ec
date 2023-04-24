@@ -7,6 +7,6 @@ enum class MosaicType {
     ;
 
     companion object {
-        fun default() = None
+        fun default() = Mosaic
     }
 }

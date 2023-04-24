@@ -43,7 +43,6 @@ internal class MosaicViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     companion object {
-        private const val DEFAULT_MOSAIC_STRENGTH = 20f
         private const val debounceDelay: Long = 200L
     }
 
@@ -59,9 +58,6 @@ internal class MosaicViewModel @Inject constructor(
 
     private val _mosaicImage = MutableLiveData<Event<String>>()
     val mosaicImage: LiveData<Event<String>> get() = _mosaicImage
-
-    private val _pixelSize = MutableLiveData<Float>().apply { postValue(DEFAULT_MOSAIC_STRENGTH) }
-    val pixelSize: LiveData<Float> get() = _pixelSize
 
     private val _screenStep =
         MutableLiveData<ScreenStep>().apply { postValue(ScreenStep.SelectMosaicEdit) }
@@ -96,7 +92,9 @@ internal class MosaicViewModel @Inject constructor(
     }
 
     fun setPixelSize(value: Float) {
-        _pixelSize.value = value
+        _mosaicFaceState.updateState {
+            copy(pixelSize = value)
+        }
     }
 
     fun setImageAboutScreenStep() {
@@ -163,20 +161,19 @@ internal class MosaicViewModel @Inject constructor(
         }
     }
 
-    internal fun getMosaicImage() {
+    fun getMosaicImage() {
         viewModelScope.launch {
             val originalImage = _detectFaces.value.originalImage
             val indexes = _detectedFaceIndexes.value
             val coordinates = indexes.map { _detectFaces.value.faceList[it].coordinates }
                 .ifEmpty { listOf(listOf()) }
-
-            pixelSize.value?.let { pixelSize ->
+            with(_mosaicFaceState.value){
                 getMosaicImageUseCase(
                     currentTime = currentTime,
                     pixelSize = pixelSize.toInt(),
                     originalImage = originalImage,
                     coordinates = coordinates,
-                    mosaicType = mosaicFaceState.value.mosaicType
+                    mosaicType = mosaicType
                 ).onSuccess {
                     when (screenStep.value) {
                         ScreenStep.MosaicFace -> {
@@ -195,11 +192,20 @@ internal class MosaicViewModel @Inject constructor(
             }
         }
     }
-    }
 
     fun setMosaicType(mosaicType: MosaicType) {
         _mosaicFaceState.updateState {
             copy(mosaicType = mosaicType)
+        }
+        emitMosaicEvent()
+    }
+
+    fun mosaicFaceRefresh() {
+        _mosaicFaceState.updateState {
+            copy(
+                mosaicType = MosaicType.default(),
+                pixelSize = DEFAULT_MOSAIC_STRENGTH,
+            )
         }
         emitMosaicEvent()
     }

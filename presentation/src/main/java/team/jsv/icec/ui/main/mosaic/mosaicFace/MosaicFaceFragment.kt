@@ -15,22 +15,27 @@ import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentMosaicFaceBinding
 
 @AndroidEntryPoint
-class MosaicFaceFragment :
-    BaseFragment<FragmentMosaicFaceBinding>(R.layout.fragment_mosaic_face) {
+class MosaicFaceFragment
+    : BaseFragment<FragmentMosaicFaceBinding>(R.layout.fragment_mosaic_face) {
 
     private val viewModel: MosaicViewModel by activityViewModels()
 
     override fun initView() {
+        initClickListener()
         observeState()
+    }
+
+    private fun initClickListener() {
         binding.ivMosaicFigure.setOnClickListener {
             viewModel.setMosaicType(MosaicType.Mosaic)
         }
         binding.ivBlurFigure.setOnClickListener {
             viewModel.setMosaicType(MosaicType.Blur)
         }
+        binding.ivRefresh.setOnClickListener {
+            viewModel.mosaicFaceRefresh()
+        }
         binding.sliderMosaicFigure.apply {
-            haloRadius = 0
-
             addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
                 viewModel.setPixelSize(value)
             })
@@ -49,10 +54,6 @@ class MosaicFaceFragment :
             popBackStack()
         })
 
-        viewModel.pixelSize.observe(this@MosaicFaceFragment) {
-            binding.sliderMosaicFigure.value = it
-        }
-
         viewModel.mosaicFaceState.flowWithLifecycle(lifecycle).collect { state ->
             when (state.mosaicType) {
                 MosaicType.Mosaic -> {
@@ -68,6 +69,7 @@ class MosaicFaceFragment :
                     binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
                 }
             }
+            binding.sliderMosaicFigure.value = state.pixelSize
         }
     }
 }
