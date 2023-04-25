@@ -5,19 +5,44 @@
     tools:ignore="ContentDescription,UnusedAttribute">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/imageview_face"
+            android:id="@+id/iv_face"
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:background="@drawable/bg_detected_face_item_rounded"
             android:clipToOutline="true"
             android:scaleType="centerCrop"
-            android:src="@drawable/rv_test_image"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/rv_test_image" />
+
+        <ImageView
+            android:id="@+id/iv_checking_background"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@drawable/bg_checking_face"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_face"
+            app:layout_constraintEnd_toEndOf="@+id/iv_face"
+            app:layout_constraintStart_toStartOf="@+id/iv_face"
+            app:layout_constraintTop_toTopOf="@+id/iv_face"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/iv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_check_32_32"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_face"
+            app:layout_constraintEnd_toEndOf="@+id/iv_face"
+            app:layout_constraintStart_toStartOf="@+id/iv_face"
+            app:layout_constraintTop_toTopOf="@+id/iv_face"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
