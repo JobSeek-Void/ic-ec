@@ -5,12 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import team.jsv.domain.model.Face
 import team.jsv.domain.usecase.GetDetectedFaceUseCase
 import team.jsv.domain.usecase.GetMosaicImageUseCase
 import team.jsv.icec.base.BaseViewModel
 import team.jsv.icec.base.Event
+import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
+import team.jsv.icec.ui.main.mosaic.detect.model.toFaceViewItem
 import team.jsv.util_kotlin.IcecNetworkException
 import java.io.File
 import java.text.SimpleDateFormat
@@ -37,8 +41,8 @@ internal class MosaicViewModel @Inject constructor(
         SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
             .format(System.currentTimeMillis())
 
-    private val _detectFaces = MutableLiveData<Face>()
-    val detectFaces: LiveData<Face> get() = _detectFaces
+    private val _detectFaces = MutableStateFlow(FaceViewItem())
+    val detectFaces: StateFlow<FaceViewItem> = _detectFaces.asStateFlow()
 
     private val _originalImage = MutableLiveData<File>()
     val originalImage: LiveData<File> get() = _originalImage
@@ -58,6 +62,8 @@ internal class MosaicViewModel @Inject constructor(
 
     private val _state = MutableLiveData<PictureState>()
     val state: LiveData<PictureState> get() = _state
+
+    private val _selectedItemIndex = MutableStateFlow<MutableList<Int>>(mutableListOf())
 
     fun setScreen(screenStep: ScreenStep) = _screenStep.postValue(screenStep)
 
@@ -79,13 +85,23 @@ internal class MosaicViewModel @Inject constructor(
         }
     }
 
+    fun updateSelectedItemList(index: Int) {
+        val currentItemIndexList = _selectedItemIndex.value
+        if (currentItemIndexList.contains(index)) {
+            currentItemIndexList.remove(index)
+        } else {
+            currentItemIndexList.add(index)
+        }
+        _selectedItemIndex.value = currentItemIndexList
+    }
+
     internal fun getFaceList(image: File) {
         viewModelScope.launch {
             getDetectedFaceUseCase(
                 currentTime = currentTime,
                 image = image
             ).onSuccess {
-                _detectFaces.postValue(it)
+                _detectFaces.value = it.toFaceViewItem()
             }.onFailure {
                 handleException(it)
             }
