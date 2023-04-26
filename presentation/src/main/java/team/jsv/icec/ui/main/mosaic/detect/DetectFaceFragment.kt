@@ -25,7 +25,7 @@ class DetectFaceFragment :
     private val detectedFaceAdapter by lazy {
         DetectedFaceAdapter(object : DetectedFaceListener {
             override fun onItemClick(position: Int) {
-                viewModel.updateSelectedItemList(position)
+                viewModel.setOnClickItem(position)
             }
         })
     }
@@ -33,7 +33,7 @@ class DetectFaceFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.detectFaceViewModel = detectFaceViewModel
+        binding.vm = viewModel
         initRecyclerView()
     }
 

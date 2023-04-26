@@ -5,8 +5,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import team.jsv.domain.usecase.GetDetectedFaceUseCase
@@ -63,7 +66,8 @@ internal class MosaicViewModel @Inject constructor(
     private val _state = MutableLiveData<PictureState>()
     val state: LiveData<PictureState> get() = _state
 
-    private val _selectedItemIndex = MutableStateFlow<MutableList<Int>>(mutableListOf())
+    private val _selectedItemIndex = MutableSharedFlow<MutableList<Int>>(replay = 1)
+    val selectedItemIndex: SharedFlow<MutableList<Int>> = _selectedItemIndex.asSharedFlow()
 
     fun setScreen(screenStep: ScreenStep) = _screenStep.postValue(screenStep)
 
@@ -85,14 +89,32 @@ internal class MosaicViewModel @Inject constructor(
         }
     }
 
-    fun updateSelectedItemList(index: Int) {
-        val currentItemIndexList = _selectedItemIndex.value
-        if (currentItemIndexList.contains(index)) {
-            currentItemIndexList.remove(index)
-        } else {
-            currentItemIndexList.add(index)
+    fun setOnClickAllSelectButton() {
+        viewModelScope.launch {
+            val currentItemIndexList =
+                _selectedItemIndex.replayCache.firstOrNull() ?: mutableListOf()
+            if (currentItemIndexList.size == detectFaces.value.faceList.size ||
+                    currentItemIndexList.size >= 1) {
+                currentItemIndexList.clear()
+            } else {
+                currentItemIndexList.clear()
+                currentItemIndexList.addAll(detectFaces.value.faceList.indices)
+            }
+            _selectedItemIndex.emit(currentItemIndexList)
         }
-        _selectedItemIndex.value = currentItemIndexList
+    }
+
+    fun setOnClickItem(index: Int) {
+        viewModelScope.launch {
+            val currentItemIndexList =
+                _selectedItemIndex.replayCache.firstOrNull() ?: mutableListOf()
+            if (currentItemIndexList.contains(index)) {
+                currentItemIndexList.remove(index)
+            } else {
+                currentItemIndexList.add(index)
+            }
+            _selectedItemIndex.emit(currentItemIndexList)
+        }
     }
 
     internal fun getFaceList(image: File) {
