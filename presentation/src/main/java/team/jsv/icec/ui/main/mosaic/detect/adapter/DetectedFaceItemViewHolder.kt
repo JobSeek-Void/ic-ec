@@ -13,15 +13,17 @@ class DetectedFaceItemViewHolder(
 
     fun bind(item: DetectFaceInfoViewItem) {
         binding.ivFace.loadImage(item.url)
+
+        if (item.selected) {
+            binding.ivCheckingBackground.visibility = View.VISIBLE
+            binding.ivCheck.visibility = View.VISIBLE
+        } else {
+            binding.ivCheckingBackground.visibility = View.GONE
+            binding.ivCheck.visibility = View.GONE
+        }
+
         binding.item.setOnClickListener {
             listener.onItemClick(adapterPosition)
-            if (binding.ivCheck.visibility == View.GONE) {
-                binding.ivCheckingBackground.visibility = View.VISIBLE
-                binding.ivCheck.visibility = View.VISIBLE
-            } else {
-                binding.ivCheckingBackground.visibility = View.GONE
-                binding.ivCheck.visibility = View.GONE
-            }
         }
     }
 }

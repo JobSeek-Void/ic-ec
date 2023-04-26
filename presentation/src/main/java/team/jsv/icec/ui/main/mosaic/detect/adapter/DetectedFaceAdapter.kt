@@ -20,6 +20,13 @@ class DetectedFaceAdapter(private val listener: DetectedFaceListener) :
         }
     }
 
+    fun updateSelection(selectedIndices: List<Int>) {
+        val updatedList = currentList.mapIndexed { index, detectFaceInfoViewItem ->
+            detectFaceInfoViewItem.copy(selected = selectedIndices.contains(index))
+        }
+        submitList(updatedList)
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetectedFaceItemViewHolder {
         val binding = ViewholderDetectedFaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DetectedFaceItemViewHolder(binding, listener)

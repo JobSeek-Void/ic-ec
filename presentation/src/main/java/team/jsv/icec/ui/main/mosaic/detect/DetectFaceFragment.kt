@@ -3,8 +3,6 @@ package team.jsv.icec.ui.main.mosaic.detect
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -38,15 +36,22 @@ class DetectFaceFragment :
     }
 
     override fun initView() {
-        viewModel.backPress.observe(this, EventObserver {
-            popBackStack()
-        })
-
         lifecycleScope.launch {
-            viewModel.detectFaces.flowWithLifecycle(lifecycle).collect {
-                val detectedFaceCount = it.faceList.size
-                binding.tvDetectedFaceCount.text =
-                    getString(R.string.detected_face_count, detectedFaceCount)
+            launch {
+                viewModel.backPress.observe(this@DetectFaceFragment, EventObserver {
+                    popBackStack()
+                })
+            }
+
+            launch {
+                viewModel.selectedItemIndex.collect { selectedIndexList ->
+                    detectedFaceAdapter.updateSelection(selectedIndexList)
+                    if (selectedIndexList.isEmpty()) {
+                        binding.btGroupSelect.changeBackground(false)
+                    } else {
+                        binding.btGroupSelect.changeBackground(true)
+                    }
+                }
             }
         }
     }

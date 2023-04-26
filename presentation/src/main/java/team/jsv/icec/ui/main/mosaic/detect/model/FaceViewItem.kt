@@ -10,7 +10,8 @@ data class FaceViewItem(
 
 data class DetectFaceInfoViewItem(
     val url: String,
-    val coordinates: List<Int>
+    val coordinates: List<Int>,
+    val selected: Boolean = false
 )
 
 fun Face.toFaceViewItem(): FaceViewItem {
