@@ -6,8 +6,8 @@
 
     <data>
         <variable
-            name="detectFaceViewModel"
-            type="team.jsv.icec.ui.main.mosaic.detect.DetectFaceViewModel" />
+            name="vm"
+            type="team.jsv.icec.ui.main.mosaic.MosaicViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -39,14 +39,12 @@
             android:letterSpacing="0"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:onClick="@{() -> detectFaceViewModel.setOnGroupSelectButton()}"
             android:outlineProvider="none"
             android:paddingHorizontal="8dp"
             android:paddingVertical="4dp"
-            android:text="@{detectFaceViewModel.isAllSelect ? @string/deselect_all_text : @string/select_all_text}"
             android:textColor="@color/gray6"
             android:textSize="12sp"
-            app:allSelectBackground="@{detectFaceViewModel.isAllSelect()}"
+            app:allSelectBackground="@{false}"
             app:cornerRadius="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/tv_detected_face_count"

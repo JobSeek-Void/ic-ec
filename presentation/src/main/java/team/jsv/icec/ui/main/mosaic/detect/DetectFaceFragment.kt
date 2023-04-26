@@ -22,7 +22,6 @@ class DetectFaceFragment :
     BaseFragment<FragmentDetectFaceBinding>(R.layout.fragment_detect_face) {
 
     private val viewModel: MosaicViewModel by activityViewModels()
-    private val detectFaceViewModel: DetectFaceViewModel by viewModels()
     private val detectedFaceAdapter by lazy {
         DetectedFaceAdapter(object : DetectedFaceListener {
             override fun onItemClick(position: Int) {
