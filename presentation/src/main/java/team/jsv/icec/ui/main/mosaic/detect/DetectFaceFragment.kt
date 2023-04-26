@@ -59,6 +59,7 @@ class DetectFaceFragment :
     private fun initRecyclerView() {
         binding.rvDetectedFace.apply {
             adapter = detectedFaceAdapter
+            itemAnimator = null
             addItemDecoration(HorizontalSpaceItemDecoration(space = 12))
         }
 

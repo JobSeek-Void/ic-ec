@@ -10,6 +10,10 @@ import team.jsv.presentation.databinding.ViewholderDetectedFaceBinding
 class DetectedFaceAdapter(private val listener: DetectedFaceListener) :
     ListAdapter<DetectFaceInfoViewItem, DetectedFaceItemViewHolder>(DetectedFaceDiffUtil()) {
 
+    init {
+        setHasStableIds(true)
+    }
+
     private class DetectedFaceDiffUtil : DiffUtil.ItemCallback<DetectFaceInfoViewItem>() {
         override fun areItemsTheSame(oldItem: DetectFaceInfoViewItem, newItem: DetectFaceInfoViewItem): Boolean {
             return oldItem == newItem
