@@ -132,12 +132,10 @@ internal class MosaicViewModel @Inject constructor(
 
     internal fun getMosaicImage() {
         viewModelScope.launch {
-            val originalImage = detectFaces.value?.originalImage ?: ""
-            val coordinates = arrayListOf<List<Int>>().also { coordinates ->
-                detectFaces.value?.faceList?.forEach {
-                    coordinates.add(it.coordinates.toList())
-                }
-            }
+            val originalImage = detectFaces.value.originalImage
+            val indexes = selectedItemIndex.replayCache.firstOrNull() ?: mutableListOf()
+            val coordinates = indexes.map { detectFaces.value.faceList[it].coordinates }
+                .ifEmpty { listOf(listOf()) }
 
             pixelSize.value?.let { pixelSize ->
                 getMosaicImageUseCase(
