@@ -14,10 +14,12 @@ class ImageRepositoryImpl @Inject constructor(
 
     override suspend fun getDetectedFace(
         currentTime: String,
+        threshold: Float,
         image: File
     ): Face {
         return imageDataSource.getDetectedFace(
             currentTime = currentTime,
+            threshold = threshold,
             image = image
         ).toDomain()
     }

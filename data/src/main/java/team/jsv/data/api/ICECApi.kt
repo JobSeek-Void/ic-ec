@@ -15,6 +15,7 @@ interface ICECApi {
     @POST("/faceList")
     suspend fun getDetectedFace(
         @Part("currentTime") currentTime: String,
+        @Part("threshold") threshold: Float,
         @Part image: MultipartBody.Part,
     ): FaceResponse
 

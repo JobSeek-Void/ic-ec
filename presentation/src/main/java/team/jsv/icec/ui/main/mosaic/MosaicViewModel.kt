@@ -121,6 +121,7 @@ internal class MosaicViewModel @Inject constructor(
         viewModelScope.launch {
             getDetectedFaceUseCase(
                 currentTime = currentTime,
+                threshold = 0.1f,
                 image = image
             ).onSuccess {
                 _detectFaces.value = it.toFaceViewItem()
