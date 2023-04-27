@@ -32,26 +32,25 @@ class DetectFaceFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.vm = viewModel
-        initRecyclerView()
     }
 
     override fun initView() {
-        lifecycleScope.launch {
-            launch {
-                viewModel.backPress.observe(this@DetectFaceFragment, EventObserver {
-                    popBackStack()
-                })
-            }
+        observeBackPress()
+        collectSelectedItemUpdates()
+        initRecyclerView()
+    }
 
-            launch {
-                viewModel.selectedItemIndex.collect { selectedIndexList ->
-                    detectedFaceAdapter.updateSelection(selectedIndexList)
-                    if (selectedIndexList.isEmpty()) {
-                        binding.btGroupSelect.changeBackground(false)
-                    } else {
-                        binding.btGroupSelect.changeBackground(true)
-                    }
-                }
+    private fun observeBackPress() {
+        viewModel.backPress.observe(this, EventObserver {
+            popBackStack()
+        })
+    }
+
+    private fun collectSelectedItemUpdates() {
+        lifecycleScope.launch {
+            viewModel.selectedItemIndex.collect { selectedIndexList ->
+                detectedFaceAdapter.updateSelection(selectedIndexList)
+                binding.btGroupSelect.changeBackground(selectedIndexList.isNotEmpty())
             }
         }
     }
