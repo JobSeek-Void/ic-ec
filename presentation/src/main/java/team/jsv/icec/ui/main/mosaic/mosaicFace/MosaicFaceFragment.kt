@@ -34,11 +34,11 @@ class MosaicFaceFragment :
 
         binding.sliderMosaicFigure.apply {
             haloRadius = 0
-        }.run {
+
             addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
                 viewModel.setPixelSize(value)
             })
-
+        }.run {
             addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
