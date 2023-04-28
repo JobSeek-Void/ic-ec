@@ -48,7 +48,7 @@ class DetectFaceFragment :
 
     private fun collectSelectedItemUpdates() {
         lifecycleScope.launch {
-            viewModel.selectedItemIndex.collect { selectedIndexList ->
+            viewModel.detectedFaceIndexes.collect { selectedIndexList ->
                 detectedFaceAdapter.updateSelection(selectedIndexList)
                 binding.btGroupSelect.changeBackground(selectedIndexList.isNotEmpty())
             }
