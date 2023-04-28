@@ -1,9 +1,10 @@
 package team.jsv.icec.ui.main.mosaic.detect.adapter
 
-import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import team.jsv.icec.ui.main.mosaic.detect.model.DetectFaceInfoViewItem
+import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
+import team.jsv.icec.util.visible
 import team.jsv.presentation.databinding.ViewholderDetectedFaceBinding
 
 class DetectedFaceItemViewHolder(
@@ -15,11 +16,11 @@ class DetectedFaceItemViewHolder(
         binding.ivFace.loadImage(item.url)
 
         if (item.selected) {
-            binding.ivCheckingBackground.visibility = View.VISIBLE
-            binding.ivCheck.visibility = View.VISIBLE
+            binding.ivCheckingBackground.visible()
+            binding.ivCheck.visible()
         } else {
-            binding.ivCheckingBackground.visibility = View.GONE
-            binding.ivCheck.visibility = View.GONE
+            binding.ivCheckingBackground.gone()
+            binding.ivCheck.gone()
         }
 
         binding.item.setOnClickListener {

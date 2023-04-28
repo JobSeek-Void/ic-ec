@@ -15,8 +15,10 @@ import team.jsv.icec.ui.main.mosaic.MosaicViewModel
 import team.jsv.icec.ui.main.mosaic.PictureState
 import team.jsv.icec.ui.main.mosaic.ScreenStep
 import team.jsv.icec.util.PermissionUtil
+import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
 import team.jsv.icec.util.requestPermissions
+import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMainBinding
 import java.io.File
@@ -50,20 +52,20 @@ class MainActivity :
         viewModel.screenStep.observe(this) {
             when (it) {
                 ScreenStep.SelectMosaicEdit -> {
-                    binding.topBar.buttonBack.visibility = View.VISIBLE
-                    binding.topBar.textviewTitle.visibility = View.GONE
-                    binding.topBar.buttonNext.visibility = View.GONE
+                    binding.topBar.buttonBack.visible()
+                    binding.topBar.textviewTitle.gone()
+                    binding.topBar.buttonNext.gone()
                 }
                 ScreenStep.SelectFace -> {
-                    binding.topBar.buttonBack.visibility = View.VISIBLE
-                    binding.topBar.buttonNext.visibility = View.VISIBLE
-                    binding.topBar.textviewTitle.visibility = View.VISIBLE
+                    binding.topBar.buttonBack.visible()
+                    binding.topBar.buttonNext.visible()
+                    binding.topBar.textviewTitle.visible()
                     binding.topBar.textviewTitle.text = getString(R.string.mosaic_text)
                 }
                 ScreenStep.MosaicFace -> {
-                    binding.topBar.buttonBack.visibility = View.VISIBLE
-                    binding.topBar.buttonNext.visibility = View.VISIBLE
-                    binding.topBar.textviewTitle.visibility = View.VISIBLE
+                    binding.topBar.buttonBack.visible()
+                    binding.topBar.buttonNext.visible()
+                    binding.topBar.textviewTitle.visible()
                     binding.topBar.textviewTitle.text = getString(R.string.mosaic_text)
                 }
                 else -> {}
