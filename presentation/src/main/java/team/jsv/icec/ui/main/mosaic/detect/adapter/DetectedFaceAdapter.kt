@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import team.jsv.icec.ui.main.mosaic.detect.model.DetectFaceInfoViewItem
 import team.jsv.presentation.databinding.ViewholderDetectedFaceBinding
 
-class DetectedFaceAdapter(private val listener: DetectedFaceListener) :
+class DetectedFaceAdapter(private val onClick: (Int) -> Unit) :
     ListAdapter<DetectFaceInfoViewItem, DetectedFaceItemViewHolder>(DetectedFaceDiffUtil()) {
 
     init {
@@ -33,7 +33,7 @@ class DetectedFaceAdapter(private val listener: DetectedFaceListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DetectedFaceItemViewHolder {
         val binding = ViewholderDetectedFaceBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return DetectedFaceItemViewHolder(binding, listener)
+        return DetectedFaceItemViewHolder(binding, onClick)
     }
 
     override fun onBindViewHolder(holder: DetectedFaceItemViewHolder, position: Int) {

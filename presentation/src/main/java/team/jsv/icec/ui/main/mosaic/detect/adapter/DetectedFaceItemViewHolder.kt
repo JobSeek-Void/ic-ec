@@ -9,7 +9,7 @@ import team.jsv.presentation.databinding.ViewholderDetectedFaceBinding
 
 class DetectedFaceItemViewHolder(
     private val binding: ViewholderDetectedFaceBinding,
-    private val listener: DetectedFaceListener
+    private val onClick: (Int) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: DetectFaceInfoViewItem) {
@@ -24,7 +24,7 @@ class DetectedFaceItemViewHolder(
         }
 
         binding.item.setOnClickListener {
-            listener.onItemClick(adapterPosition)
+            onClick(adapterPosition)
         }
     }
 }

@@ -10,7 +10,6 @@ import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
 import team.jsv.icec.ui.main.mosaic.detect.adapter.DetectedFaceAdapter
-import team.jsv.icec.ui.main.mosaic.detect.adapter.DetectedFaceListener
 import team.jsv.icec.util.HorizontalSpaceItemDecoration
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentDetectFaceBinding
@@ -21,11 +20,7 @@ class DetectFaceFragment :
 
     private val viewModel: MosaicViewModel by activityViewModels()
     private val detectedFaceAdapter by lazy {
-        DetectedFaceAdapter(object : DetectedFaceListener {
-            override fun onItemClick(position: Int) {
-                viewModel.setOnClickItem(position)
-            }
-        })
+        DetectedFaceAdapter { position -> viewModel.setOnClickItem(position) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

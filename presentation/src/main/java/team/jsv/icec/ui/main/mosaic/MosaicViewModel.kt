@@ -116,7 +116,7 @@ internal class MosaicViewModel @Inject constructor(
         viewModelScope.launch {
             getDetectedFaceUseCase(
                 currentTime = currentTime,
-                threshold = 0.1f,
+                threshold = 0.1f, // TODO(ham2174): 신로도값을 함수의 파라미터를 통해 받아오도록 수정
                 image = image
             ).onSuccess {
                 _detectFaces.value = it.toFaceViewItem()
