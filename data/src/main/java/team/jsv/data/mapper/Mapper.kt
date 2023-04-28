@@ -13,7 +13,6 @@ import java.io.File
 
 internal fun FaceResponse.toDomain() =
     Face(
-        code = code,
         originalImage = originalImage,
         faceList = faceList.map { it.toDomainModel() }
     )
