@@ -41,8 +41,9 @@ class CameraActivity :
         private const val FILENAME_FORMAT = "yyyy-MM-dd-HHmmss"
     }
 
-    private val deviceHeight get() = binding.root.resources?.displayMetrics?.heightPixels ?: 0
-    private val deviceWidth get() = binding.root.resources?.displayMetrics?.widthPixels ?: 0
+class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_camera) {
+    private val deviceHeight get() = screenHeight(this)
+    private val deviceWidth get() = screenWidth(this)
 
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var cameraSelector: CameraSelector
@@ -65,14 +66,31 @@ class CameraActivity :
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
+    private fun screenHeight(activity: Activity): Int {
+        val displayMetrics = DisplayMetrics()
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.hide(WindowInsets.Type.statusBars())
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            activity.windowManager.currentWindowMetrics.bounds.height()
         } else {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAGS_CHANGED
-            )
+            @Suppress("DEPRECATION")
+            val display = activity.windowManager.defaultDisplay
+            @Suppress("DEPRECATION")
+            display.getMetrics(displayMetrics)
+            displayMetrics.heightPixels
+        }
+    }
+
+    private fun screenWidth(activity: Activity): Int {
+        val displayMetrics = DisplayMetrics()
+
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            activity.windowManager.currentWindowMetrics.bounds.width()
+        } else {
+            @Suppress("DEPRECATION")
+            val display = activity.windowManager.defaultDisplay
+            @Suppress("DEPRECATION")
+            display.getMetrics(displayMetrics)
+            displayMetrics.widthPixels
         }
     }
 
@@ -90,7 +108,6 @@ class CameraActivity :
         binding.ivClose.setOnClickListener {
             finish()
         }
-
 
         binding.ivRatio.setOnClickListener {
             when (viewModel.ratioState.value) {
