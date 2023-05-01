@@ -49,27 +49,29 @@ class MosaicFaceFragment
         }
     }
 
-    private fun observeState() = lifecycleScope.launch {
-        viewModel.backPress.observe(this@MosaicFaceFragment, EventObserver {
-            popBackStack()
-        })
+    private fun observeState() {
+        lifecycleScope.launch {
+            viewModel.backPress.observe(this@MosaicFaceFragment, EventObserver {
+                popBackStack()
+            })
 
-        viewModel.mosaicFaceState.flowWithLifecycle(lifecycle).collect { state ->
-            when (state.mosaicType) {
-                MosaicType.Mosaic -> {
-                    binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_active_50)
-                    binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_inactive_50)
+            viewModel.mosaicFaceState.flowWithLifecycle(lifecycle).collect { state ->
+                when (state.mosaicType) {
+                    MosaicType.Mosaic -> {
+                        binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_active_50)
+                        binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_inactive_50)
+                    }
+                    MosaicType.Blur -> {
+                        binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
+                        binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_active_50)
+                    }
+                    MosaicType.None -> {
+                        binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_inactive_50)
+                        binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
+                    }
                 }
-                MosaicType.Blur -> {
-                    binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
-                    binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_active_50)
-                }
-                MosaicType.None -> {
-                    binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_inactive_50)
-                    binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
-                }
+                binding.sliderMosaicFigure.value = state.pixelSize
             }
-            binding.sliderMosaicFigure.value = state.pixelSize
         }
     }
 }

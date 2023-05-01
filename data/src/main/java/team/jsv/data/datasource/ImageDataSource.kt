@@ -62,7 +62,7 @@ class ImageDataSource @Inject constructor(
         coordinates: List<List<Int>>,
     ): MosaicResponse {
         try {
-            return icecApi.getMosaicImage(
+            return icecApi.getBlurImage(
                 mosaicRequestBody = MosaicRequestBody(
                     currentTime = currentTime,
                     pixelSize = pixelSize,
