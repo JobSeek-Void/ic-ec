@@ -63,9 +63,18 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
         initClickListener()
     }
 
-    override fun onWindowFocusChanged(hasFocus: Boolean) {
-        super.onWindowFocusChanged(hasFocus)
-    private fun screenHeight(activity: Activity): Int {
+    private fun getStatusBarHeightDP(context: Context) : Int {
+        var result = 0
+
+        val resourceId: Int =
+            context.resources.getIdentifier("status_bar_height", "dimen", "android")
+
+        if (resourceId > 0) {
+            result = context.resources.getDimension(resourceId).toInt()
+        }
+
+        return result
+    }
         val displayMetrics = DisplayMetrics()
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
