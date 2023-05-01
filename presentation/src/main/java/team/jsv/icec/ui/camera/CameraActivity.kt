@@ -3,19 +3,20 @@
 package team.jsv.icec.ui.camera
 
 import android.annotation.SuppressLint
-import android.content.ContentValues
-import android.content.Intent
+import android.app.Activity
+import android.content.Context
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
-import android.view.WindowInsets
-import android.view.WindowManager
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.ImageProxy
 import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintSet
@@ -28,8 +29,6 @@ import team.jsv.icec.util.SettingViewUtil.resizeView
 import team.jsv.icec.util.requestPermissions
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityCameraBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import kotlin.math.roundToInt
