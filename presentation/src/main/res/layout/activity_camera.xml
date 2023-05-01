@@ -35,7 +35,6 @@
             android:id="@+id/iv_reverse"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginTop="38dp"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
