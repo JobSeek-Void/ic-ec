@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:src="@drawable/ic_back_32_32"
+            android:src="@drawable/ic_back_32"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/textview_title"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,46 +51,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/textview_title"
             tools:visibility="visible" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_share"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:outlineProvider="none"
-            android:padding="0dp"
-            android:text="@string/share_text"
-            android:textColor="@color/black"
-            android:textSize="13sp"
-            android:visibility="gone"
-            app:icon="@drawable/ic_share_18_18"
-            app:iconGravity="textTop"
-            app:iconPadding="2dp"
-            app:iconTint="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/button_back"
-            app:layout_constraintEnd_toStartOf="@+id/button_download"
-            app:layout_constraintTop_toTopOf="@+id/button_back"
-            tools:visibility="gone" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_download"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:outlineProvider="none"
-            android:padding="0dp"
-            android:text="@string/download_text"
-            android:textColor="@color/black"
-            android:textSize="13sp"
-            android:visibility="gone"
-            app:icon="@drawable/ic_download_18_18"
-            app:iconGravity="textTop"
-            app:iconPadding="2dp"
-            app:iconTint="@color/black"
-            app:layout_constraintBottom_toBottomOf="@+id/button_back"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_back"
-            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
