@@ -51,12 +51,13 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         requestPermissions(PermissionUtil.getPermissions())
-        viewModel.setRatioState(SettingRatio.RATIO_1_1.id)
+
         setReverseBtMargin()
         cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
         resizeCameraView()
+
+        viewModel.initSetRatio()
     }
 
     override fun onResume() {
