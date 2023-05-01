@@ -9,14 +9,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import team.jsv.domain.model.MosaicType
 import team.jsv.domain.usecase.GetDetectedFaceUseCase
 import team.jsv.domain.usecase.GetMosaicImageUseCase
 import team.jsv.icec.base.BaseViewModel
 import team.jsv.icec.base.Event
+import team.jsv.icec.base.updateState
 import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
 import team.jsv.icec.ui.main.mosaic.detect.model.toFaceViewItem
+import team.jsv.icec.ui.main.mosaic.mosaicFace.DEFAULT_MOSAIC_STRENGTH
+import team.jsv.icec.ui.main.mosaic.mosaicFace.MosaicFaceState
 import team.jsv.util_kotlin.IcecNetworkException
+import team.jsv.util_kotlin.MutableDebounceFlow
 import team.jsv.util_kotlin.copy
+import team.jsv.util_kotlin.debounceAction
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -31,11 +37,11 @@ enum class ScreenStep {
 @HiltViewModel
 internal class MosaicViewModel @Inject constructor(
     private val getDetectedFaceUseCase: GetDetectedFaceUseCase,
-    private val getMosaicImageUseCase: GetMosaicImageUseCase
+    private val getMosaicImageUseCase: GetMosaicImageUseCase,
 ) : BaseViewModel() {
 
     companion object {
-        const val DEFAULT_MOSAIC_STRENGTH = 20f
+        private const val debounceDelay: Long = 200L
     }
 
     private val currentTime: String =
@@ -51,9 +57,6 @@ internal class MosaicViewModel @Inject constructor(
     private val _mosaicImage = MutableLiveData<Event<String>>()
     val mosaicImage: LiveData<Event<String>> get() = _mosaicImage
 
-    private val _pixelSize = MutableLiveData<Float>().apply { postValue(DEFAULT_MOSAIC_STRENGTH) }
-    val pixelSize: LiveData<Float> get() = _pixelSize
-
     private val _screenStep =
         MutableLiveData<ScreenStep>().apply { postValue(ScreenStep.SelectMosaicEdit) }
     val screenStep: LiveData<ScreenStep> get() = _screenStep
@@ -67,6 +70,18 @@ internal class MosaicViewModel @Inject constructor(
     private val _detectedFaceIndexes = MutableStateFlow<List<Int>>(emptyList())
     val detectedFaceIndexes: StateFlow<List<Int>> = _detectedFaceIndexes.asStateFlow()
 
+    private val _mosaicFaceState = MutableStateFlow(MosaicFaceState())
+    val mosaicFaceState = _mosaicFaceState.asStateFlow()
+
+    private val mosaicDebounce = MutableDebounceFlow<Unit> {
+        debounceAction(
+            coroutineScope = viewModelScope,
+            timeoutMillis = debounceDelay,
+        ) {
+            getMosaicImage()
+        }
+    }
+
     fun setScreen(screenStep: ScreenStep) = _screenStep.postValue(screenStep)
 
     fun setImage(data: File) {
@@ -75,7 +90,9 @@ internal class MosaicViewModel @Inject constructor(
     }
 
     fun setPixelSize(value: Float) {
-        _pixelSize.value = value
+        _mosaicFaceState.updateState {
+            copy(pixelSize = value)
+        }
     }
 
     fun setImageAboutScreenStep() {
@@ -126,19 +143,25 @@ internal class MosaicViewModel @Inject constructor(
         }
     }
 
-    internal fun getMosaicImage() {
+    fun emitMosaicEvent() {
+        viewModelScope.launch {
+            mosaicDebounce.emit(Unit)
+        }
+    }
+
+    fun getMosaicImage() {
         viewModelScope.launch {
             val originalImage = _detectFaces.value.originalImage
             val indexes = _detectedFaceIndexes.value
             val coordinates = indexes.map { _detectFaces.value.faceList[it].coordinates }
                 .ifEmpty { listOf(listOf()) }
-
-            pixelSize.value?.let { pixelSize ->
+            with(_mosaicFaceState.value) {
                 getMosaicImageUseCase(
                     currentTime = currentTime,
                     pixelSize = pixelSize.toInt(),
                     originalImage = originalImage,
-                    coordinates = coordinates
+                    coordinates = coordinates,
+                    mosaicType = mosaicType
                 ).onSuccess {
                     when (screenStep.value) {
                         ScreenStep.MosaicFace -> {
@@ -156,6 +179,23 @@ internal class MosaicViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun setMosaicType(mosaicType: MosaicType) {
+        _mosaicFaceState.updateState {
+            copy(mosaicType = mosaicType)
+        }
+        emitMosaicEvent()
+    }
+
+    fun mosaicFaceRefresh() {
+        _mosaicFaceState.updateState {
+            copy(
+                mosaicType = MosaicType.default(),
+                pixelSize = DEFAULT_MOSAIC_STRENGTH,
+            )
+        }
+        emitMosaicEvent()
     }
 
     private fun handleException(exception: Throwable) {

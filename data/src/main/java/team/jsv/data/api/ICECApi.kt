@@ -21,7 +21,12 @@ interface ICECApi {
 
     @POST("/mosaic")
     suspend fun getMosaicImage(
-        @Body mosaicRequestBody: MosaicRequestBody
+        @Body mosaicRequestBody: MosaicRequestBody,
+    ): MosaicResponse
+
+    @POST("/blur")
+    suspend fun getBlurImage(
+        @Body mosaicRequestBody: MosaicRequestBody,
     ): MosaicResponse
 
 }

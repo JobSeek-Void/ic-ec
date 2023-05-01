@@ -9,6 +9,9 @@
 
     <color name="MainColor">#EFFF04</color>
     <color name="SubColor">#0884FE</color>
+    <color name="Surface">@color/gray3</color>
+    <color name="onSurface">@color/white</color>
+    <color name="transparent">#00000000</color>
 
     <!-- System Theme Color -->
     <color name="WindowBackGroundColor">#121212</color>
