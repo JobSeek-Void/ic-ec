@@ -55,9 +55,9 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
 
         setReverseBtMargin()
         cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
-        resizeCameraView()
 
         viewModel.initSetRatio()
+        observeRatio()
     }
 
     override fun onResume() {
@@ -182,13 +182,14 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
         }
     }
 
-    private fun resizeCameraView() {
+    private fun observeRatio() {
         viewModel.ratioState.observe(this) { ratioState ->
             val layoutParams = binding.cameraPreview.layoutParams
 
             binding.cameraPreview.layoutParams =
-                resizeView(layoutParams, ratioState, deviceWidth, deviceHeight)
-            startCamera()
+                resizeView(layoutParams, ratioState, deviceWidth, deviceHeight).apply {
+                    startCamera()
+                }
         }
     }
 
