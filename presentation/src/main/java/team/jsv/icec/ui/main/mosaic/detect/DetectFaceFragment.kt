@@ -11,6 +11,7 @@ import team.jsv.icec.base.EventObserver
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
 import team.jsv.icec.ui.main.mosaic.detect.adapter.DetectedFaceAdapter
 import team.jsv.icec.util.HorizontalSpaceItemDecoration
+import team.jsv.icec.util.setSliderValues
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentDetectFaceBinding
 
@@ -30,9 +31,19 @@ class DetectFaceFragment :
     }
 
     override fun initView() {
+        initDetectSlider()
         observeBackPress()
         collectSelectedItemUpdates()
         initRecyclerView()
+    }
+
+    private fun initDetectSlider() {
+        binding.sdDetectFace.setSliderValues(
+            value = 90f,
+            valueFrom = 1f,
+            valueTo = 99f,
+            stepSize = 1f
+        )
     }
 
     private fun observeBackPress() {
