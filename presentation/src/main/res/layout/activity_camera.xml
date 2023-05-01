@@ -13,29 +13,28 @@
             android:id="@+id/camera_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="@+id/button_capture"
+            app:layout_constraintBottom_toTopOf="@+id/bt_capture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageview_reverse"
+            app:layout_constraintTop_toBottomOf="@+id/iv_reverse"
             app:srcCompat="@drawable/ic_launcher_foreground">
         </androidx.camera.view.PreviewView>
 
         <ImageView
-            android:id="@+id/imageview_close"
+            android:id="@+id/iv_close"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:clickable="true"
             android:layout_marginStart="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageview_reverse"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_reverse"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageview_reverse"
+            app:layout_constraintTop_toTopOf="@+id/iv_reverse"
             app:srcCompat="@drawable/ic_close_32" />
 
         <ImageView
-            android:id="@+id/imageview_reverse"
+            android:id="@+id/iv_reverse"
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:layout_marginTop="38dp"
             android:clickable="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -43,20 +42,20 @@
             app:srcCompat="@drawable/ic_reverse_32" />
 
         <ImageView
-            android:id="@+id/imageview_ratio"
+            android:id="@+id/iv_ratio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
             android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imageview_reverse"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_reverse"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageview_reverse"
+            app:layout_constraintTop_toTopOf="@+id/iv_reverse"
             app:srcCompat="@drawable/ic_1_1_ratio_22_33" />
 
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/button_capture"
+            android:id="@+id/bt_capture"
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_marginBottom="23dp"
