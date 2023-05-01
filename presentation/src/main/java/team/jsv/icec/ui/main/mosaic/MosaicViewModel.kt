@@ -5,13 +5,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import team.jsv.domain.model.Face
 import team.jsv.domain.usecase.GetDetectedFaceUseCase
 import team.jsv.domain.usecase.GetMosaicImageUseCase
 import team.jsv.icec.base.BaseViewModel
 import team.jsv.icec.base.Event
+import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
+import team.jsv.icec.ui.main.mosaic.detect.model.toFaceViewItem
 import team.jsv.util_kotlin.IcecNetworkException
+import team.jsv.util_kotlin.copy
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -37,8 +42,8 @@ internal class MosaicViewModel @Inject constructor(
         SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
             .format(System.currentTimeMillis())
 
-    private val _detectFaces = MutableLiveData<Face>()
-    val detectFaces: LiveData<Face> get() = _detectFaces
+    private val _detectFaces = MutableStateFlow(FaceViewItem())
+    val detectFaces: StateFlow<FaceViewItem> = _detectFaces.asStateFlow()
 
     private val _originalImage = MutableLiveData<File>()
     val originalImage: LiveData<File> get() = _originalImage
@@ -59,6 +64,9 @@ internal class MosaicViewModel @Inject constructor(
     private val _state = MutableLiveData<PictureState>()
     val state: LiveData<PictureState> get() = _state
 
+    private val _detectedFaceIndexes = MutableStateFlow<List<Int>>(emptyList())
+    val detectedFaceIndexes: StateFlow<List<Int>> = _detectedFaceIndexes.asStateFlow()
+
     fun setScreen(screenStep: ScreenStep) = _screenStep.postValue(screenStep)
 
     fun setImage(data: File) {
@@ -74,36 +82,56 @@ internal class MosaicViewModel @Inject constructor(
         when (_screenStep.value) {
             ScreenStep.MosaicFace -> {
                 _state.postValue(PictureState.File(_originalImage.value ?: File("")))
-                setScreen(ScreenStep.SelectFace)
-            }
-            ScreenStep.SelectFace -> {
-                setScreen(ScreenStep.SelectMosaicEdit)
             }
             else -> {}
         }
     }
 
-    internal fun getFaceList(
-        image: File
-    ) = viewModelScope.launch {
-        getDetectedFaceUseCase(
-            currentTime = currentTime,
-            image = image
-        ).onSuccess {
-            _detectFaces.postValue(it)
-        }.onFailure {
-            handleException(it)
+    fun setOnClickAllSelectButton() {
+        viewModelScope.launch {
+            _detectedFaceIndexes.value.copy {
+                if (size == _detectFaces.value.faceList.size || size >= 1) {
+                    clear()
+                } else {
+                    clear()
+                    addAll(_detectFaces.value.faceList.indices)
+                }
+            }.also { _detectedFaceIndexes.value = it }
         }
     }
 
-    internal fun getMosaicImage() =
+    fun setOnClickItem(index: Int) {
         viewModelScope.launch {
-            val originalImage = detectFaces.value?.originalImage ?: ""
-            val coordinates = arrayListOf<List<Int>>().also { coordinates ->
-                detectFaces.value?.faceList?.forEach {
-                    coordinates.add(it.coordinates.toList())
+            _detectedFaceIndexes.value.copy {
+                if (contains(index)) {
+                    remove(index)
+                } else {
+                    add(index)
                 }
+            }.also { _detectedFaceIndexes.value = it }
+        }
+    }
+
+    internal fun getFaceList(image: File) {
+        viewModelScope.launch {
+            getDetectedFaceUseCase(
+                currentTime = currentTime,
+                threshold = 0.1f, // TODO(ham2174): 신로도값을 함수의 파라미터를 통해 받아오도록 수정
+                image = image
+            ).onSuccess {
+                _detectFaces.value = it.toFaceViewItem()
+            }.onFailure {
+                handleException(it)
             }
+        }
+    }
+
+    internal fun getMosaicImage() {
+        viewModelScope.launch {
+            val originalImage = _detectFaces.value.originalImage
+            val indexes = _detectedFaceIndexes.value
+            val coordinates = indexes.map { _detectFaces.value.faceList[it].coordinates }
+                .ifEmpty { listOf(listOf()) }
 
             pixelSize.value?.let { pixelSize ->
                 getMosaicImageUseCase(
@@ -128,6 +156,7 @@ internal class MosaicViewModel @Inject constructor(
                 }
             }
         }
+    }
 
     private fun handleException(exception: Throwable) {
         if (exception is IcecNetworkException) {

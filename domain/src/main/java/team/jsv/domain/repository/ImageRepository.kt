@@ -8,6 +8,7 @@ interface ImageRepository {
 
     suspend fun getDetectedFace(
         currentTime: String,
+        threshold: Float,
         image: File
     ): Face
 

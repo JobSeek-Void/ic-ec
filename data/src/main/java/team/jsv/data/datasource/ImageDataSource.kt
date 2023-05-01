@@ -15,11 +15,13 @@ class ImageDataSource @Inject constructor(
 
     suspend fun getDetectedFace(
         currentTime: String,
+        threshold: Float,
         image: File
     ): FaceResponse {
         try {
             return icecApi.getDetectedFace(
                 currentTime = currentTime,
+                threshold =  threshold,
                 image = image.toMultipartImage()
             )
         } catch (e: Throwable) {

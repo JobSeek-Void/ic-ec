@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/faceSelectFragment"
-        android:name="team.jsv.icec.ui.main.mosaic.selectFace.SelectFaceFragment"
+        android:name="team.jsv.icec.ui.main.mosaic.detect.DetectFaceFragment"
         android:label="FaceSelectFragment" >
         <action
             android:id="@+id/action_faceSelectFragment_to_faceMosaicFragment"

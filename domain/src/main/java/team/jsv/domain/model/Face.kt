@@ -1,7 +1,6 @@
 package team.jsv.domain.model
 
 data class Face(
-    val code: Int,
     val originalImage: String,
     val faceList: List<DetectFaceInfo>
 )

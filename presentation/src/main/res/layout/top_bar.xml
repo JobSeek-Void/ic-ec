@@ -1,30 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="48dp">
 
         <ImageView
             android:id="@+id/button_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:src="@drawable/ic_back_24_24"
-            app:layout_constraintBottom_toBottomOf="@+id/imageview_logo"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_back_32_32"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/textview_title"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/imageview_logo" />
+            app:layout_constraintTop_toTopOf="@+id/textview_title"
+            tools:visibility="visible" />
 
-        <ImageView
-            android:id="@+id/imageview_logo"
+        <TextView
+            android:id="@+id/textview_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo_wip"
+            android:fontFamily="@font/pretendard_bold"
+            android:includeFontPadding="false"
+            android:text="@string/mosaic_text"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_next"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:includeFontPadding="false"
+            android:text="@string/next_text"
+            android:textColor="@color/SubColor"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/white"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/textview_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/textview_title"
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_share"
@@ -36,13 +62,15 @@
             android:text="@string/share_text"
             android:textColor="@color/black"
             android:textSize="13sp"
+            android:visibility="gone"
             app:icon="@drawable/ic_share_18_18"
             app:iconGravity="textTop"
             app:iconPadding="2dp"
             app:iconTint="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/button_back"
             app:layout_constraintEnd_toStartOf="@+id/button_download"
-            app:layout_constraintTop_toTopOf="@+id/button_back" />
+            app:layout_constraintTop_toTopOf="@+id/button_back"
+            tools:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_download"
@@ -54,13 +82,15 @@
             android:text="@string/download_text"
             android:textColor="@color/black"
             android:textSize="13sp"
+            android:visibility="gone"
             app:icon="@drawable/ic_download_18_18"
             app:iconGravity="textTop"
             app:iconPadding="2dp"
             app:iconTint="@color/black"
             app:layout_constraintBottom_toBottomOf="@+id/button_back"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/button_back" />
+            app:layout_constraintTop_toTopOf="@+id/button_back"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
