@@ -1,13 +1,12 @@
 package team.jsv.icec.ui.main.mosaic.mosaicFace
 
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import team.jsv.domain.model.MosaicType
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel

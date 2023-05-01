@@ -6,25 +6,23 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import team.jsv.domain.model.Face
 import team.jsv.domain.model.MosaicType
 import team.jsv.domain.usecase.GetDetectedFaceUseCase
 import team.jsv.domain.usecase.GetMosaicImageUseCase
 import team.jsv.icec.base.BaseViewModel
 import team.jsv.icec.base.Event
 import team.jsv.icec.base.updateState
-import team.jsv.icec.ui.main.mosaic.mosaicFace.MosaicFaceState
 import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
 import team.jsv.icec.ui.main.mosaic.detect.model.toFaceViewItem
+import team.jsv.icec.ui.main.mosaic.mosaicFace.DEFAULT_MOSAIC_STRENGTH
+import team.jsv.icec.ui.main.mosaic.mosaicFace.MosaicFaceState
 import team.jsv.util_kotlin.IcecNetworkException
 import team.jsv.util_kotlin.MutableDebounceFlow
-import team.jsv.util_kotlin.debounceAction
 import team.jsv.util_kotlin.copy
+import team.jsv.util_kotlin.debounceAction
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -142,16 +140,6 @@ internal class MosaicViewModel @Inject constructor(
             }.onFailure {
                 handleException(it)
             }
-    internal fun getFaceList(
-        image: File,
-    ) = viewModelScope.launch {
-        getDetectedFaceUseCase(
-            currentTime = currentTime,
-            image = image
-        ).onSuccess {
-            _detectFaces.postValue(it)
-        }.onFailure {
-            handleException(it)
         }
     }
 
@@ -167,7 +155,7 @@ internal class MosaicViewModel @Inject constructor(
             val indexes = _detectedFaceIndexes.value
             val coordinates = indexes.map { _detectFaces.value.faceList[it].coordinates }
                 .ifEmpty { listOf(listOf()) }
-            with(_mosaicFaceState.value){
+            with(_mosaicFaceState.value) {
                 getMosaicImageUseCase(
                     currentTime = currentTime,
                     pixelSize = pixelSize.toInt(),
