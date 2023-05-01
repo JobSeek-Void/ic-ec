@@ -35,12 +35,6 @@ import kotlin.math.roundToInt
 
 class CameraActivity :
     BaseActivity<ActivityCameraBinding>(R.layout.activity_camera) {
-
-    companion object {
-        private const val FILENAME_FORMAT = "yyyy-MM-dd-HHmmss"
-    }
-
-class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_camera) {
     private val deviceHeight get() = screenHeight(this)
     private val deviceWidth get() = screenWidth(this)
 
@@ -84,6 +78,7 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
         binding.ivReverse.layoutParams = layoutParams
     }
 
+    private fun screenHeight(activity: Activity): Int {
         val displayMetrics = DisplayMetrics()
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -219,6 +214,27 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
         cameraExecutor = Executors.newSingleThreadExecutor()
     }
 
+    private fun takePhoto() {
+        val imageCapture = imageCapture ?: return
+
+        imageCapture.takePicture(
+            ContextCompat.getMainExecutor(this),
+            object : ImageCapture.OnImageCapturedCallback() {
+                override fun onCaptureSuccess(imageProxy: ImageProxy) {
+                    val buffer = imageProxy.planes[0].buffer
+                    val bytes = ByteArray(buffer.capacity())
+                    buffer.get(bytes)
+                    val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    imageProxy.close()
+                    //Todo(jiiiiiyoon): viewModel에 저장
+                }
+
+                override fun onError(exception: ImageCaptureException) {
+                    Log.e("사진저장실패", "Photo capture failed: ${exception.message}", exception)
+                }
+            })
+    }
+
     private fun imageCaptureSetting() {
         imageCapture = ImageCapture.Builder().apply {
             when (viewModel.ratioState.value) {
@@ -258,42 +274,5 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
                 }
             }
         }.build()
-    }
-
-    private fun takePhoto() {
-        val imageCapture = imageCapture ?: return
-
-        val name = SimpleDateFormat(FILENAME_FORMAT, Locale("ko", "KR"))
-            .format(System.currentTimeMillis())
-        val contentValues = ContentValues().apply {
-            put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-            put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/CameraX-Image")
-            }
-        }
-
-        val outputOptions = ImageCapture.OutputFileOptions
-            .Builder(
-                contentResolver,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                contentValues
-            )
-            .build()
-
-        imageCapture.takePicture(
-            outputOptions,
-            ContextCompat.getMainExecutor(this),
-            object : ImageCapture.OnImageSavedCallback {
-                override fun onError(exc: ImageCaptureException) {
-                    Log.e("captureError", "Photo capture failed: ${exc.message}", exc)
-                }
-
-                override fun onImageSaved(output: ImageCapture.OutputFileResults) {
-                    startActivity(Intent(this@CameraActivity, CameraResultActivity::class.java))
-                }
-            }
-        )
     }
 }
