@@ -4,4 +4,10 @@
         <item name="android:windowBackground">@color/WindowBackGroundColor</item>
         <item name="android:statusBarColor">@color/StatusBarColor</item>
     </style>
+
+    <style name="ICECCameraTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>
