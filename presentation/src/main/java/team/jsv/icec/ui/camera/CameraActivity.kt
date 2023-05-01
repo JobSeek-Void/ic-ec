@@ -54,6 +54,7 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
 
         requestPermissions(PermissionUtil.getPermissions())
         viewModel.setRatioState(SettingRatio.RATIO_1_1.id)
+        setReverseBtMargin()
         cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
         resizeCameraView()
     }
@@ -75,6 +76,13 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_cam
 
         return result
     }
+
+    private fun setReverseBtMargin() {
+        val layoutParams = binding.ivReverse.layoutParams as ViewGroup.MarginLayoutParams
+        layoutParams.setMargins(0, getStatusBarHeightDP(this), 0, 0)
+        binding.ivReverse.layoutParams = layoutParams
+    }
+
         val displayMetrics = DisplayMetrics()
 
         return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
