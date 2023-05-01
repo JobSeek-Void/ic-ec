@@ -36,7 +36,7 @@
             android:id="@+id/iv_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_check_32_32"
+            android:src="@drawable/ic_select_mark_32"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@+id/iv_face"
             app:layout_constraintEnd_toEndOf="@+id/iv_face"
