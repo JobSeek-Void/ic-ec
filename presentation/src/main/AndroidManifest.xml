@@ -5,16 +5,18 @@
         <activity
             android:name="team.jsv.icec.ui.camera.CameraActivity"
             android:theme="@style/ICECCameraTheme"
-            android:exported="false" />
-        <activity
-            android:name="team.jsv.icec.ui.main.MainActivity"
-            android:theme="@style/ICECTheme"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name="team.jsv.icec.ui.main.MainActivity"
+            android:theme="@style/ICECTheme"
+            android:exported="false">
+
         </activity>
     </application>
 
