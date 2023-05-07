@@ -33,4 +33,9 @@
         <item name="android:textSize">10sp</item>
         <item name="android:fontFamily">@font/pretendard_regular</item>
     </style>
+
+    <style name="ICEC.RoundedCorner_8" parent="">
+        <item name="cornerSize">8dp</item>
+    </style>
+
 </resources>
