@@ -11,13 +11,21 @@ import team.jsv.icec.base.EventObserver
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
 import team.jsv.icec.ui.main.mosaic.detect.adapter.DetectedFaceAdapter
 import team.jsv.icec.util.HorizontalSpaceItemDecoration
-import team.jsv.icec.util.setSliderValues
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentDetectFaceBinding
 
 @AndroidEntryPoint
 class DetectFaceFragment :
     BaseFragment<FragmentDetectFaceBinding>(R.layout.fragment_detect_face) {
+
+    companion object {
+        private const val sliderValue = 90f
+        private const val sliderFrom = 1f
+        private const val sliderValueTo = 99f
+        private const val sliderStepSize = 1f
+        private const val sliderHaloRadius = 0
+        private const val horizontalSpace = 12
+    }
 
     private val viewModel: MosaicViewModel by activityViewModels()
     private val detectedFaceAdapter by lazy {
@@ -38,12 +46,13 @@ class DetectFaceFragment :
     }
 
     private fun initDetectSlider() {
-        binding.sdDetectFace.setSliderValues(
-            value = 90f,
-            valueFrom = 1f,
-            valueTo = 99f,
-            stepSize = 1f
-        )
+        binding.sdDetectFace.apply {
+            value = sliderValue
+            valueFrom = sliderFrom
+            valueTo = sliderValueTo
+            stepSize = sliderStepSize
+            haloRadius = sliderHaloRadius
+        }
     }
 
     private fun observeBackPress() {
@@ -65,7 +74,7 @@ class DetectFaceFragment :
         binding.rvDetectedFace.apply {
             adapter = detectedFaceAdapter
             itemAnimator = null
-            addItemDecoration(HorizontalSpaceItemDecoration(space = 12))
+            addItemDecoration(HorizontalSpaceItemDecoration(space = horizontalSpace))
         }
 
         lifecycleScope.launch {
