@@ -5,6 +5,7 @@
     tools:ignore="ContentDescription">
 
     <data>
+
         <variable
             name="vm"
             type="team.jsv.icec.ui.main.mosaic.MosaicViewModel" />
@@ -52,8 +53,8 @@
             app:layout_constraintTop_toTopOf="@+id/tv_detected_face_count"
             app:strokeColor="@color/gray2"
             app:strokeWidth="1dp"
-            tools:text="전체 선택"
-            tools:backgroundTint="@color/gray1"/>
+            tools:backgroundTint="@color/gray1"
+            tools:text="전체 선택" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_detected_face"
@@ -84,20 +85,16 @@
 
         <com.google.android.material.slider.Slider
             android:id="@+id/sd_detect_face"
+            style="@style/ICEC.slider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="26dp"
-            android:stepSize="10"
-            android:valueFrom="10"
-            android:valueTo="90"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:thumbColor="@color/white"
-            app:tickVisible="false"
-            app:trackColorActive="@color/MainColor"
-            app:trackColorInactive="@color/gray3"
-            tools:value="50" />
+            tools:value="50"
+            tools:valueFrom="10"
+            tools:valueTo="90" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

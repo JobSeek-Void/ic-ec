@@ -16,7 +16,7 @@ class DetectedFaceAdapter(private val onClick: (Int) -> Unit) :
 
     private class DetectedFaceDiffUtil : DiffUtil.ItemCallback<DetectFaceInfoViewItem>() {
         override fun areItemsTheSame(oldItem: DetectFaceInfoViewItem, newItem: DetectFaceInfoViewItem): Boolean {
-            return oldItem == newItem
+            return oldItem.url == newItem.url
         }
 
         override fun areContentsTheSame(oldItem: DetectFaceInfoViewItem, newItem: DetectFaceInfoViewItem): Boolean {

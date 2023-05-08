@@ -14,4 +14,28 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
+
+    <style name="ICEC.slider" parent="@style/Widget.MaterialComponents.Slider">
+        <item name="labelStyle">@style/ICEC.slider.Tooltip</item>
+        <item name="trackColorActive">@color/MainColor</item>
+        <item name="trackColorInactive">@color/gray3</item>
+        <item name="thumbColor">@color/white</item>
+        <item name="tickVisible">false</item>
+    </style>
+
+    <style name="ICEC.slider.Tooltip" parent="Widget.MaterialComponents.Tooltip">
+        <item name="backgroundTint">@android:color/transparent</item>
+        <item name="android:textAppearance">@style/ICEC.slider.Tooltip.TextAppearance</item>
+    </style>
+
+    <style name="ICEC.slider.Tooltip.TextAppearance" parent="TextAppearance.MaterialComponents.Tooltip">
+        <item name="android:textColor">@color/onSurface</item>
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
+
+    <style name="ICEC.RoundedCorner_8" parent="">
+        <item name="cornerSize">8dp</item>
+    </style>
+
 </resources>

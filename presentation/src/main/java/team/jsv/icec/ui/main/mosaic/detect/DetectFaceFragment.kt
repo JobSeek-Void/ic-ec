@@ -18,6 +18,15 @@ import team.jsv.presentation.databinding.FragmentDetectFaceBinding
 class DetectFaceFragment :
     BaseFragment<FragmentDetectFaceBinding>(R.layout.fragment_detect_face) {
 
+    companion object {
+        private const val sliderValue = 90f
+        private const val sliderFrom = 1f
+        private const val sliderValueTo = 99f
+        private const val sliderStepSize = 1f
+        private const val sliderHaloRadius = 0
+        private const val horizontalSpace = 12
+    }
+
     private val viewModel: MosaicViewModel by activityViewModels()
     private val detectedFaceAdapter by lazy {
         DetectedFaceAdapter { position -> viewModel.setOnClickItem(position) }
@@ -30,9 +39,20 @@ class DetectFaceFragment :
     }
 
     override fun initView() {
+        initDetectSlider()
         observeBackPress()
         collectSelectedItemUpdates()
         initRecyclerView()
+    }
+
+    private fun initDetectSlider() {
+        binding.sdDetectFace.apply {
+            value = sliderValue
+            valueFrom = sliderFrom
+            valueTo = sliderValueTo
+            stepSize = sliderStepSize
+            haloRadius = sliderHaloRadius
+        }
     }
 
     private fun observeBackPress() {
@@ -54,7 +74,7 @@ class DetectFaceFragment :
         binding.rvDetectedFace.apply {
             adapter = detectedFaceAdapter
             itemAnimator = null
-            addItemDecoration(HorizontalSpaceItemDecoration(space = 12))
+            addItemDecoration(HorizontalSpaceItemDecoration(space = horizontalSpace))
         }
 
         lifecycleScope.launch {
