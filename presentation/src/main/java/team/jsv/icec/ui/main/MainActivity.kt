@@ -1,8 +1,6 @@
 package team.jsv.icec.ui.main
 
-import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
 import androidx.navigation.fragment.NavHostFragment
@@ -11,7 +9,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.EventObserver
 import team.jsv.icec.base.showToast
-import team.jsv.icec.ui.camera.CameraActivity
 import team.jsv.icec.ui.main.mosaic.MosaicEvent
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
 import team.jsv.icec.ui.main.mosaic.PictureState
