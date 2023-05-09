@@ -96,13 +96,13 @@ class MainActivity :
                 is PictureState.File
                 -> {
                     viewModel.originalImage.observe(this) { file ->
-                        binding.imageviewImage.loadImage(file)
+                        binding.ivImage.loadImage(file)
                     }
                 }
                 is PictureState.Url
                 -> {
                     viewModel.mosaicImage.observe(this, EventObserver { url ->
-                        binding.imageviewImage.loadImage(url)
+                        binding.ivImage.loadImage(url)
                     })
                 }
             }

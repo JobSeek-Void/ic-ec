@@ -15,7 +15,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageview_image"
+            android:id="@+id/iv_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="fitCenter"
@@ -34,7 +34,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageview_image"
+            app:layout_constraintTop_toBottomOf="@+id/iv_image"
             app:navGraph="@navigation/nav_graph"
             tools:layout="@layout/fragment_select_mosaic_edit"
             tools:layout_height="114dp" />
