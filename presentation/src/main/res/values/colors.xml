@@ -3,12 +3,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white95">#F2FFFFFF</color>
-    <color name="gray1">#FFFFFFFF</color>
-    <color name="gray2">#FFEEEEEE</color>
+    <color name="gray1">#1E1E1E</color>
+    <color name="gray2">#333333</color>
     <color name="gray3">#505050</color>
     <color name="gray4">#808080</color>
     <color name="gray5">#9F9F9F</color>
-    <color name="gray6">#333333</color>
+    <color name="gray6">#ECECEC</color>
 
     <color name="MainColor">#FFFA9A85</color>
     <color name="SubColor">#99FA9A85</color>
@@ -25,6 +25,5 @@
     <color name="EditButtonColor">#FFFA9A85</color>
     <!-- Common Color -->
     <color name="ButtonIconColor">#FFFFFFFF</color>
-    <color name="ButtonStrokeColor">#333333</color>
 
 </resources>

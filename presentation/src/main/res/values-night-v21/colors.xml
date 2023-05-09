@@ -25,6 +25,5 @@
     <color name="EditButtonColor">#CB1E1E1E</color>
     <!-- Common Color -->
     <color name="ButtonIconColor">#FFFFFFFF</color>
-    <color name="ButtonStrokeColor">#333333</color>
 
 </resources>
