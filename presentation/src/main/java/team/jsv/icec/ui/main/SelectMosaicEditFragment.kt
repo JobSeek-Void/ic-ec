@@ -21,13 +21,13 @@ class SelectMosaicEditFragment :
     }
 
     private fun initClickEvent() {
-        binding.buttonMosaic.setOnClickListener {
+        binding.btMosaic.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_faceSelectFragment)
             viewModel.setScreen(ScreenStep.SelectFace)
             viewModel.originalImage.value?.let { originalImage -> viewModel.getFaceList(originalImage) }
         }
 
-        binding.buttonEdit.setOnClickListener {
+        binding.btEdit.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_photoEditFragment)
         }
     }
@@ -38,8 +38,8 @@ class SelectMosaicEditFragment :
 
     private fun setButtonStroke() {
         if (currentTheme == Configuration.UI_MODE_NIGHT_NO) {
-            binding.buttonEdit.strokeWidth = 0
-            binding.buttonMosaic.strokeWidth = 0
+            binding.btEdit.strokeWidth = 0
+            binding.btMosaic.strokeWidth = 0
         }
     }
 

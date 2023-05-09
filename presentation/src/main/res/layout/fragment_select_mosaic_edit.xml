@@ -8,7 +8,7 @@
         android:layout_height="144dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_mosaic"
+            android:id="@+id/bt_mosaic"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosans_semibold"
@@ -26,7 +26,7 @@
             app:iconGravity="start"
             app:iconTint="@color/ButtonIconColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_edit"
+            app:layout_constraintEnd_toStartOf="@+id/bt_edit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="@color/ButtonStrokeColor"
@@ -34,7 +34,7 @@
             tools:ignore="UnusedAttribute" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_edit"
+            android:id="@+id/bt_edit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/notosans_semibold"
@@ -53,7 +53,7 @@
             app:iconTint="@color/ButtonIconColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_mosaic"
+            app:layout_constraintStart_toEndOf="@+id/bt_mosaic"
             app:layout_constraintTop_toTopOf="parent"
             app:strokeColor="@color/ButtonStrokeColor"
             app:strokeWidth="1dp"
