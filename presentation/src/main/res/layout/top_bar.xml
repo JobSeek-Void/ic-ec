@@ -8,15 +8,15 @@
         android:layout_height="48dp">
 
         <ImageView
-            android:id="@+id/button_back"
+            android:id="@+id/bt_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_back_32"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/textview_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textview_title"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
         <ImageView
@@ -32,12 +32,11 @@
             tools:visibility="gone" />
 
         <TextView
-            android:id="@+id/textview_title"
+            android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_bold"
             android:includeFontPadding="false"
-            android:text="@string/mosaic_text"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:visibility="gone"
@@ -45,10 +44,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:text="Mosaic"
             tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_next"
+            android:id="@+id/bt_next"
             style="@style/ICEC.MaterialButton.TopBarButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
