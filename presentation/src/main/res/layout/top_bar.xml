@@ -49,20 +49,37 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/button_next"
-            android:layout_width="60dp"
+            style="@style/ICEC.MaterialButton.TopBarButton"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:includeFontPadding="false"
+            android:fontFamily="@font/pretendard_medium"
             android:text="@string/next_text"
             android:textColor="@color/SubColor"
             android:textSize="12sp"
             android:visibility="gone"
             app:backgroundTint="@color/white"
-            app:cornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/textview_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textview_title"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_download"
+            style="@style/ICEC.MaterialButton.TopBarButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="@string/download_text"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/SubColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
