@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- ICEC.ActivityTheme -->
     <style name="ICECTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="android:windowBackground">@color/WindowBackGroundColor</item>
         <item name="android:statusBarColor">@color/StatusBarColor</item>
@@ -11,6 +13,7 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <!-- ICEC.MaterialSlider -->
     <style name="ICEC.slider" parent="@style/Widget.MaterialComponents.Slider">
         <item name="labelStyle">@style/ICEC.slider.Tooltip</item>
         <item name="trackColorActive">@color/MainColor</item>
@@ -30,10 +33,12 @@
         <item name="android:fontFamily">@font/pretendard_regular</item>
     </style>
 
+    <!-- ICEC.CommonStyle -->
     <style name="ICEC.RoundedCorner_8" parent="">
         <item name="cornerSize">8dp</item>
     </style>
 
+    <!-- ICEC.MaterialButton -->
     <style name="ICEC.MaterialButton.TopBarButton" parent="Widget.MaterialComponents.Button">
         <item name="android:includeFontPadding">false</item>
         <item name="android:insetLeft">0dp</item>
@@ -46,6 +51,21 @@
         <item name="android:paddingEnd">15dp</item>
         <item name="android:paddingTop">6dp</item>
         <item name="android:paddingBottom">6dp</item>
+        <item name="cornerRadius">20dp</item>
+    </style>
+
+    <style name="ICEC.MaterialButton.TopBarButton.Use" parent="Widget.MaterialComponents.Button">
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:insetLeft">0dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetRight">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
         <item name="cornerRadius">20dp</item>
     </style>
 
@@ -71,7 +91,5 @@
         <item name="iconTint">@color/white</item>
         <item name="iconPadding">10dp</item>
     </style>
-
-
 
 </resources>
