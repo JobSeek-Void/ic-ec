@@ -8,26 +8,34 @@
         android:layout_height="48dp">
 
         <ImageView
-            android:id="@+id/button_back"
+            android:id="@+id/bt_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:src="@drawable/ic_back_32"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/textview_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/textview_title"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
-        <TextView
-            android:id="@+id/textview_title"
+        <ImageView
+            android:id="@+id/bt_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/pretendard_bold"
-            android:includeFontPadding="false"
-            android:text="@string/mosaic_text"
-            android:textColor="@color/white"
-            android:textSize="16sp"
+            android:layout_marginStart="16dp"
+            android:src="@drawable/ic_close_32"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_reverse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_reverse_32"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -35,21 +43,89 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_next"
-            android:layout_width="60dp"
+        <ImageView
+            android:id="@+id/iv_ratio_1_1"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_reverse"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_reverse"
+            tools:src="@drawable/ic_1_1_ratio_22_33"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_bold"
             android:includeFontPadding="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Mosaic"
+            tools:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_next"
+            style="@style/ICEC.MaterialButton.TopBarButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/pretendard_medium"
             android:text="@string/next_text"
             android:textColor="@color/SubColor"
             android:textSize="12sp"
             android:visibility="gone"
             app:backgroundTint="@color/white"
-            app:cornerRadius="20dp"
-            app:layout_constraintBottom_toBottomOf="@id/textview_title"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/textview_title"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_download"
+            style="@style/ICEC.MaterialButton.TopBarButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="@string/download_text"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/SubColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="gone" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_use"
+            style="@style/ICEC.MaterialButton.TopBarButton.Use"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="@string/use_text"
+            android:textColor="@color/white"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/transparent"
+            app:icon="@drawable/ic_right_arrow_5_8"
+            app:iconGravity="textEnd"
+            app:iconPadding="4dp"
+            app:iconTint="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp"
             tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -5,59 +5,35 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="144dp">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_mosaic"
+            android:id="@+id/bt_mosaic"
+            style="@style/ICEC.MaterialButton.MosaicEditButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/notosans_semibold"
-            android:includeFontPadding="false"
-            android:outlineProvider="none"
-            android:paddingHorizontal="30dp"
-            android:paddingVertical="10dp"
+            android:paddingLeft="22dp"
+            android:paddingRight="22dp"
             android:text="@string/mosaic_text"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:backgroundTint="@color/MosaicButtonColor"
-            app:cornerRadius="8dp"
             app:icon="@drawable/ic_mosaic_15_16"
-            app:iconGravity="start"
-            app:iconTint="@color/ButtonIconColor"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_edit"
+            app:layout_constraintEnd_toStartOf="@+id/bt_edit"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/ButtonStrokeColor"
-            app:strokeWidth="1dp"
-            tools:ignore="UnusedAttribute" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/button_edit"
+            android:id="@+id/bt_edit"
+            style="@style/ICEC.MaterialButton.MosaicEditButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/notosans_semibold"
-            android:includeFontPadding="false"
-            android:outlineProvider="none"
-            android:paddingHorizontal="30dp"
-            android:paddingVertical="10dp"
+            android:paddingLeft="35dp"
+            android:paddingRight="35dp"
             android:text="@string/edit_text"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:backgroundTint="@color/EditButtonColor"
-            app:cornerRadius="8dp"
             app:icon="@drawable/ic_edit_15_16"
-            app:iconGravity="start"
-            app:iconTint="@color/ButtonIconColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_mosaic"
-            app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/ButtonStrokeColor"
-            app:strokeWidth="1dp"
-            tools:ignore="UnusedAttribute" />
+            app:layout_constraintStart_toEndOf="@+id/bt_mosaic"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

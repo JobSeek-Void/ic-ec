@@ -51,21 +51,27 @@ class MainActivity :
         viewModel.screenStep.observe(this) {
             when (it) {
                 ScreenStep.SelectMosaicEdit -> {
-                    binding.topBar.buttonBack.visible()
-                    binding.topBar.textviewTitle.gone()
-                    binding.topBar.buttonNext.gone()
+                    binding.topBar.btClose.visible()
+                    binding.topBar.btBack.gone()
+                    binding.topBar.tvTitle.gone()
+                    binding.topBar.btNext.gone()
+                    binding.topBar.btDownload.gone()
                 }
                 ScreenStep.SelectFace -> {
-                    binding.topBar.buttonBack.visible()
-                    binding.topBar.buttonNext.visible()
-                    binding.topBar.textviewTitle.visible()
-                    binding.topBar.textviewTitle.text = getString(R.string.mosaic_text)
+                    binding.topBar.btClose.gone()
+                    binding.topBar.btDownload.gone()
+                    binding.topBar.btBack.visible()
+                    binding.topBar.btNext.visible()
+                    binding.topBar.tvTitle.visible()
+                    binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
                 }
                 ScreenStep.MosaicFace -> {
-                    binding.topBar.buttonBack.visible()
-                    binding.topBar.buttonNext.visible()
-                    binding.topBar.textviewTitle.visible()
-                    binding.topBar.textviewTitle.text = getString(R.string.mosaic_text)
+                    binding.topBar.btClose.gone()
+                    binding.topBar.btDownload.gone()
+                    binding.topBar.btBack.visible()
+                    binding.topBar.btNext.visible()
+                    binding.topBar.tvTitle.visible()
+                    binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
                 }
                 else -> {}
             }
@@ -75,7 +81,7 @@ class MainActivity :
     private fun initView() {
 
         // TODO(ham2174) : 갤러리 혹은 카메라로 찍은 사진 데이터를 가져와야함. TakePictureActivity -> MainActivity 이미지 데이터 전달 필요
-        viewModel.setImage(File("/storage/emulated/0/Pictures/dicdic6.jpg"))
+        viewModel.setImage(File("/storage/emulated/0/Pictures/two_face.jpg"))
 
         viewModel.mosaicEvent.observe(this, EventObserver {
             when (it) {
@@ -90,13 +96,13 @@ class MainActivity :
                 is PictureState.File
                 -> {
                     viewModel.originalImage.observe(this) { file ->
-                        binding.imageviewImage.loadImage(file)
+                        binding.ivImage.loadImage(file)
                     }
                 }
                 is PictureState.Url
                 -> {
                     viewModel.mosaicImage.observe(this, EventObserver { url ->
-                        binding.imageviewImage.loadImage(url)
+                        binding.ivImage.loadImage(url)
                     })
                 }
             }
@@ -135,11 +141,11 @@ class MainActivity :
     }
 
     private fun initClickListeners() {
-        binding.topBar.buttonBack.setOnClickListener {
+        binding.topBar.btBack.setOnClickListener {
             handleScreenStepChange()
         }
 
-        binding.topBar.buttonNext.setOnClickListener {
+        binding.topBar.btNext.setOnClickListener {
             when (viewModel.screenStep.value) {
                 ScreenStep.SelectFace -> {
                     navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
