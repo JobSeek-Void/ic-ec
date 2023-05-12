@@ -15,16 +15,14 @@
             app:layout_constraintBottom_toTopOf="@+id/bt_capture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_reverse"
-            app:srcCompat="@drawable/ic_launcher_foreground">
+            app:layout_constraintTop_toBottomOf="@+id/iv_reverse">
         </androidx.camera.view.PreviewView>
 
         <ImageView
             android:id="@+id/iv_close"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/iv_reverse"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_reverse"
@@ -32,9 +30,8 @@
 
         <ImageView
             android:id="@+id/iv_reverse"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +42,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/iv_reverse"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_reverse"
