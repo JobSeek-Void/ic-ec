@@ -71,6 +71,8 @@ object SettingViewUtil {
 
         when (connectStateValue) {
             ConnenctState.TOP.id -> {
+                constraintSet.clear(targetView.id, ConstraintSet.BOTTOM)
+
                 constraintSet.connect(
                     targetView.id,
                     ConstraintSet.TOP,
@@ -79,6 +81,8 @@ object SettingViewUtil {
                 )
             }
             ConnenctState.BOTTOM.id -> {
+                constraintSet.clear(targetView.id, ConstraintSet.TOP)
+
                 constraintSet.connect(
                     targetView.id,
                     ConstraintSet.BOTTOM,
@@ -105,4 +109,5 @@ object SettingViewUtil {
             constraintSet.applyTo(constraintLayout)
         }
     }
+
 }
