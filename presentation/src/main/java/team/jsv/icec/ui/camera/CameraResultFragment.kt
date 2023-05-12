@@ -11,6 +11,6 @@ class CameraResultFragment :
     private val viewModel: CameraViewModel by activityViewModels()
 
     override fun initView() {
-        binding.photo.setImageBitmap(viewModel.bitmapImage.value)
+        binding.ivPreviewImage.setImageBitmap(viewModel.bitmapImage.value)
     }
 }
