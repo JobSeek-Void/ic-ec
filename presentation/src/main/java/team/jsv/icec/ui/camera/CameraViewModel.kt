@@ -13,7 +13,7 @@ class CameraViewModel : BaseViewModel() {
     private val _bitmapImage = MutableLiveData<Bitmap>()
     val bitmapImage: LiveData<Bitmap> get() = _bitmapImage
 
-    private val _isFrontCamera = MutableLiveData<Boolean>().apply { value = true }
+    private val _isFrontCamera = MutableLiveData<Boolean>().apply { value = false }
     val isFrontCamera: LiveData<Boolean> get() = _isFrontCamera
 
     fun setRatioState(value: Int) {
