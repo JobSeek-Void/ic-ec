@@ -161,7 +161,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                     binding.ivRatio.setImageResource(R.drawable.ic_1_1_ratio_22_33)
                     SettingViewUtil.reconnectView(
                         constraintLayout = binding.constraintLayout,
-                        targetViewGroup = binding.cameraPreview,
+                        targetView = binding.cameraPreview,
                         topView = binding.ivReverse,
                         topViewSet = ConstraintSet.BOTTOM,
                         bottomView = binding.btCapture,
@@ -178,7 +178,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                     binding.ivRatio.setImageResource(R.drawable.ic_9_16_ratio_22_33)
                     SettingViewUtil.reconnectView(
                         constraintLayout = binding.constraintLayout,
-                        targetViewGroup = binding.cameraPreview,
+                        targetView = binding.cameraPreview,
                         topView = binding.constraintLayout,
                         topViewSet = ConstraintSet.TOP,
                         bottomView = binding.constraintLayout,
@@ -191,7 +191,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                     binding.ivRatio.setImageResource(R.drawable.ic_full_ratio_22_33)
                     SettingViewUtil.reconnectView(
                         constraintLayout = binding.constraintLayout,
-                        targetViewGroup = binding.cameraPreview,
+                        targetView = binding.cameraPreview,
                         topView = binding.constraintLayout,
                         topViewSet = ConstraintSet.TOP,
                         bottomView = binding.constraintLayout,

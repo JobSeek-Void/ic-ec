@@ -1,9 +1,12 @@
 package team.jsv.icec.util
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
+import team.jsv.icec.ui.camera.CameraFragment
 import team.jsv.icec.ui.camera.SettingRatio
 import kotlin.math.roundToInt
 
@@ -43,7 +46,7 @@ object SettingViewUtil {
 
     fun reconnectView(
         constraintLayout: ConstraintLayout,
-        targetViewGroup: ViewGroup,
+        targetView: View,
         topView: View,
         topViewSet: Int,
         bottomView: View,
@@ -54,13 +57,13 @@ object SettingViewUtil {
         constraintSet.clone(constraintLayout)
 
         constraintSet.connect(
-            targetViewGroup.id,
+            targetView.id,
             ConstraintSet.LEFT,
             ConstraintSet.PARENT_ID,
             ConstraintSet.LEFT
         )
         constraintSet.connect(
-            targetViewGroup.id,
+            targetView.id,
             ConstraintSet.RIGHT,
             ConstraintSet.PARENT_ID,
             ConstraintSet.RIGHT
@@ -69,7 +72,7 @@ object SettingViewUtil {
         when (connectStateValue) {
             ConnenctState.TOP.id -> {
                 constraintSet.connect(
-                    targetViewGroup.id,
+                    targetView.id,
                     ConstraintSet.TOP,
                     topView.id,
                     topViewSet
@@ -77,7 +80,7 @@ object SettingViewUtil {
             }
             ConnenctState.BOTTOM.id -> {
                 constraintSet.connect(
-                    targetViewGroup.id,
+                    targetView.id,
                     ConstraintSet.BOTTOM,
                     bottomView.id,
                     bottomViewSet
@@ -85,13 +88,13 @@ object SettingViewUtil {
             }
             ConnenctState.TOPBOTTOM.id -> {
                 constraintSet.connect(
-                    targetViewGroup.id,
+                    targetView.id,
                     ConstraintSet.TOP,
                     topView.id,
                     topViewSet
                 )
                 constraintSet.connect(
-                    targetViewGroup.id,
+                    targetView.id,
                     ConstraintSet.BOTTOM,
                     bottomView.id,
                     bottomViewSet
