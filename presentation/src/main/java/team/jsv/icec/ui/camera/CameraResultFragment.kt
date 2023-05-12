@@ -145,5 +145,39 @@ class CameraResultFragment :
         }
     }
 
+    private fun saveImage(bitmap: Bitmap) {
+        val resolver = requireContext().contentResolver
+
+        val imageName: String =
+            SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
+                .format(System.currentTimeMillis())
+
+        val contentValues = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, imageName)
+            put(MediaStore.Images.Media.MIME_TYPE, JPEG_MIME_TYPE)
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(
+                    MediaStore.Images.Media.RELATIVE_PATH,
+                    Environment.DIRECTORY_PICTURES + MEDIA_DIRECTORY_PATH
+                )
+            } else {
+                put(
+                    MediaStore.Images.Media.DATA,
+                    Environment.getExternalStorageDirectory().absolutePath + EXTERNAL_STORAGE_DIRECTORY_PATH
+                )
+            }
+        }
+
+        val imageUri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
+
+        imageUri?.let { uri ->
+            resolver.openOutputStream(uri)?.use { outputStream ->
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream)
+            }
+        }.apply {
+            requireActivity().startActivity(Intent(requireActivity(), MainActivity::class.java))
+            requireActivity().finish()
+        }
     }
 }
