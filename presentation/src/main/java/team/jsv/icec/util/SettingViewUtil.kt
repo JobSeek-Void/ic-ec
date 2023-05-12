@@ -110,4 +110,21 @@ object SettingViewUtil {
         }
     }
 
+    @SuppressLint("InternalInsetResource", "DiscouragedApi")
+    fun getStatusBarHeightDP(context: Context): Int {
+        var result = 0
+
+        val resourceId: Int =
+            context.resources.getIdentifier(
+                CameraFragment.RESOURCE_NAME,
+                CameraFragment.RESOURCE_DEF_TYPE,
+                CameraFragment.RESOURCE_DEF_PACKAGE
+            )
+
+        if (resourceId > 0) {
+            result = context.resources.getDimension(resourceId).toInt()
+        }
+
+        return result
+    }
 }

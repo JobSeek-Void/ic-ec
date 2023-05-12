@@ -73,20 +73,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         }
     }
 
-    @SuppressLint("InternalInsetResource", "DiscouragedApi")
-    private fun getStatusBarHeightDP(context: Context): Int {
-        var result = 0
-
-        val resourceId: Int =
-            context.resources.getIdentifier(RESOURCE_NAME, RESOURCE_DEF_TYPE, RESOURCE_DEF_PACKAGE)
-
-        if (resourceId > 0) {
-            result = context.resources.getDimension(resourceId).toInt()
-        }
-
-        return result
-    }
-
     private fun setReverseBtMargin() {
         val layoutParams = binding.ivReverse.layoutParams as ViewGroup.MarginLayoutParams
         layoutParams.setMargins(0, getStatusBarHeightDP(requireContext()), 0, 0)
