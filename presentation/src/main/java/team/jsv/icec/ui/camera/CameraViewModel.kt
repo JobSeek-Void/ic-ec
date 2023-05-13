@@ -24,7 +24,7 @@ class CameraViewModel : BaseViewModel() {
         _bitmapImage.value = image
     }
 
-    fun setIsFrontCamera(value : Boolean) {
+    fun setIsFrontCamera(value: Boolean) {
         _isFrontCamera.value = value
     }
 }
