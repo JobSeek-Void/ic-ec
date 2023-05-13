@@ -1,11 +1,8 @@
 package team.jsv.icec.ui.camera
 
-import android.app.Activity
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.os.Build
-import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
 import android.view.ViewGroup
@@ -18,11 +15,12 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.util.ConnenctState
 import team.jsv.icec.util.SettingViewUtil
 import team.jsv.icec.util.SettingViewUtil.getStatusBarHeightDP
+import team.jsv.icec.util.deviceHeight
+import team.jsv.icec.util.deviceWidth
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentCameraBinding
 import java.util.concurrent.ExecutorService
@@ -36,9 +34,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         const val RESOURCE_DEF_PACKAGE = "android"
     }
 
-    private val deviceHeight get() = screenHeight(requireActivity())
-    private val deviceWidth get() = screenWidth(requireActivity())
-
     private val viewModel: CameraViewModel by activityViewModels()
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var cameraSelector: CameraSelector
@@ -47,30 +42,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     override fun onResume() {
         super.onResume()
         initClickEvent()
-    }
-
-    private fun screenHeight(activity: Activity): Int {
-        val displayMetrics = DisplayMetrics()
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activity.windowManager.currentWindowMetrics.bounds.height()
-        } else {
-            @Suppress("DEPRECATION") val display = activity.windowManager.defaultDisplay
-            @Suppress("DEPRECATION") display.getMetrics(displayMetrics)
-            displayMetrics.heightPixels
-        }
-    }
-
-    private fun screenWidth(activity: Activity): Int {
-        val displayMetrics = DisplayMetrics()
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activity.windowManager.currentWindowMetrics.bounds.width()
-        } else {
-            @Suppress("DEPRECATION") val display = activity.windowManager.defaultDisplay
-            @Suppress("DEPRECATION") display.getMetrics(displayMetrics)
-            displayMetrics.widthPixels
-        }
     }
 
     private fun setReverseBtMargin() {
@@ -134,11 +105,14 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         viewModel.ratioState.observe(this) { ratioState ->
             val layoutParams = binding.cameraPreview.layoutParams
 
-            binding.cameraPreview.layoutParams =
-                SettingViewUtil.resizeView(layoutParams, ratioState, deviceWidth, deviceHeight)
-                    .apply {
-                        startCamera()
-                    }
+            binding.cameraPreview.layoutParams = SettingViewUtil.resizeView(
+                layoutParams,
+                ratioState,
+                requireActivity().deviceWidth,
+                requireActivity().deviceHeight
+            ).apply {
+                startCamera()
+            }
 
             when (ratioState) {
                 SettingRatio.RATIO_1_1.id -> {

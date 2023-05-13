@@ -1,13 +1,11 @@
 package team.jsv.icec.ui.camera
 
-import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
 import android.graphics.Bitmap
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.DisplayMetrics
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.activityViewModels
@@ -15,10 +13,12 @@ import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.ui.main.MainActivity
 import team.jsv.icec.util.ConnenctState
 import team.jsv.icec.util.SettingViewUtil
+import team.jsv.icec.util.deviceHeight
+import team.jsv.icec.util.deviceWidth
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentCameraResultBinding
-import java.text.SimpleDateFormat
-import java.util.Locale
+import team.jsv.util_kotlin.toFormatString
+import java.util.Date
 
 class CameraResultFragment :
     BaseFragment<FragmentCameraResultBinding>(R.layout.fragment_camera_result) {
@@ -31,36 +31,9 @@ class CameraResultFragment :
 
     private val viewModel: CameraViewModel by activityViewModels()
 
-    private val deviceHeight get() = screenHeight(requireActivity())
-    private val deviceWidth get() = screenWidth(requireActivity())
-
     override fun onResume() {
         super.onResume()
         initClickEvent()
-    }
-
-    private fun screenHeight(activity: Activity): Int {
-        val displayMetrics = DisplayMetrics()
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activity.windowManager.currentWindowMetrics.bounds.height()
-        } else {
-            @Suppress("DEPRECATION") val display = activity.windowManager.defaultDisplay
-            @Suppress("DEPRECATION") display.getMetrics(displayMetrics)
-            displayMetrics.heightPixels
-        }
-    }
-
-    private fun screenWidth(activity: Activity): Int {
-        val displayMetrics = DisplayMetrics()
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activity.windowManager.currentWindowMetrics.bounds.width()
-        } else {
-            @Suppress("DEPRECATION") val display = activity.windowManager.defaultDisplay
-            @Suppress("DEPRECATION") display.getMetrics(displayMetrics)
-            displayMetrics.widthPixels
-        }
     }
 
     override fun initView() {
@@ -89,9 +62,12 @@ class CameraResultFragment :
         viewModel.ratioState.observe(this) { ratioState ->
             val layoutParams = binding.ivPreviewImage.layoutParams
 
-            binding.ivPreviewImage.layoutParams =
-                SettingViewUtil.resizeView(layoutParams, ratioState, deviceWidth, deviceHeight)
-
+            binding.ivPreviewImage.layoutParams = SettingViewUtil.resizeView(
+                layoutParams,
+                ratioState,
+                requireActivity().deviceWidth,
+                requireActivity().deviceHeight
+            )
 
             when (ratioState) {
                 SettingRatio.RATIO_1_1.id -> {
