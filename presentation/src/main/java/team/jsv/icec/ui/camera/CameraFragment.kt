@@ -201,7 +201,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
 
                     viewModel.setBitmapImage(rotatedBitmap)
 
-                    findNavController().navigate(R.id.action_cameraFragment_to_cameraResultFragment)
+                    navController.navigate(R.id.action_cameraFragment_to_cameraResultFragment)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
