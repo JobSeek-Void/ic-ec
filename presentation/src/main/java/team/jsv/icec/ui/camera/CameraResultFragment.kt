@@ -66,8 +66,8 @@ class CameraResultFragment :
             binding.ivPreviewImage.layoutParams = SettingViewUtil.resizeView(
                 layoutParams,
                 ratioState,
-                requireActivity().deviceWidth,
-                requireActivity().deviceHeight
+                this.deviceWidth,
+                this.deviceHeight
             )
 
             when (ratioState) {

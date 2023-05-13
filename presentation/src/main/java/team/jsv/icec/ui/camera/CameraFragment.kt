@@ -108,8 +108,8 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
             binding.cameraPreview.layoutParams = SettingViewUtil.resizeView(
                 layoutParams,
                 ratioState,
-                requireActivity().deviceWidth,
-                requireActivity().deviceHeight
+                this.deviceWidth,
+                this.deviceHeight
             ).apply {
                 startCamera()
             }
