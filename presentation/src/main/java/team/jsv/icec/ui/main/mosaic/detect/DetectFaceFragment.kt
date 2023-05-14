@@ -1,23 +1,17 @@
 package team.jsv.icec.ui.main.mosaic.detect
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
-import team.jsv.icec.base.showToast
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
 import team.jsv.icec.ui.main.mosaic.detect.adapter.DetectedFaceAdapter
 import team.jsv.icec.util.HorizontalSpaceItemDecoration
-import team.jsv.icec.util.LoadingDialog
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentDetectFaceBinding
 
@@ -102,12 +96,8 @@ class DetectFaceFragment :
         lifecycleScope.launch {
             viewModel.detectFaceState.collect { state ->
                 when (state.isLoading) {
-                    true -> {
-                        dialog.show()
-                    }
-                    false -> {
-                        dialog.dismiss()
-                    }
+                    true -> dialog.show()
+                    false -> dialog.dismiss()
                 }
             }
         }

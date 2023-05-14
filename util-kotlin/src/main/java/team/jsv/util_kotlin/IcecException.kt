@@ -10,3 +10,11 @@ class IcecNetworkException(
         return "NetworkError(code=$code, message=$message)"
     }
 }
+
+class IcecClientException(
+    override val message: String,
+) : IcecException(message) {
+    override fun toString(): String {
+        return "Client Error : $message)"
+    }
+}
