@@ -56,13 +56,10 @@ class DetectFaceFragment :
             stepSize = sliderStepSize
             haloRadius = sliderHaloRadius
 
-            addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
-                viewModel.setDetectStrength(value)
-            })
-
             addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
+                    viewModel.setDetectStrength(value)
                     viewModel.getFaceList()
                 }
             })
