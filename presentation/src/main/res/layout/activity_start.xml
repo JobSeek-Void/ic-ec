@@ -27,8 +27,6 @@
             app:cornerRadius="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-
-
             app:strokeColor="@color/gray2"
             app:strokeWidth="1dp" />
 
@@ -54,6 +52,5 @@
             app:layout_constraintTop_toTopOf="@+id/bt_photo"
             app:strokeColor="@color/gray2"
             app:strokeWidth="1dp" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
