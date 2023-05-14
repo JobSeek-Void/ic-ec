@@ -50,9 +50,6 @@ internal class MosaicViewModel @Inject constructor(
         SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
             .format(System.currentTimeMillis())
 
-    private val _detectFaces = MutableStateFlow(FaceViewItem())
-    val detectFaces: StateFlow<FaceViewItem> = _detectFaces.asStateFlow()
-
     private val _originalImage = MutableLiveData<File>()
     val originalImage: LiveData<File> get() = _originalImage
 
@@ -112,11 +109,11 @@ internal class MosaicViewModel @Inject constructor(
     fun setOnClickAllSelectButton() {
         viewModelScope.launch {
             _detectedFaceIndexes.value.copy {
-                if (size == _detectFaces.value.faceList.size || size >= 1) {
+                if (size == _detectFaceState.value.faceViewItem.faceList.size || size >= 1) {
                     clear()
                 } else {
                     clear()
-                    addAll(_detectFaces.value.faceList.indices)
+                    addAll(_detectFaceState.value.faceViewItem.faceList.indices)
                 }
             }.also { _detectedFaceIndexes.value = it }
         }
@@ -136,6 +133,12 @@ internal class MosaicViewModel @Inject constructor(
 
     fun setOnClearDetectedFaceIndex() {
         _detectedFaceIndexes.value = emptyList()
+    }
+
+    fun setFaceViewItem(faceViewItem: FaceViewItem) {
+        _detectFaceState.updateState {
+            copy(faceViewItem = faceViewItem)
+        }
     }
 
     fun setDetectStrength(value: Float) {
@@ -158,8 +161,10 @@ internal class MosaicViewModel @Inject constructor(
                     currentTime = currentTime,
                     threshold = detectStrength.toThreshold,
                     image = _originalImage.value ?: File("")
-                ).onSuccess {
-                    _detectFaces.value = it.toFaceViewItem()
+                ).onSuccess { data ->
+                    data.toFaceViewItem().also { faceViewItem ->
+                        setFaceViewItem(faceViewItem)
+                    }
                     setOnClearDetectedFaceIndex()
                 }.onFailure {
                     handleException(it)
@@ -176,9 +181,9 @@ internal class MosaicViewModel @Inject constructor(
 
     fun getMosaicImage() {
         viewModelScope.launch {
-            val originalImage = _detectFaces.value.originalImage
+            val originalImage = _detectFaceState.value.faceViewItem.originalImage
             val indexes = _detectedFaceIndexes.value
-            val coordinates = indexes.map { _detectFaces.value.faceList[it].coordinates }
+            val coordinates = indexes.map { _detectFaceState.value.faceViewItem.faceList[it].coordinates }
                 .ifEmpty { listOf(listOf()) }
             with(_mosaicFaceState.value) {
                 getMosaicImageUseCase(

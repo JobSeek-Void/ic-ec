@@ -86,8 +86,8 @@ class DetectFaceFragment :
 
     private fun collectDetectFaces() {
         lifecycleScope.launch {
-            viewModel.detectFaces.collect { faceViewItems ->
-                detectedFaceAdapter.submitList(faceViewItems.faceList)
+            viewModel.detectFaceState.collect { state ->
+                detectedFaceAdapter.submitList(state.faceViewItem.faceList)
             }
         }
     }
@@ -98,6 +98,7 @@ class DetectFaceFragment :
                 when (state.isLoading) {
                     true -> dialog.show()
                     false -> dialog.dismiss()
+                        .also { detectedFaceAdapter.submitList(state.faceViewItem.faceList) }
                 }
             }
         }

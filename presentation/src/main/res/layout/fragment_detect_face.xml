@@ -24,7 +24,7 @@
             android:fontFamily="@font/pretendard_medium"
             android:textColor="@color/white"
             android:textSize="14sp"
-            app:detectedFaceCount="@{vm.detectFaces.component2().size()}"
+            app:detectedFaceCount="@{vm.detectFaceState.component1().component2().size()}"
             app:layout_constraintBottom_toTopOf="@+id/rv_detected_face"
             app:layout_constraintStart_toStartOf="parent"
             tools:text="5명" />
