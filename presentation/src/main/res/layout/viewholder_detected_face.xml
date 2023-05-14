@@ -4,6 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="ContentDescription,UnusedAttribute">
 
+    <data>
+        <variable
+            name="data"
+            type="team.jsv.icec.ui.main.mosaic.detect.model.DetectFaceInfoViewItem" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item"
         android:layout_width="wrap_content"
@@ -17,6 +23,7 @@
             android:scaleType="centerCrop"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:selectFaceItem="@{data.component3()}"
             app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8"
             tools:src="@drawable/rv_test_image"
             tools:strokeColor="@color/SubColor"
@@ -31,6 +38,7 @@
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/iv_face"
             app:layout_constraintTop_toTopOf="@+id/iv_face"
+            app:checkingVisible="@{data.component3()}"
             tools:src="@drawable/ic_select_mark_14"
             tools:visibility="visible" />
 
