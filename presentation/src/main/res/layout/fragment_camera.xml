@@ -15,16 +15,13 @@
             app:layout_constraintBottom_toTopOf="@+id/bt_capture"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_reverse"
-            app:srcCompat="@drawable/ic_launcher_foreground">
-        </androidx.camera.view.PreviewView>
+            app:layout_constraintTop_toBottomOf="@+id/iv_reverse" />
 
         <ImageView
             android:id="@+id/iv_close"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/iv_reverse"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_reverse"
@@ -32,9 +29,8 @@
 
         <ImageView
             android:id="@+id/iv_reverse"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:clickable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -45,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:clickable="true"
             app:layout_constraintBottom_toBottomOf="@+id/iv_reverse"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_reverse"
@@ -56,7 +51,7 @@
             android:layout_width="65dp"
             android:layout_height="65dp"
             android:layout_marginBottom="23dp"
-            android:background="@drawable/shape_circle_capture_button"
+            android:background="@drawable/ic_capture_65"
             android:stateListAnimator="@null"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
