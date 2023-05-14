@@ -22,7 +22,7 @@ abstract class BaseFragment<T : ViewDataBinding>(
 
     protected val currentTheme: Int get() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
     protected val navController: NavController get() = NavHostFragment.findNavController(this)
-    protected val dialog by lazy { LoadingDialog(requireContext()) }
+    protected val dialog by lazy { LoadingDialog(context = requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,
