@@ -25,9 +25,9 @@ import team.jsv.util_kotlin.IcecNetworkException
 import team.jsv.util_kotlin.MutableDebounceFlow
 import team.jsv.util_kotlin.copy
 import team.jsv.util_kotlin.debounceAction
+import team.jsv.util_kotlin.toFormatString
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Locale
+import java.util.Date
 import javax.inject.Inject
 
 enum class ScreenStep {
@@ -44,11 +44,10 @@ internal class MosaicViewModel @Inject constructor(
 
     companion object {
         private const val debounceDelay: Long = 200L
+        private const val DEFAULT_CURRENT_TIME_FORMAT = "yyyy-MM-dd-HHmmss"
     }
 
-    private val currentTime: String =
-        SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale("ko", "KR"))
-            .format(System.currentTimeMillis())
+    private val currentTime: String = Date().toFormatString(DEFAULT_CURRENT_TIME_FORMAT)
 
     private val _originalImage = MutableLiveData<File>()
     val originalImage: LiveData<File> get() = _originalImage
