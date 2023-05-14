@@ -3,7 +3,10 @@ package team.jsv.icec.ui.main.mosaic.detect
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseFragment
@@ -41,6 +44,7 @@ class DetectFaceFragment :
     override fun initView() {
         initDetectSlider()
         observeBackPress()
+        collectDetectFaceState()
         collectSelectedItemUpdates()
         initRecyclerView()
     }
@@ -52,6 +56,14 @@ class DetectFaceFragment :
             valueTo = sliderValueTo
             stepSize = sliderStepSize
             haloRadius = sliderHaloRadius
+
+            addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+                override fun onStartTrackingTouch(slider: Slider) {}
+                override fun onStopTrackingTouch(slider: Slider) {
+                    viewModel.setDetectStrength(value)
+                    viewModel.getFaceList()
+                }
+            })
         }
     }
 
@@ -62,10 +74,24 @@ class DetectFaceFragment :
     }
 
     private fun collectSelectedItemUpdates() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.detectedFaceIndexes.collect { selectedIndexList ->
+                    detectedFaceAdapter.updateSelection(selectedIndexList)
+                    binding.btGroupSelect.changeBackground(selectedIndexList.isNotEmpty())
+                }
+            }
+        }
+    }
+
+    private fun collectDetectFaceState() {
         lifecycleScope.launch {
-            viewModel.detectedFaceIndexes.collect { selectedIndexList ->
-                detectedFaceAdapter.updateSelection(selectedIndexList)
-                binding.btGroupSelect.changeBackground(selectedIndexList.isNotEmpty())
+            viewModel.detectFaceState.collect { state ->
+                when (state.isLoading) {
+                    true -> dialog.show()
+                    false -> dialog.dismiss()
+                        .also { detectedFaceAdapter.submitList(state.faceViewItem.faceList) }
+                }
             }
         }
     }
@@ -75,12 +101,6 @@ class DetectFaceFragment :
             adapter = detectedFaceAdapter
             itemAnimator = null
             addItemDecoration(HorizontalSpaceItemDecoration(space = horizontalSpace))
-        }
-
-        lifecycleScope.launch {
-            viewModel.detectFaces.collect { faceViewItems ->
-                detectedFaceAdapter.submitList(faceViewItems.faceList)
-            }
         }
     }
 

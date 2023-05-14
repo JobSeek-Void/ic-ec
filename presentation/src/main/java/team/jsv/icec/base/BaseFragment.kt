@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.NavHostFragment
+import team.jsv.icec.util.LoadingDialog
 
 abstract class BaseFragment<T : ViewDataBinding>(
     @LayoutRes val layoutRes: Int,
@@ -21,6 +22,7 @@ abstract class BaseFragment<T : ViewDataBinding>(
 
     protected val currentTheme: Int get() = resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK
     protected val navController: NavController get() = NavHostFragment.findNavController(this)
+    protected val dialog by lazy { LoadingDialog(context = requireContext()) }
 
     override fun onCreateView(
         inflater: LayoutInflater,

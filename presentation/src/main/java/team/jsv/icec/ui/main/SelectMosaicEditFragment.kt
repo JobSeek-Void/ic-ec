@@ -24,7 +24,7 @@ class SelectMosaicEditFragment :
         binding.btMosaic.setOnClickListener {
             navController.navigate(R.id.action_selectMosaicEditFragment_to_faceSelectFragment)
             viewModel.setScreen(ScreenStep.SelectFace)
-            viewModel.originalImage.value?.let { originalImage -> viewModel.getFaceList(originalImage) }
+            viewModel.getFaceList()
         }
 
         binding.btEdit.setOnClickListener {

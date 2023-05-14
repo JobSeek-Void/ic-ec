@@ -8,13 +8,9 @@ import team.jsv.icec.ui.main.mosaic.detect.model.DetectFaceInfoViewItem
 import team.jsv.presentation.databinding.ViewholderDetectedFaceBinding
 
 class DetectedFaceAdapter(private val onClick: (Int) -> Unit) :
-    ListAdapter<DetectFaceInfoViewItem, DetectedFaceItemViewHolder>(DetectedFaceDiffUtil()) {
+    ListAdapter<DetectFaceInfoViewItem, DetectedFaceItemViewHolder>(DetectedFaceDiffUtil) {
 
-    init {
-        setHasStableIds(true)
-    }
-
-    private class DetectedFaceDiffUtil : DiffUtil.ItemCallback<DetectFaceInfoViewItem>() {
+    object DetectedFaceDiffUtil : DiffUtil.ItemCallback<DetectFaceInfoViewItem>() {
         override fun areItemsTheSame(oldItem: DetectFaceInfoViewItem, newItem: DetectFaceInfoViewItem): Boolean {
             return oldItem.url == newItem.url
         }
