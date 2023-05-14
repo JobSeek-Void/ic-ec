@@ -1,13 +1,8 @@
 package team.jsv.icec.ui.camera
 
-import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Matrix
-import android.os.Build
-import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
 import android.view.ViewGroup
@@ -20,15 +15,16 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.util.ConnenctState
 import team.jsv.icec.util.SettingViewUtil
+import team.jsv.icec.util.SettingViewUtil.getStatusBarHeightDP
+import team.jsv.icec.util.deviceHeight
+import team.jsv.icec.util.deviceWidth
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentCameraBinding
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
-import kotlin.math.roundToInt
 
 class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_camera) {
 
@@ -38,9 +34,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         const val RESOURCE_DEF_PACKAGE = "android"
     }
 
-    private val deviceHeight get() = screenHeight(requireActivity())
-    private val deviceWidth get() = screenWidth(requireActivity())
-
     private val viewModel: CameraViewModel by activityViewModels()
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var cameraSelector: CameraSelector
@@ -49,44 +42,6 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     override fun onResume() {
         super.onResume()
         initClickEvent()
-    }
-
-    private fun screenHeight(activity: Activity): Int {
-        val displayMetrics = DisplayMetrics()
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activity.windowManager.currentWindowMetrics.bounds.height()
-        } else {
-            @Suppress("DEPRECATION") val display = activity.windowManager.defaultDisplay
-            @Suppress("DEPRECATION") display.getMetrics(displayMetrics)
-            displayMetrics.heightPixels
-        }
-    }
-
-    private fun screenWidth(activity: Activity): Int {
-        val displayMetrics = DisplayMetrics()
-
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            activity.windowManager.currentWindowMetrics.bounds.width()
-        } else {
-            @Suppress("DEPRECATION") val display = activity.windowManager.defaultDisplay
-            @Suppress("DEPRECATION") display.getMetrics(displayMetrics)
-            displayMetrics.widthPixels
-        }
-    }
-
-    @SuppressLint("InternalInsetResource", "DiscouragedApi")
-    private fun getStatusBarHeightDP(context: Context): Int {
-        var result = 0
-
-        val resourceId: Int =
-            context.resources.getIdentifier(RESOURCE_NAME, RESOURCE_DEF_TYPE, RESOURCE_DEF_PACKAGE)
-
-        if (resourceId > 0) {
-            result = context.resources.getDimension(resourceId).toInt()
-        }
-
-        return result
     }
 
     private fun setReverseBtMargin() {
@@ -150,18 +105,21 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         viewModel.ratioState.observe(this) { ratioState ->
             val layoutParams = binding.cameraPreview.layoutParams
 
-            binding.cameraPreview.layoutParams =
-                SettingViewUtil.resizeView(layoutParams, ratioState, deviceWidth, deviceHeight)
-                    .apply {
-                        startCamera()
-                    }
+            binding.cameraPreview.layoutParams = SettingViewUtil.resizeView(
+                layoutParams,
+                ratioState,
+                this.deviceWidth,
+                this.deviceHeight
+            ).apply {
+                startCamera()
+            }
 
-            when (viewModel.ratioState.value) {
+            when (ratioState) {
                 SettingRatio.RATIO_1_1.id -> {
                     binding.ivRatio.setImageResource(R.drawable.ic_1_1_ratio_22_33)
                     SettingViewUtil.reconnectView(
                         constraintLayout = binding.constraintLayout,
-                        targetViewGroup = binding.cameraPreview,
+                        targetView = binding.cameraPreview,
                         topView = binding.ivReverse,
                         topViewSet = ConstraintSet.BOTTOM,
                         bottomView = binding.btCapture,
@@ -178,7 +136,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                     binding.ivRatio.setImageResource(R.drawable.ic_9_16_ratio_22_33)
                     SettingViewUtil.reconnectView(
                         constraintLayout = binding.constraintLayout,
-                        targetViewGroup = binding.cameraPreview,
+                        targetView = binding.cameraPreview,
                         topView = binding.constraintLayout,
                         topViewSet = ConstraintSet.TOP,
                         bottomView = binding.constraintLayout,
@@ -191,7 +149,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                     binding.ivRatio.setImageResource(R.drawable.ic_full_ratio_22_33)
                     SettingViewUtil.reconnectView(
                         constraintLayout = binding.constraintLayout,
-                        targetViewGroup = binding.cameraPreview,
+                        targetView = binding.cameraPreview,
                         topView = binding.constraintLayout,
                         topViewSet = ConstraintSet.TOP,
                         bottomView = binding.constraintLayout,
@@ -241,40 +199,15 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                     val rotatedBitmap = rotateBitmap(bitmap, imageProxy)
                     imageProxy.close()
 
-                    if (viewModel.ratioState.value == SettingRatio.RATIO_1_1.id) {
-                        viewModel.setBitmapImage(resizeBitmap(rotatedBitmap))
-                    } else {
-                        viewModel.setBitmapImage(rotatedBitmap)
-                    }
-                    findNavController().navigate(R.id.action_cameraFragment_to_cameraResultFragment)
+                    viewModel.setBitmapImage(rotatedBitmap)
+
+                    navController.navigate(R.id.action_cameraFragment_to_cameraResultFragment)
                 }
 
                 override fun onError(exception: ImageCaptureException) {
                     Log.e("사진저장실패", "Photo capture failed: ${exception.message}", exception)
                 }
             })
-    }
-
-    private fun resizeBitmap(bitmap: Bitmap): Bitmap {
-        val cropSize = if (bitmap.width > bitmap.height) bitmap.height else bitmap.width
-        val cropBitmap = Bitmap.createBitmap(
-            bitmap,
-            (bitmap.width - cropSize) / 2,
-            (bitmap.height - cropSize) / 2,
-            cropSize,
-            cropSize
-        )
-
-        val size = cropBitmap.width.coerceAtMost(cropBitmap.height)
-        val resizedBitmap = Bitmap.createBitmap(
-            cropBitmap,
-            (cropBitmap.width - size) / 2,
-            (cropBitmap.height - size) / 2,
-            size,
-            size
-        )
-
-        return resizedBitmap.copy(resizedBitmap.config, true)
     }
 
     private fun rotateBitmap(bitmap: Bitmap, imageProxy: ImageProxy): Bitmap {
@@ -293,39 +226,11 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
 
     private fun imageCaptureSetting() {
         imageCapture = ImageCapture.Builder().apply {
-            when (viewModel.ratioState.value) {
-                SettingRatio.RATIO_1_1.id -> {
-                    setTargetResolution(
-                        Size(
-                            deviceWidth, (deviceWidth * SettingRatio.AMOUNT_1_1).roundToInt()
-                        )
-                    )
-                }
-
-                SettingRatio.RATIO_3_4.id -> {
-                    setTargetResolution(
-                        Size(
-                            deviceWidth, (deviceWidth * SettingRatio.AMOUNT_3_4).roundToInt()
-                        )
-                    )
-                }
-
-                SettingRatio.RATIO_9_16.id -> {
-                    setTargetResolution(
-                        Size(
-                            deviceWidth, (deviceWidth * SettingRatio.AMOUNT_9_16).roundToInt()
-                        )
-                    )
-                }
-
-                SettingRatio.RATIO_FULL.id -> {
-                    setTargetResolution(
-                        Size(
-                            deviceWidth, deviceHeight
-                        )
-                    )
-                }
-            }
+            setTargetResolution(
+                Size(
+                    binding.cameraPreview.width, binding.cameraPreview.height
+                )
+            )
         }.build()
     }
 
