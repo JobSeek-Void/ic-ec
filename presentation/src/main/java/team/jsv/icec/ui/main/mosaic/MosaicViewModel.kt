@@ -15,6 +15,7 @@ import team.jsv.domain.usecase.GetMosaicImageUseCase
 import team.jsv.icec.base.BaseViewModel
 import team.jsv.icec.base.Event
 import team.jsv.icec.base.updateState
+import team.jsv.icec.ui.main.mosaic.detect.DetectFaceState
 import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
 import team.jsv.icec.ui.main.mosaic.detect.model.toFaceViewItem
 import team.jsv.icec.ui.main.mosaic.mosaicFace.DEFAULT_MOSAIC_STRENGTH
@@ -69,6 +70,9 @@ internal class MosaicViewModel @Inject constructor(
 
     private val _detectedFaceIndexes = MutableStateFlow<List<Int>>(emptyList())
     val detectedFaceIndexes: StateFlow<List<Int>> = _detectedFaceIndexes.asStateFlow()
+
+    private val _detectFaceState = MutableStateFlow(DetectFaceState())
+    val detectFaceState = _detectFaceState.asStateFlow()
 
     private val _mosaicFaceState = MutableStateFlow(MosaicFaceState())
     val mosaicFaceState = _mosaicFaceState.asStateFlow()
@@ -129,7 +133,22 @@ internal class MosaicViewModel @Inject constructor(
         }
     }
 
-    internal fun getFaceList(image: File) {
+    fun setOnClearDetectedFaceIndex() {
+        _detectedFaceIndexes.value = emptyList()
+    }
+
+    fun setDetectStrength(value: Float) {
+        _detectFaceState.updateState {
+            copy(detectStrength = value)
+        }
+    }
+
+    fun setDetectFaceLoading(isLoading: Boolean) {
+        _detectFaceState.updateState {
+            copy(isLoading = isLoading)
+        }
+    }
+
         viewModelScope.launch {
             getDetectedFaceUseCase(
                 currentTime = currentTime,
