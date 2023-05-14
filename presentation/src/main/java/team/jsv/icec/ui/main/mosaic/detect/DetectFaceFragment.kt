@@ -3,7 +3,9 @@ package team.jsv.icec.ui.main.mosaic.detect
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -44,7 +46,6 @@ class DetectFaceFragment :
         observeBackPress()
         collectDetectFaceState()
         collectSelectedItemUpdates()
-        collectDetectFaces()
         initRecyclerView()
     }
 
@@ -73,18 +74,12 @@ class DetectFaceFragment :
     }
 
     private fun collectSelectedItemUpdates() {
-        lifecycleScope.launch {
-            viewModel.detectedFaceIndexes.collect { selectedIndexList ->
-                detectedFaceAdapter.updateSelection(selectedIndexList)
-                binding.btGroupSelect.changeBackground(selectedIndexList.isNotEmpty())
-            }
-        }
-    }
-
-    private fun collectDetectFaces() {
-        lifecycleScope.launch {
-            viewModel.detectFaceState.collect { state ->
-                detectedFaceAdapter.submitList(state.faceViewItem.faceList)
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.detectedFaceIndexes.collect { selectedIndexList ->
+                    detectedFaceAdapter.updateSelection(selectedIndexList)
+                    binding.btGroupSelect.changeBackground(selectedIndexList.isNotEmpty())
+                }
             }
         }
     }
