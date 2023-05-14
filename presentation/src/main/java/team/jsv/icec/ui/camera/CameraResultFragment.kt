@@ -28,6 +28,7 @@ class CameraResultFragment :
         const val MEDIA_DIRECTORY_PATH = "/ICEC IMAGE"
         const val EXTERNAL_STORAGE_DIRECTORY_PATH = "/Pictures/ICEC IMAGE"
         const val IMAGE_DATE_FORMAT = "yyyy-MM-dd-HHmmss"
+        const val STRING_ICEC = "ICEC"
     }
 
     private val viewModel: CameraViewModel by activityViewModels()
@@ -126,7 +127,10 @@ class CameraResultFragment :
         val resolver = requireContext().contentResolver
 
         val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, Date().toFormatString(IMAGE_DATE_FORMAT))
+            put(
+                MediaStore.Images.Media.DISPLAY_NAME,
+                "${STRING_ICEC}-${Date().toFormatString(IMAGE_DATE_FORMAT)}"
+            )
             put(MediaStore.Images.Media.MIME_TYPE, JPEG_MIME_TYPE)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
