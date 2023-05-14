@@ -20,6 +20,7 @@ import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
 import team.jsv.icec.ui.main.mosaic.detect.model.toFaceViewItem
 import team.jsv.icec.ui.main.mosaic.mosaicFace.DEFAULT_MOSAIC_STRENGTH
 import team.jsv.icec.ui.main.mosaic.mosaicFace.MosaicFaceState
+import team.jsv.icec.util.toThreshold
 import team.jsv.util_kotlin.IcecNetworkException
 import team.jsv.util_kotlin.MutableDebounceFlow
 import team.jsv.util_kotlin.copy
@@ -149,15 +150,20 @@ internal class MosaicViewModel @Inject constructor(
         }
     }
 
+    fun getFaceList() {
         viewModelScope.launch {
-            getDetectedFaceUseCase(
-                currentTime = currentTime,
-                threshold = 0.1f, // TODO(ham2174): 신로도값을 함수의 파라미터를 통해 받아오도록 수정
-                image = image
-            ).onSuccess {
-                _detectFaces.value = it.toFaceViewItem()
-            }.onFailure {
-                handleException(it)
+            setDetectFaceLoading(true)
+            with(_detectFaceState.value) {
+                getDetectedFaceUseCase(
+                    currentTime = currentTime,
+                    threshold = detectStrength.toThreshold,
+                    image = _originalImage.value ?: File("")
+                ).onSuccess {
+                    _detectFaces.value = it.toFaceViewItem()
+                    setOnClearDetectedFaceIndex()
+                }.onFailure {
+                    handleException(it)
+                }.also { setDetectFaceLoading(false) }
             }
         }
     }
