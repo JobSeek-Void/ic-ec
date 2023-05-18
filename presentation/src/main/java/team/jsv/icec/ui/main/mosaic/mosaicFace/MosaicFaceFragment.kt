@@ -60,16 +60,22 @@ class MosaicFaceFragment
                         binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_active_50)
                         binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_inactive_50)
                     }
+
                     MosaicType.Blur -> {
                         binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
                         binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_active_50)
                     }
+
                     MosaicType.None -> {
                         binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_inactive_50)
                         binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
                     }
                 }
                 binding.sliderMosaicFigure.value = state.pixelSize
+                when (state.isLoading) {
+                    true -> dialog.show()
+                    false -> dialog.dismiss()
+                }
             }
         }
     }
