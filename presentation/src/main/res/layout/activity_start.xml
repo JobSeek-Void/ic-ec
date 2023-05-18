@@ -52,5 +52,28 @@
             app:layout_constraintTop_toTopOf="@+id/bt_photo"
             app:strokeColor="@color/gray2"
             app:strokeWidth="1dp" />
+
+        <TextView
+            android:id="@+id/text_recent_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/recent_photo"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@+id/bt_photo"
+            app:layout_constraintTop_toBottomOf="@+id/bt_photo" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_recent_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:layout_marginTop="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@id/text_recent_photo"
+            app:layout_constraintTop_toBottomOf="@+id/text_recent_photo" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

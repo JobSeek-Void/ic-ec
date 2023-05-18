@@ -43,6 +43,13 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
             }
 
 
+        galleryImageAdapter = GalleryImageAdapter()
+
+        binding.rvRecentPhoto.apply {
+            adapter = galleryImageAdapter
+            itemAnimator = null
+            addItemDecoration(RecyclerViewSpacing(space = 14, topSpace = 14))
+            layoutManager = GridLayoutManager(this@StartActivity, 3)
         }
 
     }
