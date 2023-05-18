@@ -42,7 +42,7 @@ class MosaicFaceFragment
             addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
-                    viewModel.emitMosaicEvent()
+                    viewModel.getMosaicImage()
                 }
             })
         }

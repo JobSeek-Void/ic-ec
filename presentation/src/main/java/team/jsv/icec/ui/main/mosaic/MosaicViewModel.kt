@@ -22,9 +22,7 @@ import team.jsv.icec.ui.main.mosaic.mosaicFace.DEFAULT_MOSAIC_STRENGTH
 import team.jsv.icec.ui.main.mosaic.mosaicFace.MosaicFaceState
 import team.jsv.icec.util.toThreshold
 import team.jsv.util_kotlin.IcecNetworkException
-import team.jsv.util_kotlin.MutableDebounceFlow
 import team.jsv.util_kotlin.copy
-import team.jsv.util_kotlin.debounceAction
 import team.jsv.util_kotlin.toFormatString
 import java.io.File
 import java.util.Date
@@ -74,15 +72,6 @@ internal class MosaicViewModel @Inject constructor(
     private val _mosaicFaceState = MutableStateFlow(MosaicFaceState())
     val mosaicFaceState = _mosaicFaceState.asStateFlow()
 
-    private val mosaicDebounce = MutableDebounceFlow<Unit> {
-        debounceAction(
-            coroutineScope = viewModelScope,
-            timeoutMillis = debounceDelay,
-        ) {
-            getMosaicImage()
-        }
-    }
-
     fun setScreen(screenStep: ScreenStep) = _screenStep.postValue(screenStep)
 
     fun setImage(data: File) {
@@ -101,6 +90,7 @@ internal class MosaicViewModel @Inject constructor(
             ScreenStep.MosaicFace -> {
                 _state.postValue(PictureState.File(_originalImage.value ?: File("")))
             }
+
             else -> {}
         }
     }
@@ -172,18 +162,14 @@ internal class MosaicViewModel @Inject constructor(
         }
     }
 
-    fun emitMosaicEvent() {
-        viewModelScope.launch {
-            mosaicDebounce.emit(Unit)
-        }
-    }
-
     fun getMosaicImage() {
         viewModelScope.launch {
+            _mosaicFaceState.updateState { copy(isLoading = true) }
             val originalImage = _detectFaceState.value.faceViewItem.originalImage
             val indexes = _detectedFaceIndexes.value
-            val coordinates = indexes.map { _detectFaceState.value.faceViewItem.faceList[it].coordinates }
-                .ifEmpty { listOf(listOf()) }
+            val coordinates =
+                indexes.map { _detectFaceState.value.faceViewItem.faceList[it].coordinates }
+                    .ifEmpty { listOf(listOf()) }
             with(_mosaicFaceState.value) {
                 getMosaicImageUseCase(
                     currentTime = currentTime,
@@ -197,6 +183,7 @@ internal class MosaicViewModel @Inject constructor(
                             _mosaicImage.postValue(Event(it.blurImage))
                             _state.postValue(PictureState.Url(it.blurImage))
                         }
+
                         else -> {
                             _state.postValue(_originalImage.value?.let { originalImage ->
                                 PictureState.File(originalImage)
@@ -205,6 +192,8 @@ internal class MosaicViewModel @Inject constructor(
                     }
                 }.onFailure {
                     handleException(it)
+                }.also {
+                    _mosaicFaceState.updateState { copy(isLoading = false) }
                 }
             }
         }
@@ -214,7 +203,7 @@ internal class MosaicViewModel @Inject constructor(
         _mosaicFaceState.updateState {
             copy(mosaicType = mosaicType)
         }
-        emitMosaicEvent()
+        getMosaicImage()
     }
 
     fun mosaicFaceRefresh() {
@@ -224,7 +213,7 @@ internal class MosaicViewModel @Inject constructor(
                 pixelSize = DEFAULT_MOSAIC_STRENGTH,
             )
         }
-        emitMosaicEvent()
+        getMosaicImage()
     }
 
     private fun handleException(exception: Throwable) {
