@@ -37,8 +37,8 @@ fun ImageView.setCheckingVisible(isSelect: Boolean) {
     }
 }
 
-@BindingAdapter("selectFaceItem")
-fun ShapeableImageView.setSelectFaceItem(isSelect: Boolean) {
+@BindingAdapter("strokeFor")
+fun ShapeableImageView.strokeFor(isSelect: Boolean) {
     if (isSelect) {
         strokeWidth = 2.dp
         setStokeColor(R.color.SubColor)
