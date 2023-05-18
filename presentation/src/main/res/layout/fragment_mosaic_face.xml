@@ -30,7 +30,6 @@
             android:layout_height="68dp"
             android:layout_marginStart="30dp"
             android:src="@drawable/ic_blur_figure_50"
-            android:clipToOutline="true"
             app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8"
             app:layout_constraintBottom_toBottomOf="@id/iv_mosaic_figure"
             app:layout_constraintEnd_toEndOf="@id/iv_refresh"
