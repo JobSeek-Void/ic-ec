@@ -67,9 +67,8 @@ class MainActivity :
                 }
                 ScreenStep.MosaicFace -> {
                     binding.topBar.btClose.gone()
-                    binding.topBar.btDownload.gone()
-                    binding.topBar.btBack.visible()
-                    binding.topBar.btNext.visible()
+                    binding.topBar.btDownload.visible()
+                    binding.topBar.btNext.gone()
                     binding.topBar.tvTitle.visible()
                     binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
                 }
