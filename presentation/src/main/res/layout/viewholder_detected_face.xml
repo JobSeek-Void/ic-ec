@@ -26,7 +26,8 @@
             app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8"
             tools:src="@drawable/rv_test_image"
             tools:strokeColor="@color/SubColor"
-            tools:strokeWidth="2dp" />
+            tools:clipToOutline="true"
+            tools:strokeWidth="4dp" />
 
         <ImageView
             android:id="@+id/iv_check"
