@@ -10,6 +10,7 @@ import team.jsv.domain.model.MosaicType
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
+import team.jsv.icec.ui.main.mosaic.detect.strokeFor
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentMosaicFaceBinding
 
@@ -25,11 +26,17 @@ class MosaicFaceFragment
     }
 
     private fun initClickListener() {
-        binding.ivMosaicFigure.setOnClickListener {
-            viewModel.setMosaicType(MosaicType.Mosaic)
+        binding.ivMosaicFigure.apply {
+            clipToOutline = true
+            setOnClickListener {
+                viewModel.setMosaicType(MosaicType.Mosaic)
+            }
         }
-        binding.ivBlurFigure.setOnClickListener {
-            viewModel.setMosaicType(MosaicType.Blur)
+        binding.ivBlurFigure.apply {
+            clipToOutline = true
+            setOnClickListener {
+                viewModel.setMosaicType(MosaicType.Blur)
+            }
         }
         binding.ivRefresh.setOnClickListener {
             viewModel.mosaicFaceRefresh()
@@ -42,7 +49,7 @@ class MosaicFaceFragment
             addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
-                    viewModel.emitMosaicEvent()
+                    viewModel.getMosaicImage()
                 }
             })
         }
@@ -57,19 +64,25 @@ class MosaicFaceFragment
             viewModel.mosaicFaceState.flowWithLifecycle(lifecycle).collect { state ->
                 when (state.mosaicType) {
                     MosaicType.Mosaic -> {
-                        binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_active_50)
-                        binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_inactive_50)
+                        binding.ivMosaicFigure.strokeFor(true)
+                        binding.ivBlurFigure.strokeFor(false)
                     }
+
                     MosaicType.Blur -> {
-                        binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
-                        binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_active_50)
+                        binding.ivMosaicFigure.strokeFor(false)
+                        binding.ivBlurFigure.strokeFor(true)
                     }
+
                     MosaicType.None -> {
-                        binding.ivBlurFigure.setImageResource(R.drawable.ic_blur_inactive_50)
-                        binding.ivMosaicFigure.setImageResource(R.drawable.ic_mosaic_inactive_50)
+                        binding.ivMosaicFigure.strokeFor(false)
+                        binding.ivBlurFigure.strokeFor(false)
                     }
                 }
                 binding.sliderMosaicFigure.value = state.pixelSize
+                when (state.isLoading) {
+                    true -> dialog.show()
+                    false -> dialog.dismiss()
+                }
             }
         }
     }

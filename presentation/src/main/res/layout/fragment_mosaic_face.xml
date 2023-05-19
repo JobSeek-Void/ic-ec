@@ -10,31 +10,31 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_mosaic_figure"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:layout_marginBottom="30dp"
             android:layout_marginEnd="30dp"
-            android:src="@drawable/ic_mosaic_inactive_50"
+            android:src="@drawable/ic_mosaic_figure_50"
+            app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8"
             app:layout_constraintBottom_toTopOf="@id/tv_mosaic_figure"
             app:layout_constraintEnd_toStartOf="@id/iv_blur_figure"
             app:layout_constraintStart_toStartOf="@id/tv_mosaic_figure"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:shapeAppearance="@style/ShapeAppearanceOverlay.MosaicImage" />
+            app:layout_constraintHorizontal_chainStyle="packed" />
 
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_blur_figure"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="68dp"
+            android:layout_height="68dp"
             android:layout_marginStart="30dp"
-            android:src="@drawable/ic_blur_inactive_50"
+            android:src="@drawable/ic_blur_figure_50"
+            app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8"
             app:layout_constraintBottom_toBottomOf="@id/iv_mosaic_figure"
             app:layout_constraintEnd_toEndOf="@id/iv_refresh"
             app:layout_constraintStart_toEndOf="@id/iv_mosaic_figure"
-            app:layout_constraintTop_toTopOf="@id/iv_mosaic_figure"
-            app:shapeAppearance="@style/ShapeAppearanceOverlay.MosaicImage" />
+            app:layout_constraintTop_toTopOf="@id/iv_mosaic_figure" />
 
 
         <TextView
