@@ -29,7 +29,7 @@ class StartActivity :
         imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    val data: Intent? = result.data
+                    val data = result.data
 
                     if (data != null) {
                         val imageUri: Uri? = data.data
@@ -46,7 +46,7 @@ class StartActivity :
     }
 
     private fun initClickEvent() {
-        binding.btPhoto.setOnClickListener {
+        binding.btGallery.setOnClickListener {
             openGallery()
         }
 
