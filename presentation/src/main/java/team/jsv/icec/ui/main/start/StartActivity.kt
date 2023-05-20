@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import dagger.hilt.android.AndroidEntryPoint
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.ui.camera.CameraActivity
 import team.jsv.icec.util.PermissionUtil
@@ -15,7 +14,6 @@ import team.jsv.icec.util.requestPermissions
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityStartBinding
 
-@AndroidEntryPoint
 class StartActivity :
     BaseActivity<ActivityStartBinding>(R.layout.activity_start) {
 
