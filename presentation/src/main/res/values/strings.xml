@@ -21,7 +21,7 @@
     <string name="reject_permission">%s 권한을 거부하였습니다.</string>
 
     <!-- StartActivity.kt -->
-    <string name="Gallery">photo</string>
-    <string name="camera">camera</string>
-    <string name="recent_photo">최근 사진</string>
+    <string name="gallery_text">Gallery</string>
+    <string name="camera_text">camera</string>
+    <string name="recent_photo_text">최근 사진</string>
 </resources>
