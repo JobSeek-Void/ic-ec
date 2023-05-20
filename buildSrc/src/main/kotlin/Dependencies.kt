@@ -48,6 +48,7 @@ object Dependencies {
         "androidx.navigation:navigation-ui-ktx:${Versions.Jetpack.Navigation}",
         "com.github.bumptech.glide:glide:${Versions.Glide.Glide}",
         "com.google.android.material:material:${Versions.UI.Material}",
+        "com.github.chrisbanes:PhotoView:${Versions.UI.PhotoView}",
     )
 
 }
