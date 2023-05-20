@@ -13,7 +13,10 @@ class DetectedFaceItemViewHolder(
 
     fun bind(item: DetectFaceInfoViewItem) {
         binding.data = item
-        binding.ivFace.loadImage(item.url)
+        binding.ivFace.apply {
+            clipToOutline = true
+            loadImage(item.url)
+        }
         binding.ivCheck.loadImage(R.drawable.ic_select_mark_14)
 
         binding.item.setOnClickListener {

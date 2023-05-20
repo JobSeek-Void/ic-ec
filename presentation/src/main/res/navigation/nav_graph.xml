@@ -10,6 +10,8 @@
         android:label="SelectMosaicEditFragment" >
         <action
             android:id="@+id/action_selectMosaicEditFragment_to_faceSelectFragment"
+            app:enterAnim="@drawable/anim_slide_up"
+            app:popExitAnim="@drawable/anim_slide_down"
             app:destination="@id/faceSelectFragment" />
         <action
             android:id="@+id/action_selectMosaicEditFragment_to_photoEditFragment"
@@ -22,6 +24,10 @@
         android:label="FaceSelectFragment" >
         <action
             android:id="@+id/action_faceSelectFragment_to_faceMosaicFragment"
+            app:enterAnim="@drawable/anim_slide_from_right"
+            app:popEnterAnim="@drawable/anim_slide_from_left"
+            app:popExitAnim="@drawable/anim_slide_to_right"
+            app:exitAnim="@drawable/anim_slide_to_left"
             app:destination="@id/faceMosaicFragment" />
     </fragment>
 
