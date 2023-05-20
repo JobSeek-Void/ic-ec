@@ -1,5 +1,7 @@
 <resources>
+
     <string name="app_name">ICEC</string>
+
     <!-- fragment_select_face.xml -->
     <string name="detected_face_count">%d명</string>
     <string name="detect_face_text">얼굴 검출</string>
@@ -22,6 +24,6 @@
 
     <!-- StartActivity.kt -->
     <string name="gallery_text">Gallery</string>
-    <string name="camera_text">camera</string>
-    <string name="recent_photo_text">최근 사진</string>
+    <string name="camera_text">Camera</string>
+
 </resources>
