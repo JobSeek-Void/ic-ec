@@ -153,5 +153,10 @@ class MainActivity :
                 else -> {}
             }
         }
+
+        binding.topBar.btClose.setOnClickListener {
+            finish()
+        }
     }
+
 }
