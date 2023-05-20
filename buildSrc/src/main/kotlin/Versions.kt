@@ -32,6 +32,7 @@ object Versions {
         const val Appcompat = "1.5.1"
         const val ConstraintLayout = "2.1.3"
         const val Material = "1.8.0"
+        const val PhotoView = "2.3.0"
     }
 
     object Glide {
