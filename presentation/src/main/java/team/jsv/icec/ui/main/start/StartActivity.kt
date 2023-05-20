@@ -1,6 +1,7 @@
 package team.jsv.icec.ui.main.start
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -9,6 +10,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.ui.camera.CameraActivity
+import team.jsv.icec.ui.main.MainActivity
 import team.jsv.icec.util.PermissionUtil
 import team.jsv.icec.util.requestPermissions
 import team.jsv.presentation.R
@@ -23,18 +25,7 @@ class StartActivity :
         super.onCreate(savedInstanceState)
 
         requestPermissions(PermissionUtil.getPermissions())
-
-        imagePickerLauncher =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == Activity.RESULT_OK) {
-                    val data = result.data
-
-                    if (data != null) {
-                        val imageUri: Uri? = data.data
-                        //Todo(jiiiiiyoon): imageUri 모자이크 화면으로 넘기기
-                    }
-                }
-            }
+        setImagePickerLauncher()
     }
 
     override fun onResume() {
@@ -43,11 +34,30 @@ class StartActivity :
         initClickEvent()
     }
 
+    private fun setImagePickerLauncher() {
+        imagePickerLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    val data: Intent? = result.data
+                    val imageUri: Uri? = data?.data
+                    val imagePath: String? = imageUri?.let { uri -> getPathFromUri(this@StartActivity, uri) }
+
+                    startMainActivity(imagePath = imagePath)
+                }
+            }
+    }
+
+    private fun startMainActivity(imagePath: String?) {
+        Intent(this@StartActivity, MainActivity::class.java).apply {
+            putExtra("imagePath", imagePath)
+            startActivity(this)
+        }
+    }
+
     private fun initClickEvent() {
         binding.btGallery.setOnClickListener {
             openGallery()
         }
-
         binding.btCamera.setOnClickListener {
             startActivity(Intent(this@StartActivity, CameraActivity::class.java))
         }
@@ -56,5 +66,14 @@ class StartActivity :
     private fun openGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         imagePickerLauncher.launch(galleryIntent)
+    }
+
+    private fun getPathFromUri(context: Context, uri: Uri): String? {
+        val projection = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, projection, null, null, null)
+        return cursor?.use {
+            val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+            if (cursor.moveToFirst()) cursor.getString(columnIndex) else null
+        }
     }
 }

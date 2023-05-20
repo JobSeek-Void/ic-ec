@@ -13,10 +13,8 @@ import team.jsv.icec.ui.main.mosaic.MosaicEvent
 import team.jsv.icec.ui.main.mosaic.MosaicViewModel
 import team.jsv.icec.ui.main.mosaic.PictureState
 import team.jsv.icec.ui.main.mosaic.ScreenStep
-import team.jsv.icec.util.PermissionUtil
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
-import team.jsv.icec.util.requestPermissions
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMainBinding
@@ -31,11 +29,11 @@ class MainActivity :
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).findNavController()
     }
+    private val imagePath: String? by lazy { intent.getStringExtra("imagePath") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        requestPermissions(PermissionUtil.getPermissions())
         initTopBar()
         initView()
         setOnBackPressedCallback()
@@ -78,9 +76,7 @@ class MainActivity :
     }
 
     private fun initView() {
-
-        // TODO(ham2174) : 갤러리 혹은 카메라로 찍은 사진 데이터를 가져와야함. TakePictureActivity -> MainActivity 이미지 데이터 전달 필요
-        viewModel.setImage(File("/storage/emulated/0/Pictures/two_face.jpg"))
+        imagePath?.let { path -> viewModel.setImage(File(path)) }
 
         viewModel.mosaicEvent.observe(this, EventObserver {
             when (it) {
