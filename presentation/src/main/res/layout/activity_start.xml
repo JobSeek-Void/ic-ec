@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -14,9 +13,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"
+            android:autoSizeTextType="uniform"
             android:text="@string/gallery_text"
             app:icon="@drawable/ic_photo_48"
-            android:autoSizeTextType="uniform"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline1"
@@ -28,8 +27,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
-            android:text="@string/camera_text"
             android:autoSizeTextType="uniform"
+            android:text="@string/camera_text"
             app:icon="@drawable/ic_camera_48"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="@id/guideline2"
@@ -63,7 +62,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.5" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
