@@ -20,6 +20,11 @@ jobs:
 	
       - name: Use server key from Secrets
         run: echo "API_URL=$ICEC_SERVER_KEY" >> $GITHUB_ENV
+	
+      - name: Access ICEC_SERVER_KEY
+        env:
+          APOD_API_KEY: $
+        run: echo ICEC_SERVER_KEY=\"ICEC_SERVER_KEY\" > ./local.properties
 
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
