@@ -1,4 +1,4 @@
-package team.jsv.app
+package team.jsv.icec
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
