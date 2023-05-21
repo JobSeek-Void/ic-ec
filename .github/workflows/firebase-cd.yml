@@ -17,7 +17,7 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-	
+
       - name: Access ICEC_SERVER_KEY
         env:
           APOD_API_KEY: $
