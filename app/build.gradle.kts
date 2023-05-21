@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "team.jsv.app"
+    namespace = "team.jsv.icec"
     compileSdk = Apps.compileSdk
 
     defaultConfig {
