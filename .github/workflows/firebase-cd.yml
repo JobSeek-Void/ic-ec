@@ -18,9 +18,6 @@ jobs:
           distribution: zulu
           java-version: 11
 	
-      - name: Use server key from Secrets
-        run: echo "API_URL=$ICEC_SERVER_KEY" >> $GITHUB_ENV
-	
       - name: Access ICEC_SERVER_KEY
         env:
           APOD_API_KEY: $
