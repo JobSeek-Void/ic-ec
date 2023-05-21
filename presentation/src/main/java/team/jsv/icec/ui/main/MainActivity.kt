@@ -29,11 +29,11 @@ class MainActivity :
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).findNavController()
     }
-    private val imagePath: String? by lazy { intent.getStringExtra("imagePath") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.setImage()
         initTopBar()
         initView()
         setOnBackPressedCallback()
@@ -76,8 +76,6 @@ class MainActivity :
     }
 
     private fun initView() {
-        imagePath?.let { path -> viewModel.setImage(File(path)) }
-
         viewModel.mosaicEvent.observe(this, EventObserver {
             when (it) {
                 is MosaicEvent.SendToast -> {

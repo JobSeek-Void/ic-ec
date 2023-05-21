@@ -9,8 +9,10 @@ import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import team.jsv.icec.base.BaseActivity
+import team.jsv.icec.base.startActivityWithAnimation
 import team.jsv.icec.ui.camera.CameraActivity
 import team.jsv.icec.ui.main.MainActivity
+import team.jsv.icec.util.Extras
 import team.jsv.icec.util.PermissionUtil
 import team.jsv.icec.util.requestPermissions
 import team.jsv.presentation.R
@@ -40,18 +42,14 @@ class StartActivity :
                 if (result.resultCode == Activity.RESULT_OK) {
                     val data: Intent? = result.data
                     val imageUri: Uri? = data?.data
-                    val imagePath: String? = imageUri?.let { uri -> getPathFromUri(this@StartActivity, uri) }
+                    val imagePath: String? =
+                        imageUri?.let { uri -> getPathFromUri(this@StartActivity, uri) }
 
-                    startMainActivity(imagePath = imagePath)
+                    startActivityWithAnimation<MainActivity>(intentBuilder = {
+                        putExtra(Extras.ImagePath, imagePath)
+                    })
                 }
             }
-    }
-
-    private fun startMainActivity(imagePath: String?) {
-        Intent(this@StartActivity, MainActivity::class.java).apply {
-            putExtra("imagePath", imagePath)
-            startActivity(this)
-        }
     }
 
     private fun initClickEvent() {
@@ -59,7 +57,7 @@ class StartActivity :
             openGallery()
         }
         binding.btCamera.setOnClickListener {
-            startActivity(Intent(this@StartActivity, CameraActivity::class.java))
+            startActivityWithAnimation<CameraActivity>()
         }
     }
 
