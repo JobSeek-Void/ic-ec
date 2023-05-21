@@ -39,4 +39,9 @@ object Versions {
         const val Glide = "4.14.2"
     }
 
+    object FireBase {
+        const val GoogleServices = "4.3.15"
+        const val Bom = "32.0.0"
+    }
+
 }
