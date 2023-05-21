@@ -3,6 +3,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -37,4 +38,6 @@ dependencies {
 
     kapt(Dependencies.Hilt.Kapt)
     implementation(Dependencies.Hilt.Android)
+
+    platform(Dependencies.FireBase.Bom)
 }
