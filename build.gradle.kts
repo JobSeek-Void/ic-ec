@@ -6,3 +6,9 @@ plugins {
     id("org.jetbrains.kotlin.kapt") version Versions.Essential.Kotlin apply false
     id("com.google.dagger.hilt.android") version Versions.Jetpack.Hilt apply false
 }
+
+buildscript {
+    dependencies {
+        classpath(Dependencies.FireBase.GoogleService)
+    }
+}
