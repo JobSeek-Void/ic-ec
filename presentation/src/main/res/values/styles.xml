@@ -1,20 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!-- ICEC.ActivityTheme -->
-    <style name="ICECTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@color/WindowBackGroundColor</item>
-        <item name="android:statusBarColor">@color/StatusBarColor</item>
-    </style>
-
+    <!-- ICEC.ShapeAppearanceOverlay -->
     <style name="ShapeAppearanceOverlay.MosaicImage" parent="">
         <item name="cornerSize">8dp</item>
-    </style>
-
-    <style name="ICECCameraTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <!-- ICEC.MaterialSlider -->
@@ -93,6 +82,30 @@
         <item name="backgroundTint">@color/white</item>
         <item name="iconTint">@color/gray1</item>
         <item name="iconPadding">10dp</item>
+    </style>
+
+    <style name="ICEC.StartActivity.MaterialButton.Gallery" parent="Widget.MaterialComponents.Button">
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:paddingTop">36dp</item>
+        <item name="android:paddingBottom">36dp</item>
+        <item name="android:paddingStart">48dp</item>
+        <item name="android:paddingEnd">48dp</item>
+        <item name="iconGravity">textTop</item>
+        <item name="cornerRadius">16dp</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="iconPadding">10dp</item>
+        <item name="iconTint">@color/gray1</item>
+        <item name="android:elevation">32dp</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:textColor">@color/gray1</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:maxLines">1</item>
     </style>
 
 </resources>

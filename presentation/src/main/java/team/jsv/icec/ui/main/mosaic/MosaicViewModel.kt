@@ -3,6 +3,7 @@ package team.jsv.icec.ui.main.mosaic
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,6 +21,7 @@ import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
 import team.jsv.icec.ui.main.mosaic.detect.model.toFaceViewItem
 import team.jsv.icec.ui.main.mosaic.mosaicFace.DEFAULT_MOSAIC_STRENGTH
 import team.jsv.icec.ui.main.mosaic.mosaicFace.MosaicFaceState
+import team.jsv.icec.util.Extras
 import team.jsv.icec.util.toThreshold
 import team.jsv.util_kotlin.IcecNetworkException
 import team.jsv.util_kotlin.copy
@@ -36,12 +38,12 @@ enum class ScreenStep {
 
 @HiltViewModel
 internal class MosaicViewModel @Inject constructor(
+    private val savedStateHandle: SavedStateHandle,
     private val getDetectedFaceUseCase: GetDetectedFaceUseCase,
     private val getMosaicImageUseCase: GetMosaicImageUseCase,
 ) : BaseViewModel() {
 
     companion object {
-        private const val debounceDelay: Long = 200L
         private const val DEFAULT_CURRENT_TIME_FORMAT = "yyyy-MM-dd-HHmmss"
     }
 
@@ -53,15 +55,15 @@ internal class MosaicViewModel @Inject constructor(
     private val _mosaicImage = MutableLiveData<Event<String>>()
     val mosaicImage: LiveData<Event<String>> get() = _mosaicImage
 
+    private val _state = MutableLiveData<PictureState>()
+    val state: LiveData<PictureState> get() = _state
+
     private val _screenStep =
         MutableLiveData<ScreenStep>().apply { postValue(ScreenStep.SelectMosaicEdit) }
     val screenStep: LiveData<ScreenStep> get() = _screenStep
 
     private val _mosaicEvent = MutableLiveData<Event<MosaicEvent>>()
     val mosaicEvent: LiveData<Event<MosaicEvent>> get() = _mosaicEvent
-
-    private val _state = MutableLiveData<PictureState>()
-    val state: LiveData<PictureState> get() = _state
 
     private val _detectedFaceIndexes = MutableStateFlow<List<Int>>(emptyList())
     val detectedFaceIndexes: StateFlow<List<Int>> = _detectedFaceIndexes.asStateFlow()
@@ -74,9 +76,10 @@ internal class MosaicViewModel @Inject constructor(
 
     fun setScreen(screenStep: ScreenStep) = _screenStep.postValue(screenStep)
 
-    fun setImage(data: File) {
-        _originalImage.value = data
-        _state.postValue(PictureState.File(data))
+    fun setImage() {
+        val imageFile: File = savedStateHandle.get<String>(Extras.ImagePath)?.let { File(it) } ?: File("")
+        _originalImage.postValue(imageFile)
+        _state.postValue(PictureState.File(imageFile))
     }
 
     fun setPixelSize(value: Float) {

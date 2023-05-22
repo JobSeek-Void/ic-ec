@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="black10">#1A000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="white95">#F2FFFFFF</color>
     <color name="gray1">#1E1E1E</color>
@@ -9,11 +10,13 @@
     <color name="gray4">#808080</color>
     <color name="gray5">#9F9F9F</color>
     <color name="gray6">#ECECEC</color>
+    <color name="dark">#121212</color>
 
     <color name="MainColor">#FFFA9A85</color>
     <color name="SubColor">#99FA9A85</color>
     <color name="Surface">@color/gray3</color>
     <color name="onSurface">@color/black</color>
+    <color name="reverseOnSurface">@color/white</color>
     <color name="transparent">#00000000</color>
 
     <!-- System Theme Color -->
