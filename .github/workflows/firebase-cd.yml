@@ -19,7 +19,7 @@ jobs:
           java-version: 11
 
       - name: Create google-services.json
-        run: echo "${{ secrets.GOOGLE_SERVICES }}" > app/google-services.json
+        run: echo "${{secrets.GOOGLE_SERVICES}}" > app/google-services.json
 
       - name: Access ICEC_SERVER_KEY
         env:
