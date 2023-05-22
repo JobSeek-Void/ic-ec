@@ -76,3 +76,7 @@ lint/tmp/
 
 # Fire Base
 google-services.json
+
+# Key Store
+keystore.jks
+keystore.properties
