@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.konan.properties.Properties
 import java.io.FileInputStream
 
@@ -22,14 +23,10 @@ android {
 
     signingConfigs {
         create("release") {
-            val configFile = project.rootProject.file("signingconfig.properties")
-            val properties = Properties()
-            properties.load(FileInputStream(configFile))
-
-            storeFile = project.rootProject.file(properties["storeFile"] as String)
-            storePassword = properties["storePassword"] as String
-            keyAlias = properties["keyAlias"] as String
-            keyPassword = properties["keyPassword"] as String
+            storeFile = project.rootProject.file(gradleLocalProperties(rootDir).getProperty("storeFile"))
+            storePassword = gradleLocalProperties(rootDir).getProperty("storePassword")
+            keyAlias = gradleLocalProperties(rootDir).getProperty("keyAlias")
+            keyPassword = gradleLocalProperties(rootDir).getProperty("keyPassword")
         }
     }
 
