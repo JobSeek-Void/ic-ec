@@ -35,10 +35,10 @@ jobs:
           ICEC_SERVER_KEY: $
         run: 
          echo ICEC_SERVER_KEY=\"ICEC_SERVER_KEY\" > ./local.properties
-         echo storeFile=keySore.jks > ./local.properties
-         echo storePassword="$KEY_STORE_PASSWORD" > ./local.properties
-         echo keyAlias="$ALIAS" > ./local.properties
-         echo keyPassword="$KEY_PASSWORD" > ./local.properties
+         echo storeFile="keySore.jks" > ./local.properties
+         echo storePassword=${{secrets.KEY_STORE_PASSWORD}} > ./local.properties
+         echo keyAlias=${{secrets.ALIAS}} > ./local.properties
+         echo keyPassword=${{secrets.KEY_PASSWORD}} > ./local.properties
   
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
