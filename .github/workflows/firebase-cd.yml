@@ -65,4 +65,4 @@ jobs:
           appId: ${{secrets.FIREBASE_APP_ID}}
           serviceCredentialsFileContent: ${{secrets.FIREBASE_CREDENTIAL}}
           groups: icec_team
-          file: app/build/outputs/apk/release/app-release-unsigned.apk
+          file: app/build/outputs/apk/release/app-release.apk
