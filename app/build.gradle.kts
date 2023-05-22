@@ -26,6 +26,12 @@ android {
         jvmTarget = Apps.jvmTarget
     }
 
+    buildTypes {
+        release {
+            isDebuggable = false
+        }
+    }
+
     buildFeatures {
         dataBinding = true
     }
