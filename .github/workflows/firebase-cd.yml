@@ -25,10 +25,20 @@ jobs:
         env:
           GOOGLE_SERVICES: ${{secrets.GOOGLE_SERVICES}}
 
-      - name: Access ICEC_SERVER_KEY
+      - name: Create KeyStore
+        run: |
+          echo "$SIGNING_KEY_BASE_64" > ./keystore.jks.b64
+          base64 -d -i ./keystore.jks.b64 > ./keystore.jks
+
+      - name: Create Local Properties
         env:
           ICEC_SERVER_KEY: $
-        run: echo ICEC_SERVER_KEY=\"ICEC_SERVER_KEY\" > ./local.properties
+        run: 
+         echo ICEC_SERVER_KEY=\"ICEC_SERVER_KEY\" > ./local.properties
+         echo storeFile=keySore.jks > ./local.properties
+         echo storePassword="$KEY_STORE_PASSWORD" > ./local.properties
+         echo keyAlias="$ALIAS" > ./local.properties
+         echo keyPassword="$KEY_PASSWORD" > ./local.properties
   
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
