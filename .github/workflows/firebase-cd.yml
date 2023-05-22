@@ -29,10 +29,7 @@ jobs:
         env:
           ICEC_SERVER_KEY: $
         run: echo ICEC_SERVER_KEY=\"ICEC_SERVER_KEY\" > ./local.properties
-
-      - name: Build release APK
-        run: ./gradlew assembleRelease
-
+  
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
 
@@ -45,6 +42,8 @@ jobs:
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
+      - name: Build release APK
+        run: ./gradlew assembleRelease
 
       - name: Deploy to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
