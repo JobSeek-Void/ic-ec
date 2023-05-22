@@ -29,7 +29,7 @@ jobs:
         env:
           KEY_STORE_BASE_64: ${{secrets.KEY_STORE_BASE_64}}
         run: |
-          echo "$KEY_STORE_BASE_64" > | base64 -d > ./keystore.jks
+          echo "$KEY_STORE_BASE_64" | base64 -d > ./keystore.jks
           
       - name: Create Key Store Properties
         env:
