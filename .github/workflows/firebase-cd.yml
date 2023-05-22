@@ -17,20 +17,52 @@ jobs:
         with:
           distribution: zulu
           java-version: 11
-	
-      - name: Use server key from Secrets
-        run: echo "API_URL=$ICEC_SERVER_KEY" >> $GITHUB_ENV
 
+      - name: Create Google Services
+        env:
+          GOOGLE_SERVICES: ${{secrets.GOOGLE_SERVICES}}
+        run: |
+          echo "$GOOGLE_SERVICES" > app/google-services.json.b64
+          base64 -d -i app/google-services.json.b64 > app/google-services.json
+
+      - name: Create Key Store
+        env:
+          KEY_STORE_BASE_64: ${{secrets.KEY_STORE_BASE_64}}
+        run: |
+          echo "$KEY_STORE_BASE_64" | base64 -d > ./keystore.jks
+          
+      - name: Create Key Store Properties
+        env:
+          KEY_STORE_PROPERTIES: ${{secrets.KEY_STORE_PROPERTIES}}
+        run: |
+          echo "$KEY_STORE_PROPERTIES" > ./keystore.properties
+
+      - name: Create Local Properties
+        env:
+          ICEC_SERVER_KEY: ${{secrets.ICEC_SERVER_KEY}}
+        run: |
+          echo ICEC_SERVER_KEY=\""$ICEC_SERVER_KEY"\" > ./local.properties
+  
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
-          
+
       - name: Build release APK
         run: ./gradlew assembleRelease
-        
+
+      - name: Sign APK
+        id: sign_apk
+        uses: r0adkll/sign-android-release@v1
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.KEY_STORE_BASE_64 }}
+          alias: ${{ secrets.ALIAS }}
+          keyStorePassword: ${{ secrets.KEY_STORE_PASSWORD }}
+          keyPassword: ${{ secrets.KEY_PASSWORD }}
+
       - name: Deploy to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{secrets.FIREBASE_APP_ID}}
-          token: ${{secrets.FIREBASE_CI_TOKEN}}
+          serviceCredentialsFileContent: ${{secrets.FIREBASE_CREDENTIAL}}
           groups: icec_team
           file: app/build/outputs/apk/release/app-release.apk
