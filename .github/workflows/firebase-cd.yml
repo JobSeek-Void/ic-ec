@@ -19,11 +19,11 @@ jobs:
           java-version: 11
 
       - name: Create Google Services
+        env:
+          GOOGLE_SERVICES: ${{secrets.GOOGLE_SERVICES}}
         run: |
           echo "$GOOGLE_SERVICES" > app/google-services.json.b64
           base64 -d -i app/google-services.json.b64 > app/google-services.json
-        env:
-          GOOGLE_SERVICES: ${{secrets.GOOGLE_SERVICES}}
 
       - name: Create KeyStore
         run: |
@@ -32,13 +32,17 @@ jobs:
 
       - name: Create Local Properties
         env:
-          ICEC_SERVER_KEY: $
-        run: 
-         echo ICEC_SERVER_KEY=\"ICEC_SERVER_KEY\" > ./local.properties
-         echo storeFile="keySore.jks" > ./local.properties
-         echo storePassword=${{secrets.KEY_STORE_PASSWORD}} > ./local.properties
-         echo keyAlias=${{secrets.ALIAS}} > ./local.properties
-         echo keyPassword=${{secrets.KEY_PASSWORD}} > ./local.properties
+          ICEC_SERVER_KEY: ${{secrets.ICEC_SERVER_KEY}}
+          STORE_FILE: keystore.jks
+          STORE_PASSWORD: ${{secrets.KEY_STORE_PASSWORD}}
+          KEY_ALIAS: ${{secrets.ALIAS}}
+          KEY_PASSWORD: ${{secrets.KEY_PASSWORD}}
+        run: |
+          echo ICEC_SERVER_KEY=\""$ICEC_SERVER_KEY"\" > ./local.properties
+          echo storeFile="$STORE_FILE" >> ./local.properties
+          echo storePassword="$STORE_PASSWORD" >> ./local.properties
+          echo keyAlias="$KEY_ALIAS" >> ./local.properties
+          echo keyPassword="$KEY_PASSWORD" >> ./local.properties
   
       - name: Grant execute permission for gradlew
         run: chmod +x ./gradlew
