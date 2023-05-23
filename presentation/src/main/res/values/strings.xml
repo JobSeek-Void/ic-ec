@@ -1,7 +1,5 @@
 <resources>
-
     <string name="app_name">ICEC</string>
-
     <!-- fragment_select_face.xml -->
     <string name="detected_face_count">%d명</string>
     <string name="detect_face_text">얼굴 검출</string>
@@ -22,6 +20,7 @@
     <string name="accept_permission">%s 권한을 허용하였습니다.</string>
     <string name="reject_permission">%s 권한을 거부하였습니다.</string>
 
+    <string name="save_done">저장 완료</string>
     <!-- StartActivity.kt -->
     <string name="gallery_text">Gallery</string>
     <string name="camera_text">Camera</string>
