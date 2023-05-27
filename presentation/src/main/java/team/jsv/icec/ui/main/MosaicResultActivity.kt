@@ -21,21 +21,28 @@ import team.jsv.presentation.databinding.ActivityMosaicResultBinding
 class MosaicResultActivity :
     BaseActivity<ActivityMosaicResultBinding>(R.layout.activity_mosaic_result) {
 
+    companion object {
+        const val INTENT_KEY = "image"
+        const val SHARE_TYPE = "image/jpg"
+    }
+
     private val viewModel: MosaicResultViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra("image", Uri::class.java)
+            intent.getParcelableExtra(INTENT_KEY, Uri::class.java)
         } else {
-            intent.getParcelableExtra("image") as? Uri
+            intent.getParcelableExtra(INTENT_KEY) as? Uri
         })?.let { image ->
             viewModel.setImage(
                 image
             )
-            initView()
+            observeImage()
         }
+
+        showSnackBarAction()
     }
 
     override fun onResume() {
@@ -54,8 +61,10 @@ class MosaicResultActivity :
         binding.topBar.btDownload.gone()
     }
 
-    private fun initView() {
-        binding.ivMosaicResult.setImageURI(viewModel.image.value)
+    private fun observeImage() {
+        viewModel.image.observe(this) { image ->
+            binding.ivMosaicResult.setImageURI(image)
+        }
     }
 
     private fun initClickListeners() {
@@ -63,7 +72,7 @@ class MosaicResultActivity :
             val shareIntent: Intent = Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_STREAM, viewModel.image.value)
-                type = "image/jpg"
+                type = SHARE_TYPE
             }
 
             startActivity(Intent.createChooser(shareIntent, R.string.share_text.toString()))
