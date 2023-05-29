@@ -3,9 +3,13 @@ package team.jsv.icec.ui.main
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.EventObserver
 import team.jsv.icec.base.showToast
@@ -27,58 +31,14 @@ class MainActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        bind()
+        handleState()
+        handleEvent()
         initView()
     }
 
     override fun onResume() {
         super.onResume()
-
         initClickListeners()
-    }
-
-    private fun bind() {
-        viewModel.screenStep.observe(this) {
-            when (it) {
-                ScreenStep.SelectFace -> {
-                    binding.topBar.btClose.visible()
-                    binding.topBar.btDownload.gone()
-                    binding.topBar.btBack.gone()
-                    binding.topBar.btNext.visible()
-                    binding.topBar.tvTitle.gone()
-                    binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
-                    viewModel.setOriginalImage()
-                }
-                ScreenStep.MosaicFace -> {
-                    binding.topBar.btClose.gone()
-                    binding.topBar.btDownload.visible()
-                    binding.topBar.btBack.visible()
-                    binding.topBar.btNext.gone()
-                    binding.topBar.tvTitle.gone()
-                    binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
-                    viewModel.setMosaicImage()
-                }
-                else -> {}
-            }
-        }
-
-        viewModel.mosaicEvent.observe(this, EventObserver {
-            when (it) {
-                is MosaicEvent.SendToast -> {
-                    binding.root.context.showToast(it.message)
-                }
-            }
-        })
-
-        viewModel.state.observe(this) { pictureState ->
-            when (pictureState) {
-                is PictureState.File ->
-                    binding.ivImage.loadImage(viewModel.originalImage)
-                is PictureState.Url ->
-                    binding.ivImage.loadImage(viewModel.mosaicImage)
-            }
-        }
     }
 
     private fun initView() {
@@ -87,12 +47,11 @@ class MainActivity :
 
     private fun initClickListeners() {
         binding.topBar.btBack.setOnClickListener {
-            handleScreenStepChange()
+            viewModel.handleBackPress()
         }
 
         binding.topBar.btNext.setOnClickListener {
             viewModel.nextScreenStep()
-            setChangeFragment()
         }
 
         binding.topBar.btClose.setOnClickListener {
@@ -100,35 +59,69 @@ class MainActivity :
         }
     }
 
+    private fun handleState(){
+        lifecycleScope.launch {
+            viewModel.mainState.flowWithLifecycle(lifecycle).collectLatest { state ->
+                with(state.pictureState) {
+                    when (viewType) {
+                        PictureState.ViewType.Original -> {
+                            binding.ivImage.loadImage(originalImage)
+                        }
+
+                        PictureState.ViewType.Mosaic -> {
+                            binding.ivImage.loadImage(mosaicImage)
+                        }
+                    }
+                }
+                when (state.screenStep) {
+                    ScreenStep.SelectFace -> {
+                        binding.topBar.btClose.visible()
+                        binding.topBar.btDownload.gone()
+                        binding.topBar.btBack.gone()
+                        binding.topBar.btNext.visible()
+                        binding.topBar.tvTitle.gone()
+                        binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
+                    }
+
+                    ScreenStep.MosaicFace -> {
+                        binding.topBar.btClose.gone()
+                        binding.topBar.btDownload.visible()
+                        binding.topBar.btBack.visible()
+                        binding.topBar.btNext.gone()
+                        binding.topBar.tvTitle.gone()
+                        binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun handleEvent() {
+        lifecycleScope.launch{
+            viewModel.mainEvent.collect{
+                when (it) {
+                    MainEvent.Finish -> {
+                        finish()
+                    }
+
+                    MainEvent.NavigateToMosaicFace -> {
+                        navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
+                    }
+
+                    is MainEvent.SendToast -> {
+                        binding.root.context.showToast(it.message)
+                    }
+                }
+            }
+        }
+    }
+
     private fun setOnBackPressedCallback() {
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                handleScreenStepChange()
+                viewModel.handleBackPress()
             }
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
-
-    private fun handleScreenStepChange() {
-        when (viewModel.screenStep.value) {
-            ScreenStep.SelectFace -> {
-                finish()
-            }
-            ScreenStep.MosaicFace -> {
-                viewModel.backPress()
-                viewModel.setScreen(ScreenStep.SelectFace)
-            }
-            else -> {}
-        }
-    }
-
-    private fun setChangeFragment() {
-        when (viewModel.screenStep.value) {
-            ScreenStep.MosaicFace -> {
-                navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
-            }
-            else -> {}
-        }
-    }
-
 }

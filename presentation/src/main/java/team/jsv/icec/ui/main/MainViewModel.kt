@@ -1,20 +1,19 @@
 package team.jsv.icec.ui.main
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import team.jsv.domain.model.MosaicType
 import team.jsv.domain.usecase.GetDetectedFaceUseCase
 import team.jsv.domain.usecase.GetMosaicImageUseCase
 import team.jsv.icec.base.BaseViewModel
-import team.jsv.icec.base.Event
 import team.jsv.icec.base.updateState
 import team.jsv.icec.ui.main.mosaic.detect.DetectFaceState
 import team.jsv.icec.ui.main.mosaic.detect.model.FaceViewItem
@@ -30,11 +29,6 @@ import java.io.File
 import java.util.Date
 import javax.inject.Inject
 
-enum class ScreenStep {
-    SelectFace,
-    MosaicFace;
-}
-
 @HiltViewModel
 internal class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
@@ -44,35 +38,22 @@ internal class MainViewModel @Inject constructor(
 
     private val currentTime: String = Date().toFormatString(DEFAULT_CURRENT_TIME_FORMAT)
 
-    private lateinit var _originalImage: File
-    var originalImage: File
-        get() = _originalImage
-        set(value) {
-            _originalImage = value
-        }
 
-    private lateinit var _mosaicImage: String
-    var mosaicImage: String
-        get() = _mosaicImage
-        set(value) {
-            _mosaicImage = value
-        }
+    //메인 액티비티 상태
+    private val _mainState = MutableStateFlow(MainState())
+    val mainState: StateFlow<MainState> get() = _mainState.asStateFlow()
 
-    private val _state = MutableLiveData<PictureState>()
-    val state: LiveData<PictureState> get() = _state
+    private val _mainEvent = MutableSharedFlow<MainEvent>()
+    val mainEvent = _mainEvent.asSharedFlow()
 
-    private val _screenStep = MutableLiveData<ScreenStep>()
-    val screenStep: LiveData<ScreenStep> get() = _screenStep
-
-    private val _mosaicEvent = MutableLiveData<Event<MosaicEvent>>()
-    val mosaicEvent: LiveData<Event<MosaicEvent>> get() = _mosaicEvent
+    //1단계 상태
+    private val _detectFaceState = MutableStateFlow(DetectFaceState())
+    val detectFaceState = _detectFaceState.asStateFlow()
 
     private val _detectedFaceIndexes = MutableStateFlow<List<Int>>(emptyList())
     val detectedFaceIndexes: StateFlow<List<Int>> = _detectedFaceIndexes.asStateFlow()
 
-    private val _detectFaceState = MutableStateFlow(DetectFaceState())
-    val detectFaceState = _detectFaceState.asStateFlow()
-
+    //2단계 상태
     private val _mosaicFaceState = MutableStateFlow(MosaicFaceState())
     val mosaicFaceState = _mosaicFaceState.asStateFlow()
 
@@ -81,68 +62,92 @@ internal class MainViewModel @Inject constructor(
         getFaceList()
     }
 
+    fun handleBackPress() {
+        when (mainState.value.screenStep) {
+            ScreenStep.SelectFace -> {
+                viewModelScope.launch {
+                    _mainEvent.emit(MainEvent.Finish)
+                }
+            }
+
+            ScreenStep.MosaicFace -> {
+                backPress()
+                setScreen(ScreenStep.SelectFace)
+            }
+        }
+    }
+
     private fun initImage() {
         val image = File(savedStateHandle.get<String>(Extras.ImagePath) ?: "")
-        _originalImage = image
-        _state.value = PictureState.File(image)
-        _screenStep.value = ScreenStep.SelectFace
+        _mainState.updateState {
+            copy(
+                pictureState = pictureState.copy(
+                    originalImage = image,
+                ),
+                screenStep = ScreenStep.SelectFace
+            )
+        }
     }
 
     fun nextScreenStep() {
-        val currentScreenStep = _screenStep.value ?: return
+        viewModelScope.launch {
+            with(_mainState.value) {
+                when (screenStep) {
+                    ScreenStep.SelectFace -> {
+                        _mainState.updateState { copy(screenStep = ScreenStep.MosaicFace) }
+                        _mainEvent.emit(MainEvent.NavigateToMosaicFace)
+                    }
 
-         when(currentScreenStep) {
-            ScreenStep.SelectFace -> {
-                _screenStep.value = ScreenStep.MosaicFace
-            }
-            ScreenStep.MosaicFace -> {
-                _screenStep.value = ScreenStep.SelectFace
+                    ScreenStep.MosaicFace -> {}
+                }
             }
         }
     }
 
-    fun setScreen(screenStep: ScreenStep) {
-        _screenStep.postValue(screenStep)
-    }
-
-    fun setOriginalImage() {
-        _state.postValue(PictureState.File(_originalImage))
-    }
-
-    fun setMosaicImage() {
-        if (::_mosaicImage.isInitialized) {
-            _state.postValue(PictureState.Url(_mosaicImage))
+    private fun setScreen(screenStep: ScreenStep) {
+        _mainState.updateState {
+            copy(
+                screenStep = screenStep,
+            )
         }
+        setImageViewType(PictureState.ViewType.Original)
     }
 
     fun setOnClickAllSelectButton() {
-        viewModelScope.launch {
-            _detectedFaceIndexes.value.copy {
-                if (size == _detectFaceState.value.faceViewItem.faceList.size || size >= 1) {
-                    clear()
-                } else {
-                    clear()
-                    addAll(_detectFaceState.value.faceViewItem.faceList.indices)
-                }
-            }.also { _detectedFaceIndexes.value = it }
+        _detectedFaceIndexes.value.copy {
+            if (size == _detectFaceState.value.faceViewItem.faceList.size || size >= 1) {
+                clear()
+            } else {
+                clear()
+                addAll(_detectFaceState.value.faceViewItem.faceList.indices)
+            }
+        }.also { _detectedFaceIndexes.value = it }
+    }
+
+    private fun setImageViewType(viewType: PictureState.ViewType) {
+        _mainState.updateState {
+            copy(
+                pictureState = pictureState.copy(
+                    viewType = viewType
+                )
+            )
         }
     }
 
     fun setOnClickItem(index: Int) {
-        viewModelScope.launch {
-            _detectedFaceIndexes.value.copy {
-                if (contains(index)) {
-                    remove(index)
-                } else {
-                    add(index)
-                }
-            }.also { _detectedFaceIndexes.value = it }
-        }
+        _detectedFaceIndexes.value.copy {
+            if (contains(index)) {
+                remove(index)
+            } else {
+                add(index)
+            }
+        }.also { _detectedFaceIndexes.value = it }
     }
 
     fun setOnClearDetectedFaceIndex() {
         _detectedFaceIndexes.value = emptyList()
     }
+
 
     fun setFaceViewItem(faceViewItem: FaceViewItem) {
         _detectFaceState.updateState {
@@ -156,20 +161,20 @@ internal class MainViewModel @Inject constructor(
         }.let { getFaceList() }
     }
 
-    fun setDetectFaceLoading(isLoading: Boolean) {
+    private fun setDetectFaceLoading(isLoading: Boolean) {
         _detectFaceState.updateState {
             copy(isLoading = isLoading)
         }
     }
 
-    fun getFaceList() {
+    private fun getFaceList() {
         viewModelScope.launch {
             setDetectFaceLoading(true)
             with(_detectFaceState.value) {
                 getDetectedFaceUseCase(
                     currentTime = currentTime,
                     threshold = detectStrength.toThreshold,
-                    image = _originalImage
+                    image = _mainState.value.pictureState.originalImage
                 ).onSuccess { data ->
                     data.toFaceViewItem().also { faceViewItem ->
                         setFaceViewItem(faceViewItem)
@@ -198,15 +203,13 @@ internal class MainViewModel @Inject constructor(
                     coordinates = coordinates,
                     mosaicType = mosaicType
                 ).onSuccess {
-                    when (screenStep.value) {
-                        ScreenStep.MosaicFace -> {
-                            _mosaicImage = it.blurImage
-                            _state.postValue(PictureState.Url(it.blurImage))
-                        }
-                        else -> {
-                            _state.postValue(
-                                PictureState.File(_originalImage))
-                        }
+                    _mainState.updateState {
+                        copy(
+                            pictureState = pictureState.copy(
+                                viewType = PictureState.ViewType.Mosaic,
+                                mosaicImage = it.blurImage, //이녀석이 다른 url로 늘 내려와야 한다
+                            )
+                        )
                     }
                 }.onFailure {
                     handleException(it)
@@ -241,9 +244,11 @@ internal class MainViewModel @Inject constructor(
     }
 
     private fun handleException(exception: Throwable) {
-        if (exception is IcecNetworkException) {
-            Log.d("실패", exception.toString())
-            _mosaicEvent.postValue(Event(MosaicEvent.SendToast(exception.message)))
+        viewModelScope.launch {
+            if (exception is IcecNetworkException) {
+                Log.d("실패", exception.toString())
+                _mainEvent.emit(MainEvent.SendToast(exception.message))
+            }
         }
     }
 

@@ -100,13 +100,13 @@ class DetectFaceFragment :
     private fun collectDetectFaceState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.detectFaceState.collect { state ->
-                when (state.isLoading) {
-                    true -> dialog.show()
-                    false -> dialog.dismiss()
+        when (state.isLoading) {
+            true -> dialog.show()
+            false -> dialog.dismiss()
                         .also { detectedFaceAdapter.submitList(state.faceViewItem.faceList) }
-                }
-            }
         }
+    }
+}
     }
 
 }
