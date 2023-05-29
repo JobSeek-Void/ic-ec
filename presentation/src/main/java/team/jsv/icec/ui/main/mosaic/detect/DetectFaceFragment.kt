@@ -1,7 +1,6 @@
 package team.jsv.icec.ui.main.mosaic.detect
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -12,7 +11,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
-import team.jsv.icec.ui.main.mosaic.MosaicViewModel
+import team.jsv.icec.ui.main.MainViewModel
 import team.jsv.icec.ui.main.mosaic.detect.adapter.DetectedFaceAdapter
 import team.jsv.icec.util.HorizontalSpaceItemDecoration
 import team.jsv.presentation.R
@@ -31,7 +30,7 @@ class DetectFaceFragment :
         private const val horizontalSpace = 12
     }
 
-    private val viewModel: MosaicViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
     private val detectedFaceAdapter by lazy {
         DetectedFaceAdapter { position -> viewModel.setOnClickItem(position) }
     }

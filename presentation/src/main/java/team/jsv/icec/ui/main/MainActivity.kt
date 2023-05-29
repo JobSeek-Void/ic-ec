@@ -9,22 +9,17 @@ import dagger.hilt.android.AndroidEntryPoint
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.EventObserver
 import team.jsv.icec.base.showToast
-import team.jsv.icec.ui.main.mosaic.MosaicEvent
-import team.jsv.icec.ui.main.mosaic.MosaicViewModel
-import team.jsv.icec.ui.main.mosaic.PictureState
-import team.jsv.icec.ui.main.mosaic.ScreenStep
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMainBinding
-import java.io.File
 
 @AndroidEntryPoint
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
-    private val viewModel: MosaicViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).findNavController()

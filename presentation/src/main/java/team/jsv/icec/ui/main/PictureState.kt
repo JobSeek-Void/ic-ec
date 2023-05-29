@@ -1,4 +1,4 @@
-package team.jsv.icec.ui.main.mosaic
+package team.jsv.icec.ui.main
 
 typealias file = java.io.File
 

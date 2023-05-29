@@ -1,4 +1,4 @@
-package team.jsv.icec.ui.main.mosaic
+package team.jsv.icec.ui.main
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -36,7 +36,7 @@ enum class ScreenStep {
 }
 
 @HiltViewModel
-internal class MosaicViewModel @Inject constructor(
+internal class MainViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val getDetectedFaceUseCase: GetDetectedFaceUseCase,
     private val getMosaicImageUseCase: GetMosaicImageUseCase,

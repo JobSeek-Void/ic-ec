@@ -8,7 +8,7 @@
 
         <variable
             name="vm"
-            type="team.jsv.icec.ui.main.mosaic.MosaicViewModel" />
+            type="team.jsv.icec.ui.main.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
