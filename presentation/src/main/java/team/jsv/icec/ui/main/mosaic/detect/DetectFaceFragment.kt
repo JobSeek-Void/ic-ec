@@ -1,6 +1,7 @@
 package team.jsv.icec.ui.main.mosaic.detect
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -38,15 +39,21 @@ class DetectFaceFragment :
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.vm = viewModel
+        bind()
+        initView()
     }
 
     override fun initView() {
         initDetectSlider()
+        initRecyclerView()
+    }
+
+    private fun bind() {
+        binding.vm = viewModel
+
         observeBackPress()
         collectDetectFaceState()
         collectSelectedItemUpdates()
-        initRecyclerView()
     }
 
     private fun initDetectSlider() {
@@ -61,14 +68,21 @@ class DetectFaceFragment :
                 override fun onStartTrackingTouch(slider: Slider) {}
                 override fun onStopTrackingTouch(slider: Slider) {
                     viewModel.setDetectStrength(value)
-                    viewModel.getFaceList()
                 }
             })
         }
     }
 
+    private fun initRecyclerView() {
+        binding.rvDetectedFace.apply {
+            adapter = detectedFaceAdapter
+            itemAnimator = null
+            addItemDecoration(HorizontalSpaceItemDecoration(space = horizontalSpace))
+        }
+    }
+
     private fun observeBackPress() {
-        viewModel.backPress.observe(this, EventObserver {
+        viewModel.backPress.observe(viewLifecycleOwner, EventObserver {
             popBackStack()
         })
     }
@@ -85,7 +99,7 @@ class DetectFaceFragment :
     }
 
     private fun collectDetectFaceState() {
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             viewModel.detectFaceState.collect { state ->
                 when (state.isLoading) {
                     true -> dialog.show()
@@ -93,14 +107,6 @@ class DetectFaceFragment :
                         .also { detectedFaceAdapter.submitList(state.faceViewItem.faceList) }
                 }
             }
-        }
-    }
-
-    private fun initRecyclerView() {
-        binding.rvDetectedFace.apply {
-            adapter = detectedFaceAdapter
-            itemAnimator = null
-            addItemDecoration(HorizontalSpaceItemDecoration(space = horizontalSpace))
         }
     }
 

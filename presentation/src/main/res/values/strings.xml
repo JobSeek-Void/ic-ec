@@ -8,15 +8,13 @@
     <string name="select_all_text">전체 선택</string>
     <string name="deselect_all_text">전체 해제</string>
 
-    <!-- fragment_select_mosaic_edit.xml -->
-    <string name="edit_text">Edit</string>
-    <string name="mosaic_text">Mosaic</string>
-
     <!-- top_bar.xml -->
     <string name="share_text">공유</string>
     <string name="download_text">저장</string>
     <string name="next_text">다음</string>
     <string name="use_text">사용</string>
+    <string name="edit_text">Edit</string>
+    <string name="mosaic_text">Mosaic</string>
 
     <!-- MainActivity.kt -->
     <string name="accept_permission">%s 권한을 허용하였습니다.</string>

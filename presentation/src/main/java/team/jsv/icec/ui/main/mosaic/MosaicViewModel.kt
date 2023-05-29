@@ -31,7 +31,6 @@ import java.util.Date
 import javax.inject.Inject
 
 enum class ScreenStep {
-    SelectMosaicEdit,
     SelectFace,
     MosaicFace;
 }
@@ -43,23 +42,26 @@ internal class MosaicViewModel @Inject constructor(
     private val getMosaicImageUseCase: GetMosaicImageUseCase,
 ) : BaseViewModel() {
 
-    companion object {
-        private const val DEFAULT_CURRENT_TIME_FORMAT = "yyyy-MM-dd-HHmmss"
-    }
-
     private val currentTime: String = Date().toFormatString(DEFAULT_CURRENT_TIME_FORMAT)
 
-    private val _originalImage = MutableLiveData<File>()
-    val originalImage: LiveData<File> get() = _originalImage
+    private lateinit var _originalImage: File
+    var originalImage: File
+        get() = _originalImage
+        set(value) {
+            _originalImage = value
+        }
 
-    private val _mosaicImage = MutableLiveData<Event<String>>()
-    val mosaicImage: LiveData<Event<String>> get() = _mosaicImage
+    private lateinit var _mosaicImage: String
+    var mosaicImage: String
+        get() = _mosaicImage
+        set(value) {
+            _mosaicImage = value
+        }
 
     private val _state = MutableLiveData<PictureState>()
     val state: LiveData<PictureState> get() = _state
 
-    private val _screenStep =
-        MutableLiveData<ScreenStep>().apply { postValue(ScreenStep.SelectMosaicEdit) }
+    private val _screenStep = MutableLiveData<ScreenStep>()
     val screenStep: LiveData<ScreenStep> get() = _screenStep
 
     private val _mosaicEvent = MutableLiveData<Event<MosaicEvent>>()
@@ -74,27 +76,42 @@ internal class MosaicViewModel @Inject constructor(
     private val _mosaicFaceState = MutableStateFlow(MosaicFaceState())
     val mosaicFaceState = _mosaicFaceState.asStateFlow()
 
-    fun setScreen(screenStep: ScreenStep) = _screenStep.postValue(screenStep)
-
-    fun setImage() {
-        val imageFile: File = savedStateHandle.get<String>(Extras.ImagePath)?.let { File(it) } ?: File("")
-        _originalImage.postValue(imageFile)
-        _state.postValue(PictureState.File(imageFile))
+    init {
+        initImage()
+        getFaceList()
     }
 
-    fun setPixelSize(value: Float) {
-        _mosaicFaceState.updateState {
-            copy(pixelSize = value)
+    private fun initImage() {
+        val image = File(savedStateHandle.get<String>(Extras.ImagePath) ?: "")
+        _originalImage = image
+        _state.value = PictureState.File(image)
+        _screenStep.value = ScreenStep.SelectFace
+    }
+
+    fun nextScreenStep() {
+        val currentScreenStep = _screenStep.value ?: return
+
+         when(currentScreenStep) {
+            ScreenStep.SelectFace -> {
+                _screenStep.value = ScreenStep.MosaicFace
+            }
+            ScreenStep.MosaicFace -> {
+                _screenStep.value = ScreenStep.SelectFace
+            }
         }
     }
 
-    fun setImageAboutScreenStep() {
-        when (_screenStep.value) {
-            ScreenStep.MosaicFace -> {
-                _state.postValue(PictureState.File(_originalImage.value ?: File("")))
-            }
+    fun setScreen(screenStep: ScreenStep) {
+        _screenStep.postValue(screenStep)
+    }
 
-            else -> {}
+    fun setOriginalImage() {
+        _state.postValue(PictureState.File(_originalImage))
+    }
+
+    fun setMosaicImage() {
+        if (::_mosaicImage.isInitialized) {
+            _state.postValue(PictureState.Url(_mosaicImage))
         }
     }
 
@@ -136,7 +153,7 @@ internal class MosaicViewModel @Inject constructor(
     fun setDetectStrength(value: Float) {
         _detectFaceState.updateState {
             copy(detectStrength = value)
-        }
+        }.let { getFaceList() }
     }
 
     fun setDetectFaceLoading(isLoading: Boolean) {
@@ -152,7 +169,7 @@ internal class MosaicViewModel @Inject constructor(
                 getDetectedFaceUseCase(
                     currentTime = currentTime,
                     threshold = detectStrength.toThreshold,
-                    image = _originalImage.value ?: File("")
+                    image = _originalImage
                 ).onSuccess { data ->
                     data.toFaceViewItem().also { faceViewItem ->
                         setFaceViewItem(faceViewItem)
@@ -183,14 +200,12 @@ internal class MosaicViewModel @Inject constructor(
                 ).onSuccess {
                     when (screenStep.value) {
                         ScreenStep.MosaicFace -> {
-                            _mosaicImage.postValue(Event(it.blurImage))
+                            _mosaicImage = it.blurImage
                             _state.postValue(PictureState.Url(it.blurImage))
                         }
-
                         else -> {
-                            _state.postValue(_originalImage.value?.let { originalImage ->
-                                PictureState.File(originalImage)
-                            })
+                            _state.postValue(
+                                PictureState.File(_originalImage))
                         }
                     }
                 }.onFailure {
@@ -209,6 +224,12 @@ internal class MosaicViewModel @Inject constructor(
         getMosaicImage()
     }
 
+    fun setPixelSize(value: Float) {
+        _mosaicFaceState.updateState {
+            copy(pixelSize = value)
+        }
+    }
+
     fun mosaicFaceRefresh() {
         _mosaicFaceState.updateState {
             copy(
@@ -225,4 +246,9 @@ internal class MosaicViewModel @Inject constructor(
             _mosaicEvent.postValue(Event(MosaicEvent.SendToast(exception.message)))
         }
     }
+
+    companion object {
+        private const val DEFAULT_CURRENT_TIME_FORMAT = "yyyy-MM-dd-HHmmss"
+    }
+
 }
