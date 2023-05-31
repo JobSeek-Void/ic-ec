@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import team.jsv.icec.base.showToast
 import team.jsv.presentation.R
 
 object PermissionUtil {
