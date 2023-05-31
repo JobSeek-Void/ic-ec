@@ -28,11 +28,6 @@ import java.lang.Byte.decode
 class MosaicResultActivity :
     BaseActivity<ActivityMosaicResultBinding>(R.layout.activity_mosaic_result) {
 
-    companion object {
-        const val INTENT_KEY = "image"
-        const val SHARE_TYPE = "image/jpg"
-    }
-
     private val viewModel: MosaicResultViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -121,5 +116,7 @@ class MosaicResultActivity :
         )
 
         snackbarView.layoutParams = params
+    companion object {
+        const val SHARE_TYPE = "image/jpg"
     }
 }
