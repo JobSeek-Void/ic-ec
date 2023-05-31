@@ -77,7 +77,7 @@ class MosaicResultActivity :
                 type = SHARE_TYPE
             }
 
-            startActivity(Intent.createChooser(shareIntent, R.string.share_text.toString()))
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share_text)))
         }
 
         binding.topBar.btClose.setOnClickListener {
