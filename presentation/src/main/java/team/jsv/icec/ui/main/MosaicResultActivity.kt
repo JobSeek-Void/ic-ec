@@ -44,7 +44,6 @@ class MosaicResultActivity :
             observeImage()
         }
 
-        showSnackBarAction()
     }
 
     override fun onResume() {
@@ -66,6 +65,7 @@ class MosaicResultActivity :
     private fun observeImage() {
         viewModel.image.observe(this) { image ->
             binding.ivMosaicResult.setImageURI(image)
+            binding.root.showSnackBarAction(getString(R.string.snackbar_text), getColor(R.color.white), getColor(R.color.SubColor))
         }
     }
 
@@ -85,37 +85,6 @@ class MosaicResultActivity :
         }
     }
 
-    private fun showSnackBarAction() {
-        val snackBar = Snackbar.make(binding.root, R.string.snackbar_text, Snackbar.LENGTH_LONG)
-        setSnackBarOption(snackBar)
-        snackBar.show()
-    }
-
-    private fun setSnackBarOption(snackBar: Snackbar) {
-        snackBar.setTextColor(Color.WHITE)
-        snackBar.setBackgroundTint(ContextCompat.getColor(this, R.color.SubColor))
-
-        val snackbarView = snackBar.view
-        val textView =
-            snackbarView.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)
-
-        textView.textAlignment = View.TEXT_ALIGNMENT_CENTER
-
-        val backgroundDrawable = snackbarView.background as GradientDrawable
-
-        backgroundDrawable.cornerRadius =
-            resources.getDimensionPixelOffset(R.dimen.snackbar_corner_radius).toFloat()
-
-        val params = snackbarView.layoutParams as ViewGroup.MarginLayoutParams
-
-        params.setMargins(
-            params.leftMargin + resources.getDimensionPixelOffset(R.dimen.snackbar_margin_start),
-            params.topMargin,
-            params.rightMargin + resources.getDimensionPixelOffset(R.dimen.snackbar_margin_end),
-            params.bottomMargin + resources.getDimensionPixelOffset(R.dimen.snackbar_margin_bottom)
-        )
-
-        snackbarView.layoutParams = params
     companion object {
         const val SHARE_TYPE = "image/jpg"
     }
