@@ -20,10 +20,11 @@
     <string name="accept_permission">%s 권한을 허용하였습니다.</string>
     <string name="reject_permission">%s 권한을 거부하였습니다.</string>
 
-    <string name="save_done">저장 완료</string>
     <!-- StartActivity.kt -->
     <string name="gallery_text">Gallery</string>
     <string name="camera_text">Camera</string>
 
+    <!-- MosaicResultActivity.kt -->
     <string name="snackbar_text">저장이 완료되었습니다~!</string>
+    <string name="save_done">저장 완료</string>
 </resources>

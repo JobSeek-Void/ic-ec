@@ -30,11 +30,12 @@ class MosaicResultActivity :
             viewModel.setImage(image)
         }
 
+        initTopBar()
+        observeImage()
     }
 
     override fun onResume() {
         super.onResume()
-        initTopBar()
         initClickListeners()
     }
 
