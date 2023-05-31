@@ -1,15 +1,10 @@
 package team.jsv.icec.ui.main
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Base64
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.core.content.FileProvider
 import team.jsv.icec.base.BaseActivity
@@ -20,9 +15,7 @@ import team.jsv.icec.util.showSnackBarAction
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMosaicResultBinding
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.lang.Byte.decode
 
 
 class MosaicResultActivity :
@@ -33,15 +26,8 @@ class MosaicResultActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            intent.getParcelableExtra(INTENT_KEY, Uri::class.java)
-        } else {
-            intent.getParcelableExtra(INTENT_KEY) as? Uri
-        })?.let { image ->
-            viewModel.setImage(
-                image
-            )
-            observeImage()
+        intent.getStringExtra(ImagePath)?.let { image ->
+            viewModel.setImage(image)
         }
 
     }
@@ -64,8 +50,16 @@ class MosaicResultActivity :
 
     private fun observeImage() {
         viewModel.image.observe(this) { image ->
-            binding.ivMosaicResult.setImageURI(image)
+            binding.ivMosaicResult.loadImage(image)
             binding.root.showSnackBarAction(getString(R.string.snackbar_text), getColor(R.color.white), getColor(R.color.SubColor))
+        }
+    }
+
+    private fun convertUri(imagePath : String) : Uri {
+        if (Build.VERSION.SDK_INT >= VERSION_CODES.N) {
+            return FileProvider.getUriForFile(this, "com.example.fileprovider", File(imagePath))
+        } else {
+            return Uri.fromFile(File(imagePath))
         }
     }
 
@@ -73,7 +67,7 @@ class MosaicResultActivity :
         binding.topBar.ivShare.setOnClickListener {
             val shareIntent = Intent().apply {
                 action = Intent.ACTION_SEND
-                putExtra(Intent.EXTRA_STREAM, viewModel.image.value)
+                putExtra(Intent.EXTRA_STREAM, convertUri(viewModel.image.value ?: ""))
                 type = SHARE_TYPE
             }
 
