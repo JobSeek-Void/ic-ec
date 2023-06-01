@@ -11,9 +11,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
+import team.jsv.icec.base.startActivityWithAnimation
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
+import team.jsv.icec.util.saveImage
 import team.jsv.icec.util.showToast
+import team.jsv.icec.util.toBitmap
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMainBinding
@@ -55,12 +58,19 @@ class MainActivity :
             viewModel.nextScreenStep()
         }
 
+        binding.topBar.btDownload.setOnClickListener {
+            lifecycleScope.launch {
+                saveImage(bitmap = binding.ivImage.toBitmap())
+                startActivityWithAnimation<MosaicResultActivity>()
+            }
+        }
+
         binding.topBar.btClose.setOnClickListener {
             finish()
         }
     }
 
-    private fun handleState(){
+    private fun handleState() {
         lifecycleScope.launch {
             viewModel.mainState.flowWithLifecycle(lifecycle).collectLatest { state ->
                 with(state.pictureState) {
@@ -98,8 +108,8 @@ class MainActivity :
     }
 
     private fun handleEvent() {
-        lifecycleScope.launch{
-            viewModel.mainEvent.collect{
+        lifecycleScope.launch {
+            viewModel.mainEvent.collect {
                 when (it) {
                     MainEvent.Finish -> {
                         finish()
