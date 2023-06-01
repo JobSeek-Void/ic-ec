@@ -1,5 +1,7 @@
 package team.jsv.icec.util
 
+import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -8,7 +10,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ fun ImageView.loadImage(data: Any) {
                 e: GlideException?,
                 model: Any?,
                 target: Target<Drawable>?,
-                isFirstResource: Boolean
+                isFirstResource: Boolean,
             ): Boolean {
                 return false
             }
@@ -39,7 +40,7 @@ fun ImageView.loadImage(data: Any) {
                 model: Any?,
                 target: Target<Drawable>?,
                 dataSource: DataSource?,
-                isFirstResource: Boolean
+                isFirstResource: Boolean,
             ): Boolean {
                 CoroutineScope(Dispatchers.Main).launch {
                     setImageDrawable(resource)
@@ -48,4 +49,9 @@ fun ImageView.loadImage(data: Any) {
             }
         })
         .submit()
+}
+
+fun ImageView.toBitmap(): Bitmap {
+    val bitmapDrawable = this.drawable as BitmapDrawable
+    return bitmapDrawable.bitmap
 }
