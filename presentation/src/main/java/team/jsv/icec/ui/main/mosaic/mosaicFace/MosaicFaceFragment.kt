@@ -15,8 +15,7 @@ import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentMosaicFaceBinding
 
 @AndroidEntryPoint
-class MosaicFaceFragment
-    : BaseFragment<FragmentMosaicFaceBinding>(R.layout.fragment_mosaic_face) {
+class MosaicFaceFragment : BaseFragment<FragmentMosaicFaceBinding>(R.layout.fragment_mosaic_face) {
 
     private val viewModel: MainViewModel by activityViewModels()
 
@@ -86,4 +85,5 @@ class MosaicFaceFragment
             }
         }
     }
+
 }

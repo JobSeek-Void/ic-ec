@@ -23,18 +23,11 @@ import java.util.Date
 class CameraResultFragment :
     BaseFragment<FragmentCameraResultBinding>(R.layout.fragment_camera_result) {
 
-    companion object {
-        const val JPEG_MIME_TYPE = "image/jpeg"
-        const val MEDIA_DIRECTORY_PATH = "/ICEC IMAGE"
-        const val EXTERNAL_STORAGE_DIRECTORY_PATH = "/Pictures/ICEC IMAGE"
-        const val IMAGE_DATE_FORMAT = "yyyy-MM-dd-HHmmss"
-        const val STRING_ICEC = "ICEC"
-    }
-
     private val viewModel: CameraViewModel by activityViewModels()
 
     override fun onResume() {
         super.onResume()
+
         initClickEvent()
     }
 
@@ -157,4 +150,13 @@ class CameraResultFragment :
             requireActivity().finish()
         }
     }
+
+    companion object {
+        const val JPEG_MIME_TYPE = "image/jpeg"
+        const val MEDIA_DIRECTORY_PATH = "/ICEC IMAGE"
+        const val EXTERNAL_STORAGE_DIRECTORY_PATH = "/Pictures/ICEC IMAGE"
+        const val IMAGE_DATE_FORMAT = "yyyy-MM-dd-HHmmss"
+        const val STRING_ICEC = "ICEC"
+    }
+
 }

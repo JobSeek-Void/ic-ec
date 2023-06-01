@@ -18,17 +18,7 @@ import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentDetectFaceBinding
 
 @AndroidEntryPoint
-class DetectFaceFragment :
-    BaseFragment<FragmentDetectFaceBinding>(R.layout.fragment_detect_face) {
-
-    companion object {
-        private const val sliderValue = 90f
-        private const val sliderFrom = 1f
-        private const val sliderValueTo = 99f
-        private const val sliderStepSize = 1f
-        private const val sliderHaloRadius = 0
-        private const val horizontalSpace = 12
-    }
+class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.fragment_detect_face) {
 
     private val viewModel: MainViewModel by activityViewModels()
     private val detectedFaceAdapter by lazy {
@@ -100,13 +90,22 @@ class DetectFaceFragment :
     private fun collectDetectFaceState() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.detectFaceState.collect { state ->
-        when (state.isLoading) {
-            true -> dialog.show()
-            false -> dialog.dismiss()
+                when (state.isLoading) {
+                    true -> dialog.show()
+                    false -> dialog.dismiss()
                         .also { detectedFaceAdapter.submitList(state.faceViewItem.faceList) }
+                }
+            }
         }
     }
-}
+
+    companion object {
+        private const val sliderValue = 90f
+        private const val sliderFrom = 1f
+        private const val sliderValueTo = 99f
+        private const val sliderStepSize = 1f
+        private const val sliderHaloRadius = 0
+        private const val horizontalSpace = 12
     }
 
 }

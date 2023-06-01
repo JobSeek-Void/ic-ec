@@ -28,12 +28,6 @@ import java.util.concurrent.Executors
 
 class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_camera) {
 
-    companion object {
-        const val RESOURCE_NAME = "status_bar_height"
-        const val RESOURCE_DEF_TYPE = "dimen"
-        const val RESOURCE_DEF_PACKAGE = "android"
-    }
-
     private val viewModel: CameraViewModel by activityViewModels()
     private lateinit var cameraExecutor: ExecutorService
     private lateinit var cameraSelector: CameraSelector
@@ -42,6 +36,12 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
     override fun onResume() {
         super.onResume()
         initClickEvent()
+    }
+
+    override fun initView() {
+        setReverseBtMargin()
+        observeRatio()
+        observeCameraSelector()
     }
 
     private fun setReverseBtMargin() {
@@ -235,9 +235,10 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         }.build()
     }
 
-    override fun initView() {
-        setReverseBtMargin()
-        observeRatio()
-        observeCameraSelector()
+    companion object {
+        const val RESOURCE_NAME = "status_bar_height"
+        const val RESOURCE_DEF_TYPE = "dimen"
+        const val RESOURCE_DEF_PACKAGE = "android"
     }
+
 }

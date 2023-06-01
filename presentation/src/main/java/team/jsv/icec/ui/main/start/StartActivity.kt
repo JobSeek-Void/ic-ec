@@ -18,8 +18,7 @@ import team.jsv.icec.util.requestPermissions
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityStartBinding
 
-class StartActivity :
-    BaseActivity<ActivityStartBinding>(R.layout.activity_start) {
+class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start) {
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
 
@@ -74,4 +73,5 @@ class StartActivity :
             if (cursor.moveToFirst()) cursor.getString(columnIndex) else null
         }
     }
+
 }
