@@ -206,7 +206,7 @@ internal class MainViewModel @Inject constructor(
                         copy(
                             pictureState = pictureState.copy(
                                 viewType = PictureState.ViewType.Mosaic,
-                                mosaicImage = it.blurImage, //이녀석이 다른 url로 늘 내려와야 한다
+                                mosaicImage = it.mosaicImage, //이녀석이 다른 url로 늘 내려와야 한다
                             )
                         )
                     }

@@ -6,6 +6,7 @@ import retrofit2.http.Multipart
 import retrofit2.http.POST
 import retrofit2.http.Part
 import team.jsv.data.dto.request.MosaicRequestBody
+import team.jsv.data.dto.response.BlurResponse
 import team.jsv.data.dto.response.FaceResponse
 import team.jsv.data.dto.response.MosaicResponse
 
@@ -27,6 +28,6 @@ interface ICECApi {
     @POST("/blur")
     suspend fun getBlurImage(
         @Body mosaicRequestBody: MosaicRequestBody,
-    ): MosaicResponse
+    ): BlurResponse
 
 }
