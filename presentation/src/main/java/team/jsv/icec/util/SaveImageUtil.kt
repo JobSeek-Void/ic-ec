@@ -12,6 +12,7 @@ import java.io.FileOutputStream
 
 private const val SaveImageMimeType = "image/png"
 private const val FileExtensionName = ".png"
+private const val CompressQuality = 100
 
 internal fun Context.saveImage(bitmap: Bitmap) {
     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.Q) {
@@ -36,7 +37,7 @@ private fun Context.saveImageOnAboveAndroidQ(bitmap: Bitmap) {
     contentResolver.openFileDescriptor(uri!!, "w", null).use { image ->
         image?.let {
             val fos = FileOutputStream(it.fileDescriptor)
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+            bitmap.compress(Bitmap.CompressFormat.PNG, CompressQuality, fos)
             fos.close()
             contentValues.clear()
             contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
@@ -58,7 +59,7 @@ private fun Context.saveImageOnUnderAndroidQ(bitmap: Bitmap) {
         createNewFile()
     }
     FileOutputStream(fileItem).use { fos ->
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
+        bitmap.compress(Bitmap.CompressFormat.PNG, CompressQuality, fos)
         fos.close()
         sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(fileItem)))
     }
