@@ -1,4 +1,4 @@
-package team.jsv.icec.ui.main
+package team.jsv.icec.ui.main.mosaic.result
 
 import android.content.Intent
 import android.net.Uri

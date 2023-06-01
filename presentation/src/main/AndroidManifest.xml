@@ -16,7 +16,7 @@
         </activity>
 
         <activity
-            android:name="team.jsv.icec.ui.main.MosaicResultActivity"
+            android:name="team.jsv.icec.ui.main.mosaic.result.MosaicResultActivity"
             android:exported="false"
             android:theme="@style/ICECTheme">
 
