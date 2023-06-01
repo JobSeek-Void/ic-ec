@@ -24,4 +24,8 @@
     <string name="gallery_text">Gallery</string>
     <string name="camera_text">Camera</string>
 
+    <!-- MosaicResultActivity.kt -->
+    <string name="snackbar_text">저장이 완료되었습니다~!</string>
+    <string name="save_done">저장 완료</string>
+
 </resources>

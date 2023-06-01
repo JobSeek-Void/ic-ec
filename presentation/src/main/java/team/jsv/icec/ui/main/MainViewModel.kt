@@ -38,7 +38,6 @@ internal class MainViewModel @Inject constructor(
 
     private val currentTime: String = Date().toFormatString(DEFAULT_CURRENT_TIME_FORMAT)
 
-
     //메인 액티비티 상태
     private val _mainState = MutableStateFlow(MainState())
     val mainState: StateFlow<MainState> get() = _mainState.asStateFlow()
