@@ -5,5 +5,7 @@ sealed class MainEvent {
 
     object NavigateToMosaicFace: MainEvent()
 
+    object NavigateToMosaicResult: MainEvent()
+
     class SendToast(val message: String) : MainEvent()
 }

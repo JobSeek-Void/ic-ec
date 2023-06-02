@@ -97,7 +97,9 @@ internal class MainViewModel @Inject constructor(
                         _mainEvent.emit(MainEvent.NavigateToMosaicFace)
                     }
 
-                    ScreenStep.MosaicFace -> {}
+                    ScreenStep.MosaicFace -> {
+                        _mainEvent.emit(MainEvent.NavigateToMosaicResult)
+                    }
                 }
             }
         }

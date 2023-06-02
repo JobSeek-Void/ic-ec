@@ -12,6 +12,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.startActivityWithAnimation
+import team.jsv.icec.ui.main.mosaic.result.MosaicResultActivity
+import team.jsv.icec.util.Extras.ImagePath
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
 import team.jsv.icec.util.saveImage
@@ -59,10 +61,7 @@ class MainActivity :
         }
 
         binding.topBar.btDownload.setOnClickListener {
-            lifecycleScope.launch {
-                saveImage(bitmap = binding.ivImage.toBitmap())
-                startActivityWithAnimation<MosaicResultActivity>()
-            }
+            viewModel.nextScreenStep()
         }
 
         binding.topBar.btClose.setOnClickListener {
@@ -108,9 +107,9 @@ class MainActivity :
     }
 
     private fun handleEvent() {
-        lifecycleScope.launch {
-            viewModel.mainEvent.collect {
-                when (it) {
+        lifecycleScope.launch{
+            viewModel.mainEvent.collect{ mainEvent ->
+                when (mainEvent) {
                     MainEvent.Finish -> {
                         finish()
                     }
@@ -119,8 +118,15 @@ class MainActivity :
                         navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
                     }
 
+                    MainEvent.NavigateToMosaicResult -> {
+                        saveImage(bitmap = binding.ivImage.toBitmap())
+                        // TODO(ham2174) : 이미지 경로 넘겨주기. (이미지 경로 saveImage 함수에서 )
+                        startActivityWithAnimation<MosaicResultActivity>()
+                        finish()
+                    }
+
                     is MainEvent.SendToast -> {
-                        binding.root.context.showToast(it.message)
+                        binding.root.context.showToast(mainEvent.message)
                     }
                 }
             }
@@ -135,4 +141,5 @@ class MainActivity :
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
+
 }
