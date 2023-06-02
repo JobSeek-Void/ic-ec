@@ -1,4 +1,4 @@
-package team.jsv.icec.ui.main
+package team.jsv.icec.ui.main.mosaic.result
 
 import android.content.Intent
 import android.net.Uri
@@ -16,7 +16,6 @@ import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMosaicResultBinding
 import java.io.File
-
 
 class MosaicResultActivity :
     BaseActivity<ActivityMosaicResultBinding>(R.layout.activity_mosaic_result) {
@@ -36,6 +35,7 @@ class MosaicResultActivity :
 
     override fun onResume() {
         super.onResume()
+
         initClickListeners()
     }
 
@@ -52,15 +52,7 @@ class MosaicResultActivity :
     private fun observeImage() {
         viewModel.image.observe(this) { image ->
             binding.ivMosaicResult.loadImage(image)
-            binding.root.showSnackBarAction(getString(R.string.snackbar_text), getColor(R.color.white), getColor(R.color.SubColor))
-        }
-    }
-
-    private fun convertUri(imagePath : String) : Uri {
-        if (Build.VERSION.SDK_INT >= VERSION_CODES.N) {
-            return FileProvider.getUriForFile(this, "com.example.fileprovider", File(imagePath))
-        } else {
-            return Uri.fromFile(File(imagePath))
+            binding.root.showSnackBarAction(R.string.snackbar_text, R.color.white, R.color.SubColor)
         }
     }
 
@@ -77,6 +69,14 @@ class MosaicResultActivity :
 
         binding.topBar.btClose.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun convertUri(imagePath : String) : Uri {
+        return if (Build.VERSION.SDK_INT >= VERSION_CODES.N) {
+            FileProvider.getUriForFile(this, "com.example.fileprovider", File(imagePath))
+        } else {
+            Uri.fromFile(File(imagePath))
         }
     }
 

@@ -3,6 +3,7 @@ package team.jsv.data.mapper
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import team.jsv.data.dto.response.BlurResponse
 import team.jsv.data.dto.response.FaceInfo
 import team.jsv.data.dto.response.FaceResponse
 import team.jsv.data.dto.response.MosaicResponse
@@ -32,5 +33,10 @@ internal fun File.toMultipartImage() =
 
 internal fun MosaicResponse.toDomain() =
     MosaicImage(
-        blurImage = blurImage
+        mosaicImage = mosaicImage
+    )
+
+internal fun BlurResponse.toDomain() =
+    MosaicImage(
+        mosaicImage = blurImage
     )

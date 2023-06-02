@@ -3,18 +3,22 @@ package team.jsv.icec.ui.main
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
-import team.jsv.icec.base.EventObserver
-import team.jsv.icec.ui.main.mosaic.MosaicEvent
-import team.jsv.icec.ui.main.mosaic.MosaicViewModel
-import team.jsv.icec.ui.main.mosaic.PictureState
-import team.jsv.icec.ui.main.mosaic.ScreenStep
+import team.jsv.icec.base.startActivityWithAnimation
+import team.jsv.icec.ui.main.mosaic.result.MosaicResultActivity
+import team.jsv.icec.util.Extras.ImagePath
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
+import team.jsv.icec.util.saveImage
 import team.jsv.icec.util.showToast
+import team.jsv.icec.util.toBitmap
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMainBinding
@@ -23,7 +27,7 @@ import team.jsv.presentation.databinding.ActivityMainBinding
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
-    private val viewModel: MosaicViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private val navController by lazy {
         (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).findNavController()
@@ -32,10 +36,9 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.setImage()
-        initTopBar()
+        handleState()
+        handleEvent()
         initView()
-        setOnBackPressedCallback()
     }
 
     override fun onResume() {
@@ -44,58 +47,87 @@ class MainActivity :
         initClickListeners()
     }
 
-    private fun initTopBar() {
-        viewModel.screenStep.observe(this) {
-            when (it) {
-                ScreenStep.SelectMosaicEdit -> {
-                    binding.topBar.btClose.visible()
-                    binding.topBar.btBack.gone()
-                    binding.topBar.tvTitle.gone()
-                    binding.topBar.btNext.gone()
-                    binding.topBar.btDownload.gone()
+    private fun initView() {
+        setOnBackPressedCallback()
+    }
+
+    private fun initClickListeners() {
+        binding.topBar.btBack.setOnClickListener {
+            viewModel.handleBackPress()
+        }
+
+        binding.topBar.btNext.setOnClickListener {
+            viewModel.nextScreenStep()
+        }
+
+        binding.topBar.btDownload.setOnClickListener {
+            viewModel.nextScreenStep()
+        }
+
+        binding.topBar.btClose.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun handleState() {
+        lifecycleScope.launch {
+            viewModel.mainState.flowWithLifecycle(lifecycle).collectLatest { state ->
+                with(state.pictureState) {
+                    when (viewType) {
+                        PictureState.ViewType.Original -> {
+                            binding.ivImage.loadImage(originalImage)
+                        }
+
+                        PictureState.ViewType.Mosaic -> {
+                            binding.ivImage.loadImage(mosaicImage)
+                        }
+                    }
                 }
-                ScreenStep.SelectFace -> {
-                    binding.topBar.btClose.gone()
-                    binding.topBar.btDownload.gone()
-                    binding.topBar.btBack.visible()
-                    binding.topBar.btNext.visible()
-                    binding.topBar.tvTitle.visible()
-                    binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
+                when (state.screenStep) {
+                    ScreenStep.SelectFace -> {
+                        binding.topBar.btClose.visible()
+                        binding.topBar.btDownload.gone()
+                        binding.topBar.btBack.gone()
+                        binding.topBar.btNext.visible()
+                        binding.topBar.tvTitle.gone()
+                        binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
+                    }
+
+                    ScreenStep.MosaicFace -> {
+                        binding.topBar.btClose.gone()
+                        binding.topBar.btDownload.visible()
+                        binding.topBar.btBack.visible()
+                        binding.topBar.btNext.gone()
+                        binding.topBar.tvTitle.gone()
+                        binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
+                    }
                 }
-                ScreenStep.MosaicFace -> {
-                    binding.topBar.btClose.gone()
-                    binding.topBar.btDownload.visible()
-                    binding.topBar.btNext.gone()
-                    binding.topBar.tvTitle.visible()
-                    binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
-                }
-                else -> {}
             }
         }
     }
 
-    private fun initView() {
-        viewModel.mosaicEvent.observe(this, EventObserver {
-            when (it) {
-                is MosaicEvent.SendToast -> {
-                    binding.root.context.showToast(it.message)
-                }
-            }
-        })
-
-        viewModel.state.observe(this) {
-            when (it) {
-                is PictureState.File
-                -> {
-                    viewModel.originalImage.observe(this) { file ->
-                        binding.ivImage.loadImage(file)
+    private fun handleEvent() {
+        lifecycleScope.launch{
+            viewModel.mainEvent.collect{ mainEvent ->
+                when (mainEvent) {
+                    MainEvent.Finish -> {
+                        finish()
                     }
-                }
-                is PictureState.Url
-                -> {
-                    viewModel.mosaicImage.observe(this, EventObserver { url ->
-                        binding.ivImage.loadImage(url)
-                    })
+
+                    MainEvent.NavigateToMosaicFace -> {
+                        navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
+                    }
+
+                    MainEvent.NavigateToMosaicResult -> {
+                        saveImage(bitmap = binding.ivImage.toBitmap())
+                        // TODO(ham2174) : 이미지 경로 넘겨주기. (이미지 경로 saveImage 함수에서 )
+                        startActivityWithAnimation<MosaicResultActivity>()
+                        finish()
+                    }
+
+                    is MainEvent.SendToast -> {
+                        binding.root.context.showToast(mainEvent.message)
+                    }
                 }
             }
         }
@@ -104,56 +136,10 @@ class MainActivity :
     private fun setOnBackPressedCallback() {
         onBackPressedCallback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                handleScreenStepChange()
+                viewModel.handleBackPress()
             }
         }
         onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-    }
-
-    private fun handleScreenStepChange() {
-        when (viewModel.screenStep.value) {
-            ScreenStep.SelectMosaicEdit -> {
-                finish()
-            }
-            ScreenStep.SelectFace -> {
-                viewModel.run {
-                    backPress()
-                    setScreen(ScreenStep.SelectMosaicEdit)
-                }
-            }
-            ScreenStep.MosaicFace -> {
-                viewModel.run {
-                    backPress()
-                    setImageAboutScreenStep()
-                    setScreen(ScreenStep.SelectFace)
-                }
-            }
-            else -> {}
-        }
-    }
-
-    private fun initClickListeners() {
-        binding.topBar.btBack.setOnClickListener {
-            handleScreenStepChange()
-        }
-
-        binding.topBar.btNext.setOnClickListener {
-            when (viewModel.screenStep.value) {
-                ScreenStep.SelectFace -> {
-                    navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
-                    viewModel.run {
-                        setScreen(ScreenStep.MosaicFace)
-                        setImageAboutScreenStep()
-                        getMosaicImage()
-                    }
-                }
-                else -> {}
-            }
-        }
-
-        binding.topBar.btClose.setOnClickListener {
-            finish()
-        }
     }
 
 }

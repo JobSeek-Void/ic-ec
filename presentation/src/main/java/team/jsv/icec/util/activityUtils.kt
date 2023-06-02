@@ -13,10 +13,10 @@ fun Context.showToast(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
 
-fun View.showSnackBarAction(msg: String, textColor: Int, backgroundColor: Int) {
-    val snackBar = Snackbar.make(this, msg, Snackbar.LENGTH_LONG)
+fun View.showSnackBarAction(msg: Int, textColor: Int, backgroundColor: Int) {
+    val snackBar = Snackbar.make(this, context.getString(msg), Snackbar.LENGTH_LONG)
     this.initSnackBarSetting(snackBar)
-    setSnackBarOption(snackBar, textColor, backgroundColor)
+    setSnackBarOption(snackBar, context.getColor(textColor), context.getColor(backgroundColor))
     snackBar.show()
 }
 

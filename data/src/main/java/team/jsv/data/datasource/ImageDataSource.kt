@@ -2,6 +2,7 @@ package team.jsv.data.datasource
 
 import team.jsv.data.api.ICECApi
 import team.jsv.data.dto.request.MosaicRequestBody
+import team.jsv.data.dto.response.BlurResponse
 import team.jsv.data.dto.response.FaceResponse
 import team.jsv.data.dto.response.MosaicResponse
 import team.jsv.data.mapper.toMultipartImage
@@ -60,7 +61,7 @@ class ImageDataSource @Inject constructor(
         pixelSize: Int,
         originalImage: String,
         coordinates: List<List<Int>>,
-    ): MosaicResponse {
+    ): BlurResponse {
         try {
             return icecApi.getBlurImage(
                 mosaicRequestBody = MosaicRequestBody(

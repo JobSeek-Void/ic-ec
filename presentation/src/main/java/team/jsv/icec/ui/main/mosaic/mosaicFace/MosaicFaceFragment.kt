@@ -9,16 +9,15 @@ import kotlinx.coroutines.launch
 import team.jsv.domain.model.MosaicType
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
-import team.jsv.icec.ui.main.mosaic.MosaicViewModel
+import team.jsv.icec.ui.main.MainViewModel
 import team.jsv.icec.ui.main.mosaic.detect.strokeFor
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentMosaicFaceBinding
 
 @AndroidEntryPoint
-class MosaicFaceFragment
-    : BaseFragment<FragmentMosaicFaceBinding>(R.layout.fragment_mosaic_face) {
+class MosaicFaceFragment : BaseFragment<FragmentMosaicFaceBinding>(R.layout.fragment_mosaic_face) {
 
-    private val viewModel: MosaicViewModel by activityViewModels()
+    private val viewModel: MainViewModel by activityViewModels()
 
     override fun initView() {
         initClickListener()
@@ -86,4 +85,5 @@ class MosaicFaceFragment
             }
         }
     }
+
 }

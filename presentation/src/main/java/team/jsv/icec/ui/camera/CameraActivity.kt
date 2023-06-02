@@ -7,8 +7,7 @@ import team.jsv.icec.util.requestPermissions
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityCameraBinding
 
-class CameraActivity :
-    BaseActivity<ActivityCameraBinding>(R.layout.activity_camera) {
+class CameraActivity : BaseActivity<ActivityCameraBinding>(R.layout.activity_camera) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
