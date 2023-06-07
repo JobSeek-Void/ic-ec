@@ -7,7 +7,6 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
-import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
 import team.jsv.icec.util.showSnackBarAction
 import team.jsv.icec.util.visible
@@ -30,15 +29,7 @@ class MosaicResultActivity :
     override fun onResume() {
         super.onResume()
 
-        binding.topBar.ivShare.isEnabled = true
-
         initClickListeners()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        binding.topBar.ivShare.isEnabled = false
     }
 
     private fun initTopBar() {
@@ -60,7 +51,7 @@ class MosaicResultActivity :
         lifecycleScope.launch {
             viewModel.mosaicResultEvent.collect { event ->
                 when(event) {
-                    is MosaicResultEvent.FinishActivity -> { finish() }
+                    MosaicResultEvent.FinishActivity -> { finish() }
 
                     is MosaicResultEvent.SendMosaicImage -> {
                         val shareIntent = Intent().apply {
@@ -71,6 +62,8 @@ class MosaicResultActivity :
 
                         startActivity(Intent.createChooser(shareIntent, getString(R.string.share_text)))
                     }
+
+                    else -> {}
                 }
             }
         }
@@ -78,11 +71,11 @@ class MosaicResultActivity :
 
     private fun initClickListeners() {
         binding.topBar.ivShare.setOnClickListener {
-            viewModel.handleMosaicResultEvent(MosaicResultEvent.Event.Share)
+            viewModel.handleMosaicResultEvent(MosaicResultEvent.Share)
         }
 
         binding.topBar.btClose.setOnClickListener {
-            viewModel.handleMosaicResultEvent(MosaicResultEvent.Event.ActivityFinish)
+            viewModel.handleMosaicResultEvent(MosaicResultEvent.FinishActivity)
         }
     }
 
