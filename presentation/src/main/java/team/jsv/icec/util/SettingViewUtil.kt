@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import team.jsv.icec.ui.camera.CameraFragment
+import team.jsv.icec.ui.camera.CameraActivity
 import team.jsv.icec.ui.camera.SettingRatio
 import kotlin.math.roundToInt
 
@@ -116,11 +116,26 @@ object SettingViewUtil {
 
         val resourceId: Int =
             context.resources.getIdentifier(
-                CameraFragment.RESOURCE_NAME,
-                CameraFragment.RESOURCE_DEF_TYPE,
-                CameraFragment.RESOURCE_DEF_PACKAGE
+                CameraActivity.RESOURCE_STATUS_NAME,
+                CameraActivity.RESOURCE_DEF_TYPE,
+                CameraActivity.RESOURCE_DEF_PACKAGE
             )
 
+        if (resourceId > 0) {
+            result = context.resources.getDimension(resourceId).toInt()
+        }
+
+        return result
+    }
+
+    @SuppressLint("InternalInsetResource", "DiscouragedApi")
+    fun getNavigationBarHeightDP(context: Context): Int {
+        var result = 0
+        val resourceId = context.resources.getIdentifier(
+            CameraActivity.RESOURCE_NAVIGATION_NAME,
+            CameraActivity.RESOURCE_DEF_TYPE,
+            CameraActivity.RESOURCE_DEF_PACKAGE
+        )
         if (resourceId > 0) {
             result = context.resources.getDimension(resourceId).toInt()
         }
