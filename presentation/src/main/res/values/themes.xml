@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- ICEC.ActivityTheme -->
     <style name="ICECTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -8,9 +8,7 @@
     </style>
 
     <style name="ICECCameraTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
-        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
     </style>
 
 </resources>
