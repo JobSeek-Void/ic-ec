@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.startActivityWithAnimation
 import team.jsv.icec.ui.main.mosaic.result.MosaicResultActivity
-import team.jsv.icec.util.Extras.ImagePath
+import team.jsv.icec.util.Extras.ResultImageKey
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
 import team.jsv.icec.util.saveImage
@@ -119,9 +119,10 @@ class MainActivity :
                     }
 
                     MainEvent.NavigateToMosaicResult -> {
-                        saveImage(bitmap = binding.ivImage.toBitmap())
-                        // TODO(ham2174) : 이미지 경로 넘겨주기. (이미지 경로 saveImage 함수에서 )
-                        startActivityWithAnimation<MosaicResultActivity>()
+                        val mosaicImageUri = saveImage(bitmap = binding.ivImage.toBitmap()).toString()
+                        startActivityWithAnimation<MosaicResultActivity>(
+                            intentBuilder = { putExtra(ResultImageKey, mosaicImageUri)}
+                        )
                         finish()
                     }
 
