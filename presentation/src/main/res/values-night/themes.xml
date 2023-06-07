@@ -9,6 +9,7 @@
 
     <style name="ICECCameraTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+        <item name="android:statusBarColor">@color/transparent</item>
     </style>
 
 </resources>
