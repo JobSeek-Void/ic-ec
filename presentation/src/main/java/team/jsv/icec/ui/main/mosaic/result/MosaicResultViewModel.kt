@@ -26,23 +26,19 @@ class MosaicResultViewModel(savedStateHandle: SavedStateHandle) : BaseViewModel(
             coroutineScope = viewModelScope,
             timeoutMillis = 200
         ) { mosaicImage ->
-            _mosaicResultEvent.emit(MosaicResultEvent.SendMosaicImage(mosaicImage = mosaicImage))
+            _mosaicResultEvent.emit(MosaicResultEvent.OnClickShare(mosaicImage = mosaicImage))
         }
     }
 
-    fun handleMosaicResultEvent(event: MosaicResultEvent) {
+    fun setOnClickShare() {
         viewModelScope.launch {
-            when (event) {
-                MosaicResultEvent.Share -> {
-                    _debounceShareEvent.emit(_image.value)
-                }
+            _debounceShareEvent.emit(_image.value)
+        }
+    }
 
-                MosaicResultEvent.FinishActivity -> {
-                    _mosaicResultEvent.emit(MosaicResultEvent.FinishActivity)
-                }
-
-                else -> {}
-            }
+    fun setOnClickClose() {
+        viewModelScope.launch {
+            _mosaicResultEvent.emit(MosaicResultEvent.OnClickFinish)
         }
     }
 

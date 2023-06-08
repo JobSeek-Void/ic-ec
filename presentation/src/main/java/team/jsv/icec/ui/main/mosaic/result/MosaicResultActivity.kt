@@ -51,9 +51,9 @@ class MosaicResultActivity :
         lifecycleScope.launch {
             viewModel.mosaicResultEvent.collect { event ->
                 when(event) {
-                    MosaicResultEvent.FinishActivity -> { finish() }
+                    MosaicResultEvent.OnClickFinish -> { finish() }
 
-                    is MosaicResultEvent.SendMosaicImage -> {
+                    is MosaicResultEvent.OnClickShare -> {
                         val shareIntent = Intent().apply {
                             action = Intent.ACTION_SEND
                             putExtra(Intent.EXTRA_STREAM,event.mosaicImage.toUri())
@@ -62,8 +62,6 @@ class MosaicResultActivity :
 
                         startActivity(Intent.createChooser(shareIntent, getString(R.string.share_text)))
                     }
-
-                    else -> {}
                 }
             }
         }
@@ -71,11 +69,11 @@ class MosaicResultActivity :
 
     private fun initClickListeners() {
         binding.topBar.ivShare.setOnClickListener {
-            viewModel.handleMosaicResultEvent(MosaicResultEvent.Share)
+            viewModel.setOnClickShare()
         }
 
         binding.topBar.btClose.setOnClickListener {
-            viewModel.handleMosaicResultEvent(MosaicResultEvent.FinishActivity)
+            viewModel.setOnClickClose()
         }
     }
 
