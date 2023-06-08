@@ -1,9 +1,12 @@
 package team.jsv.icec.util
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
+import android.os.Build
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
@@ -18,6 +21,33 @@ fun View.showSnackBarAction(msg: Int, textColor: Int, backgroundColor: Int) {
     this.initSnackBarSetting(snackBar)
     setSnackBarOption(snackBar, context.getColor(textColor), context.getColor(backgroundColor))
     snackBar.show()
+}
+
+/* root View 를 제공해야합니다 */
+fun Activity.hideSystemUI(view : View) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        window.setDecorFitsSystemWindows(false)
+        window.insetsController?.hide(WindowInsets.Type.statusBars())
+        setBottomMargin(view, this)
+    } else {
+        @Suppress("DEPRECATION")
+        // API 30 이상에서는 deprecated 됨 @jiiiiiyoon
+        window.decorView.systemUiVisibility =
+            (View.SYSTEM_UI_FLAG_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+    }
+}
+
+private fun setBottomMargin(view : View, context: Context) {
+    val layoutParams =
+        view.layoutParams as ViewGroup.MarginLayoutParams
+    layoutParams.setMargins(
+        0, 0, 0,
+        SettingViewUtil.getNavigationBarHeightDP(context)
+    )
+
+    view.layoutParams = layoutParams
 }
 
 private fun View.initSnackBarSetting(snackBar: Snackbar) {
