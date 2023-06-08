@@ -30,6 +30,8 @@ fun Activity.hideSystemUI(view : View) {
         window.insetsController?.hide(WindowInsets.Type.statusBars())
         setBottomMargin(view, this)
     } else {
+        @Suppress("DEPRECATION")
+        // API 30 이상에서는 deprecated 됨 @jiiiiiyoon
         window.decorView.systemUiVisibility =
             (View.SYSTEM_UI_FLAG_FULLSCREEN
                     or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
