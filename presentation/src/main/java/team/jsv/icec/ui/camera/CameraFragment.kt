@@ -111,9 +111,9 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
                 ratioState,
                 this.deviceWidth,
                 this.deviceHeight
-            ).apply {
-                startCamera()
-            }
+            )
+
+            startCamera()
 
             when (ratioState) {
                 SettingRatio.RATIO_1_1.id -> {
