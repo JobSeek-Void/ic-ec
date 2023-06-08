@@ -1,8 +1,10 @@
 package team.jsv.icec.ui.main.mosaic.result
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.content.FileProvider
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
@@ -12,6 +14,8 @@ import team.jsv.icec.util.showSnackBarAction
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMosaicResultBinding
+import java.io.File
+import java.net.URI
 
 class MosaicResultActivity :
     BaseActivity<ActivityMosaicResultBinding>(R.layout.activity_mosaic_result) {
@@ -53,18 +57,32 @@ class MosaicResultActivity :
                 when(event) {
                     MosaicResultEvent.OnClickFinish -> { finish() }
 
-                    is MosaicResultEvent.OnClickShare -> {
-                        val shareIntent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_STREAM,event.mosaicImage.toUri())
-                            type = SHARE_TYPE
-                        }
-
-                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_text)))
-                    }
+                    is MosaicResultEvent.OnClickShare -> { shareImage(event.mosaicImage) }
                 }
             }
         }
+    }
+
+    private fun shareImage(mosaicImagePath: String) {
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = SHARE_TYPE
+
+            if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P &&
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+            ) {
+                val contentUri = FileProvider.getUriForFile(
+                    this@MosaicResultActivity,
+                    "${packageName}.provider",
+                    File(URI(mosaicImagePath).path)
+                )
+                putExtra(Intent.EXTRA_STREAM, contentUri)
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            } else {
+                putExtra(Intent.EXTRA_STREAM, mosaicImagePath.toUri())
+            }
+        }
+
+        startActivity(Intent.createChooser(shareIntent, getString(R.string.share_text)))
     }
 
     private fun initClickListeners() {
