@@ -121,7 +121,7 @@ class MainActivity :
                     MainEvent.NavigateToMosaicResult -> {
                         val mosaicImageUri = saveImage(bitmap = binding.ivImage.toBitmap()).toString()
                         startActivityWithAnimation<MosaicResultActivity>(
-                            intentBuilder = { putExtra(ResultImageKey, mosaicImageUri)}
+                            intentBuilder = { putExtra(ResultImageKey, mosaicImageUri) }
                         )
                         finish()
                     }
