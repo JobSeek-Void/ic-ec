@@ -1,13 +1,12 @@
 package team.jsv.icec.ui.camera
 
-import android.content.Intent
-import android.util.Log
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseFragment
+import team.jsv.icec.base.startActivityWithAnimation
 import team.jsv.icec.ui.main.MainActivity
 import team.jsv.icec.util.ConnenctState
 import team.jsv.icec.util.Extras.ImagePath
@@ -53,11 +52,10 @@ class CameraResultFragment :
                     requireActivity().run {
                         val imageUri = saveImage(bitmap = bitmapImage)
                         val imagePath = getPathFromUri(uri = imageUri)
-                        val intent = Intent(this, MainActivity::class.java).apply {
-                            putExtra(ImagePath, imagePath)
-                        }
-                        startActivity(intent)
-                        finish()
+                        startActivityWithAnimation<MainActivity>(
+                            intentBuilder = { putExtra(ImagePath, imagePath) },
+                            withFinish = true
+                        )
                     }
                 }
             }
