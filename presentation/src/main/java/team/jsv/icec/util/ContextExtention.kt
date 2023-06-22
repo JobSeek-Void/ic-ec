@@ -1,5 +1,6 @@
 package team.jsv.icec.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -55,4 +56,20 @@ fun Context.getPathFromUri(uri: Uri): String? {
         val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         if (cursor.moveToFirst()) cursor.getString(columnIndex) else null
     }
+}
+
+@SuppressLint("InternalInsetResource", "DiscouragedApi")
+fun Context.statusBarHeight(): Int {
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    return if (resourceId > 0) resources.getDimensionPixelSize(resourceId)
+    else 0
+}
+
+@SuppressLint("InternalInsetResource", "DiscouragedApi")
+fun Context.navigationHeight(): Int {
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (resourceId > 0) resources.getDimensionPixelSize(resourceId)
+    else 0
+}
+
 }
