@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import team.jsv.icec.ui.main.mosaic.result.MosaicResultActivity
 import team.jsv.presentation.R
@@ -72,4 +73,6 @@ fun Context.navigationHeight(): Int {
     else 0
 }
 
+fun Context.getCustomTypefaceSpan(font: Int): CustomTypefaceSpan? {
+    return ResourcesCompat.getFont(this, font)?.let { CustomTypefaceSpan("", it) }
 }
