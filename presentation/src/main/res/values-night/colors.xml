@@ -20,8 +20,6 @@
     <color name="transparent">#00000000</color>
 
     <!-- System Theme Color -->
-    <color name="WindowBackGroundColor">#121212</color>
-    <color name="StatusBarColor">#121212</color>
     <color name="SystemColor">#121212</color>
     <!-- Mosaic Button -->
     <color name="MosaicButtonColor">#CB1E1E1E</color>

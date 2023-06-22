@@ -3,12 +3,19 @@
 
     <!-- ICEC.ActivityTheme -->
     <style name="ICECTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@color/WindowBackGroundColor</item>
-        <item name="android:statusBarColor">@color/StatusBarColor</item>
+        <item name="android:windowBackground">@color/SystemColor</item>
+        <item name="android:statusBarColor">@color/SystemColor</item>
+        <item name="android:navigationBarColor">@color/SystemColor</item>
     </style>
 
     <style name="ICECCameraTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
+    </style>
+
+    <style name="ICECSplashTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:enforceNavigationBarContrast" tools:targetApi="q">false</item>
     </style>
 
 </resources>
