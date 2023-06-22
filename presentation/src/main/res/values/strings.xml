@@ -27,5 +27,6 @@
     <!-- MosaicResultActivity.kt -->
     <string name="snackbar_text">저장이 완료되었습니다~!</string>
     <string name="save_done">저장 완료</string>
+    <string name="rec_text">REC</string>
 
 </resources>
