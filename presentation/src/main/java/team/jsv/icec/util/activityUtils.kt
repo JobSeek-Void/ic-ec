@@ -7,8 +7,11 @@ import android.os.Build
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowInsets
+import android.view.WindowInsetsController
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.view.WindowCompat
 import com.google.android.material.snackbar.Snackbar
 import team.jsv.presentation.R
 
@@ -77,4 +80,18 @@ private fun View.initSnackBarSetting(snackBar: Snackbar) {
 private fun setSnackBarOption(snackBar: Snackbar, textColor: Int, backgroundColor: Int) {
     snackBar.setTextColor(textColor)
     snackBar.setBackgroundTint(backgroundColor)
+}
+
+fun Activity.setSystemUITransparent() {
+    window.apply {
+        setFlags(
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
+            WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+        )
+    }
+    if(Build.VERSION.SDK_INT == Build.VERSION_CODES.R) {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+    }
+}
+
 }
