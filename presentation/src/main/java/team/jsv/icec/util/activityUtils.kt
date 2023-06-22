@@ -94,4 +94,16 @@ fun Activity.setSystemUITransparent() {
     }
 }
 
+fun Activity.showSystemUI() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        window.insetsController?.show(
+            WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
+    } else {
+        @Suppress("DEPRECATION")
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
+    }
+}
+
 }
