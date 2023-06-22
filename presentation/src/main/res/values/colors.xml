@@ -22,6 +22,7 @@
     <!-- System Theme Color -->
     <color name="WindowBackGroundColor">#FFFFFFFF</color>
     <color name="StatusBarColor">#121212</color>
+    <color name="SystemColor">#FFFFFFFF</color>
     <!-- Mosaic Button -->
     <color name="MosaicButtonColor">#FFFA9A85</color>
     <!-- Edit Button -->
