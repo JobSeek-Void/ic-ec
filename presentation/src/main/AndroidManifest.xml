@@ -2,7 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="team.jsv.icec">
 
-    <application android:theme="@style/ICECTheme">
+    <application>
+
+        <activity
+            android:name="team.jsv.icec.ui.SplashActivity"
+            android:exported="true"
+            android:theme="@style/ICECSplashTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity
             android:name="team.jsv.icec.ui.camera.CameraActivity"
@@ -20,21 +30,15 @@
             android:name="team.jsv.icec.ui.main.mosaic.result.MosaicResultActivity"
             android:exported="false"
             android:theme="@style/ICECTheme">
-
         </activity>
 
         <activity
             android:name="team.jsv.icec.ui.main.start.StartActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/ICECTheme">
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
 
+        <!-- Set Provider -->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="team.jsv.icec.provider"
