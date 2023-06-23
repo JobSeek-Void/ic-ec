@@ -16,6 +16,7 @@ import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.startActivityWithAnimation
 import team.jsv.icec.ui.main.start.StartActivity
+import team.jsv.icec.util.dp
 import team.jsv.icec.util.getCustomTypefaceSpan
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.hideSystemUI
@@ -41,8 +42,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
             override fun onGlobalLayout() {
                 binding.ivSplashLogo.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-                val endX = binding.ivSplashLogo.x + binding.ivSplashLogo.width + 4
-                val endY = binding.ivSplashLogo.y - binding.ivRecIndicator.height - 4
+                val endX = binding.ivSplashLogo.x + binding.ivSplashLogo.width + REC_INDICATOR_LEFT_MARGIN.dp
+                val endY = binding.ivSplashLogo.y - binding.ivRecIndicator.height - REC_INDICATOR_BOTTOM_MARGIN.dp
                 val xAnimator = ObjectAnimator.ofFloat(binding.ivRecIndicator, "x", endX)
                 val yAnimator = ObjectAnimator.ofFloat(binding.ivRecIndicator, "y", endY)
                 val animatorSet = AnimatorSet()
@@ -105,6 +106,8 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
     }
 
     companion object {
+        const val REC_INDICATOR_LEFT_MARGIN = 2
+        const val REC_INDICATOR_BOTTOM_MARGIN = 2
         const val REC_INDICATOR_START_DELAY = 2000L
         const val REC_INDICATOR_DURATION = 500L
         const val EXPLANATION_TEXT_DURATION = 500L
