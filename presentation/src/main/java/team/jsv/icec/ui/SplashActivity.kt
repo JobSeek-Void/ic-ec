@@ -107,7 +107,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
     }
 
     companion object {
-        const val REC_INDICATOR_START_DELAY = 3000L
+        const val REC_INDICATOR_START_DELAY = 2000L
         const val REC_INDICATOR_DURATION = 500L
         const val EXPLANATION_TEXT_DURATION = 500L
         const val EXPLANATION_TEXT_DELAY = 500L
