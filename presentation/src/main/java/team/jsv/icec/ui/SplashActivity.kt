@@ -53,9 +53,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
                     duration = REC_INDICATOR_DURATION
                     doOnStart { onTransitionStart() }
                     doOnEnd { onTransitionEnd() }
-                }
-
-                animatorSet.start()
+                }.start()
             }
         })
     }
