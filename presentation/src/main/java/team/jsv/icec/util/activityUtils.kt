@@ -43,13 +43,8 @@ fun Activity.hideSystemUI(view : View) {
 }
 
 private fun setBottomMargin(view : View, context: Context) {
-    val layoutParams =
-        view.layoutParams as ViewGroup.MarginLayoutParams
-    layoutParams.setMargins(
-        0, 0, 0,
-        SettingViewUtil.getNavigationBarHeightDP(context)
-    )
-
+    val layoutParams = view.layoutParams as ViewGroup.MarginLayoutParams
+    layoutParams.setMargins(0, 0, 0, context.getNavigationHeightDIP().toInt())
     view.layoutParams = layoutParams
 }
 

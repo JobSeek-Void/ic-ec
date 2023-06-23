@@ -60,17 +60,17 @@ fun Context.getPathFromUri(uri: Uri): String? {
 }
 
 @SuppressLint("InternalInsetResource", "DiscouragedApi")
-fun Context.statusBarHeight(): Int {
+fun Context.getStatusBarHeightDIP(): Float {
     val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
-    return if (resourceId > 0) resources.getDimensionPixelSize(resourceId)
-    else 0
+    return if (resourceId > 0) resources.getDimension(resourceId)
+    else 0F
 }
 
 @SuppressLint("InternalInsetResource", "DiscouragedApi")
-fun Context.navigationHeight(): Int {
+fun Context.getNavigationHeightDIP(): Float {
     val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
-    return if (resourceId > 0) resources.getDimensionPixelSize(resourceId)
-    else 0
+    return if (resourceId > 0) resources.getDimension(resourceId)
+    else 0F
 }
 
 fun Context.getCustomTypefaceSpan(font: Int): CustomTypefaceSpan? {
