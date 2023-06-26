@@ -14,12 +14,14 @@ import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginBottom
 import androidx.fragment.app.activityViewModels
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.util.ConnenctState
 import team.jsv.icec.util.SettingViewUtil
 import team.jsv.icec.util.deviceHeight
 import team.jsv.icec.util.deviceWidth
+import team.jsv.icec.util.getNavigationHeightDIP
 import team.jsv.icec.util.getStatusBarHeightDIP
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentCameraBinding
@@ -40,6 +42,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
 
     override fun initView() {
         setReverseBtMargin()
+        setCaptureBtMargin()
         observeRatio()
         observeCameraSelector()
     }
@@ -49,6 +52,15 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         context?.getStatusBarHeightDIP()?.let { statusBarHeight ->
             layoutParams.setMargins(0, statusBarHeight.toInt(), 0, 0) }
         binding.ivReverse.layoutParams = layoutParams
+    }
+
+    private fun setCaptureBtMargin() {
+        val defaultBottomMargin = binding.btCapture.marginBottom
+        val layoutParams = binding.btCapture.layoutParams as ViewGroup.MarginLayoutParams
+        context?.getNavigationHeightDIP()?.let { navigationBarHeight ->
+            layoutParams.setMargins(
+                0, 0, 0, navigationBarHeight.toInt() + defaultBottomMargin) }
+        binding.btCapture.layoutParams = layoutParams
     }
 
     private fun observeCameraSelector() {
