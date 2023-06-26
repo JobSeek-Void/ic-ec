@@ -20,6 +20,7 @@ import team.jsv.icec.util.dp
 import team.jsv.icec.util.getCustomTypefaceSpan
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.hideSystemUI
+import team.jsv.icec.util.setBehaviorSystemUI
 import team.jsv.icec.util.setSystemUITransparent
 import team.jsv.icec.util.showSystemUI
 import team.jsv.icec.util.visible
@@ -31,6 +32,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setBehaviorSystemUI()
         setSystemUITransparent()
         hideSystemUI()
         setSplashScreen()
