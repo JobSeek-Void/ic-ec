@@ -14,19 +14,15 @@ fun Context.showToast(msg: String) {
     Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }
 
-/* root View 를 제공해야합니다 */
-fun Activity.hideSystemUI(view : View) {
+fun Activity.setFullScreen() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-        window.setDecorFitsSystemWindows(false)
-        window.insetsController?.hide(WindowInsets.Type.statusBars())
-        setBottomMargin(view, this)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
     } else {
         @Suppress("DEPRECATION")
-        // API 30 이상에서는 deprecated 됨 @jiiiiiyoon
-        window.decorView.systemUiVisibility =
-            (View.SYSTEM_UI_FLAG_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    or View.SYSTEM_UI_FLAG_LAYOUT_STABLE)
+        window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
+            (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN)
     }
 }
 
