@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/parent_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/view_frame_line"
+            layout="@layout/view_frame_line" />
+
+        <ImageView
+            android:id="@+id/iv_splash_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_logo_180_54"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_explanation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_splash_logo"
+            app:layout_constraintStart_toStartOf="@+id/iv_splash_logo"
+            app:layout_constraintTop_toBottomOf="@+id/iv_splash_logo"
+            tools:fontFamily="@font/pretendard_medium"
+            tools:text="Easy and Detailed Edit \nby Auto Mosaic" />
+
+        <ImageView
+            android:id="@+id/iv_rec_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="53dp"
+            android:src="@drawable/ic_rec_indicator_8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_rec_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="@string/rec_text"
+            android:textColor="@color/gray5"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_rec_indicator"
+            app:layout_constraintStart_toEndOf="@+id/iv_rec_indicator"
+            app:layout_constraintTop_toTopOf="@+id/iv_rec_indicator" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

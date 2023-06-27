@@ -1,7 +1,5 @@
 package team.jsv.icec.util
 
-import android.annotation.SuppressLint
-import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -16,11 +14,6 @@ enum class ConnenctState(val id: Int) {
 }
 
 object SettingViewUtil {
-    private const val RESOURCE_STATUS_NAME = "status_bar_height"
-    private const val RESOURCE_NAVIGATION_NAME = "navigation_bar_height"
-    private const val RESOURCE_DEF_TYPE = "dimen"
-    private const val RESOURCE_DEF_PACKAGE = "android"
-
     fun resizeView(
         layoutParams: ViewGroup.LayoutParams,
         ratioValue: Int,
@@ -114,36 +107,4 @@ object SettingViewUtil {
         }
     }
 
-    @SuppressLint("InternalInsetResource", "DiscouragedApi")
-    fun getStatusBarHeightDP(context: Context): Int {
-        var result = 0
-
-        val resourceId: Int =
-            context.resources.getIdentifier(
-                RESOURCE_STATUS_NAME,
-                RESOURCE_DEF_TYPE,
-                RESOURCE_DEF_PACKAGE
-            )
-
-        if (resourceId > 0) {
-            result = context.resources.getDimension(resourceId).toInt()
-        }
-
-        return result
-    }
-
-    @SuppressLint("InternalInsetResource", "DiscouragedApi")
-    fun getNavigationBarHeightDP(context: Context): Int {
-        var result = 0
-        val resourceId = context.resources.getIdentifier(
-            RESOURCE_NAVIGATION_NAME,
-            RESOURCE_DEF_TYPE,
-            RESOURCE_DEF_PACKAGE
-        )
-        if (resourceId > 0) {
-            result = context.resources.getDimension(resourceId).toInt()
-        }
-
-        return result
-    }
 }

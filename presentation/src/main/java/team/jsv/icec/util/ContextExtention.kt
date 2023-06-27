@@ -1,11 +1,14 @@
 package team.jsv.icec.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.widget.Toast
 import androidx.core.content.FileProvider
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import team.jsv.icec.ui.main.mosaic.result.MosaicResultActivity
 import team.jsv.presentation.R
@@ -55,4 +58,26 @@ fun Context.getPathFromUri(uri: Uri): String? {
         val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
         if (cursor.moveToFirst()) cursor.getString(columnIndex) else null
     }
+}
+
+@SuppressLint("InternalInsetResource", "DiscouragedApi")
+fun Context.getStatusBarHeightDIP(): Float {
+    val resourceId = resources.getIdentifier("status_bar_height", "dimen", "android")
+    return if (resourceId > 0) resources.getDimension(resourceId)
+    else 0F
+}
+
+@SuppressLint("InternalInsetResource", "DiscouragedApi")
+fun Context.getNavigationHeightDIP(): Float {
+    val resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android")
+    return if (resourceId > 0) resources.getDimension(resourceId)
+    else 0F
+}
+
+fun Context.getCustomTypefaceSpan(font: Int): CustomTypefaceSpan? {
+    return ResourcesCompat.getFont(this, font)?.let { CustomTypefaceSpan("", it) }
+}
+
+fun Context.showToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }

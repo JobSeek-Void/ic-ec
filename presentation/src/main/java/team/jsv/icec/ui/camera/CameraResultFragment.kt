@@ -14,6 +14,7 @@ import team.jsv.icec.util.SettingViewUtil
 import team.jsv.icec.util.deviceHeight
 import team.jsv.icec.util.deviceWidth
 import team.jsv.icec.util.getPathFromUri
+import team.jsv.icec.util.getStatusBarHeightDIP
 import team.jsv.icec.util.saveImage
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentCameraResultBinding
@@ -37,7 +38,8 @@ class CameraResultFragment :
 
     private fun setBackBtMargin() {
         val layoutParams = binding.ivBack.layoutParams as ViewGroup.MarginLayoutParams
-        layoutParams.setMargins(0, SettingViewUtil.getStatusBarHeightDP(requireContext()), 0, 0)
+        context?.getStatusBarHeightDIP()?.let { statusBarHeight ->
+            layoutParams.setMargins(0, statusBarHeight.toInt(), 0, 0) }
         binding.ivBack.layoutParams = layoutParams
     }
 
