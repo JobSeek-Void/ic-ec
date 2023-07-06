@@ -23,13 +23,31 @@ import team.jsv.presentation.databinding.ActivityStartBinding
 class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start) {
 
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
+    private val imagePaths: MutableList<String> = mutableListOf()
+    private val adapter = ImageAdapter(this, imagePaths)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         requestPermissions(PermissionUtil.getPermissions())
         setImagePickerLauncher()
+        initialize()
+    }
 
+    override fun onResume() {
+        super.onResume()
+        initClickEvent()
+        refreshRecyclerView()
+    }
+
+    private fun setupRecyclerView() {
+        binding.rvRecentImage.layoutManager = GridLayoutManager(this, 3)
+        binding.rvRecentImage.adapter = adapter
+        binding.rvRecentImage.addItemDecoration(
+            GridSpacingItemDecoration(spanCount = 3, spacing = 16f.fromDpToPx())
+        )
+    }
+
+    private fun fetchRecentImages() {
         val projection =
             arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_MODIFIED)
         val cursor = contentResolver.query(
@@ -40,10 +58,10 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
             "${MediaStore.Images.Media.DATE_MODIFIED} DESC"
         )
 
-        val imagePaths = mutableListOf<String>()
         cursor?.use {
             val dataIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             var count = 0
+            imagePaths.clear()
 
             while (it.moveToNext() && count < 30) {
                 val imagePath = it.getString(dataIndex)
@@ -53,23 +71,21 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
         }
 
         cursor?.close()
+    }
 
-        binding.rvRecentImage.layoutManager = GridLayoutManager(this, 3)
-        val adapter = ImageAdapter(this, imagePaths)
-        binding.rvRecentImage.adapter = adapter
-        binding.rvRecentImage.addItemDecoration(
-            GridSpacingItemDecoration(spanCount = 3, spacing = 16f.fromDpToPx())
-        )
+    private fun refreshRecyclerView() {
+        fetchRecentImages()
+        adapter.notifyDataSetChanged()
+    }
+
+    private fun initialize() {
+        setupRecyclerView()
+        refreshRecyclerView()
     }
 
     private fun Float.fromDpToPx(): Int =
         (this * Resources.getSystem().displayMetrics.density).toInt()
 
-    override fun onResume() {
-        super.onResume()
-
-        initClickEvent()
-    }
 
     private fun setImagePickerLauncher() {
         imagePickerLauncher =
@@ -99,5 +115,4 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         imagePickerLauncher.launch(galleryIntent)
     }
-
 }

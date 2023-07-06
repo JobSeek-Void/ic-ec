@@ -31,7 +31,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setBehaviorSystemUI()
         setSystemUITransparent()
         hideSystemUI()
@@ -44,8 +43,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
             override fun onGlobalLayout() {
                 binding.ivSplashLogo.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-                val endX = binding.ivSplashLogo.x + binding.ivSplashLogo.width + REC_INDICATOR_LEFT_MARGIN.dp
-                val endY = binding.ivSplashLogo.y - binding.ivRecIndicator.height - REC_INDICATOR_BOTTOM_MARGIN.dp
+                val endX =
+                    binding.ivSplashLogo.x + binding.ivSplashLogo.width + REC_INDICATOR_LEFT_MARGIN.dp
+                val endY =
+                    binding.ivSplashLogo.y - binding.ivRecIndicator.height - REC_INDICATOR_BOTTOM_MARGIN.dp
                 val xAnimator = ObjectAnimator.ofFloat(binding.ivRecIndicator, "x", endX)
                 val yAnimator = ObjectAnimator.ofFloat(binding.ivRecIndicator, "y", endY)
                 val animatorSet = AnimatorSet()
@@ -62,10 +63,12 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
     }
 
     private fun onTransitionStart() {
-        val transitionDrawable = TransitionDrawable(arrayOf(
-            ContextCompat.getDrawable(this@SplashActivity, R.color.black),
-            ContextCompat.getDrawable(this@SplashActivity, R.drawable.bg_splash_image)
-        ))
+        val transitionDrawable = TransitionDrawable(
+            arrayOf(
+                ContextCompat.getDrawable(this@SplashActivity, R.color.black),
+                ContextCompat.getDrawable(this@SplashActivity, R.drawable.bg_splash_image)
+            )
+        )
 
         binding.root.background = transitionDrawable
 
@@ -102,8 +105,18 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
 
     private fun getFormattedExplanationText(): SpannableString {
         return SpannableString(EXPLANATION_TEXT).apply {
-            setSpan(getCustomTypefaceSpan(R.font.pretendard_medium), 0, 24, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(getCustomTypefaceSpan(R.font.pretendard_bold), 26, 37, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(
+                getCustomTypefaceSpan(R.font.pretendard_medium),
+                0,
+                24,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            setSpan(
+                getCustomTypefaceSpan(R.font.pretendard_bold),
+                26,
+                37,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
     }
 
