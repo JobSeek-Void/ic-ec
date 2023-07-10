@@ -10,6 +10,7 @@ import team.jsv.domain.model.MosaicType
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
 import team.jsv.icec.ui.main.MainViewModel
+import team.jsv.icec.ui.main.mosaic.detect.DetectFaceFragment
 import team.jsv.icec.ui.main.mosaic.detect.strokeFor
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.FragmentMosaicFaceBinding
@@ -41,6 +42,12 @@ class MosaicFaceFragment : BaseFragment<FragmentMosaicFaceBinding>(R.layout.frag
             viewModel.mosaicFaceRefresh()
         }
         binding.sliderMosaicFigure.apply {
+            value = SLIDER_VALUE
+            valueFrom = SLIDER_FROM
+            valueTo = SLIDER_VALUE_TO
+            stepSize = SLIDER_STEP_SIZE
+            haloRadius = SLIDER_HALO_RADIUS
+
             addOnChangeListener(Slider.OnChangeListener { _, value, _ ->
                 viewModel.setPixelSize(value)
             })
@@ -84,6 +91,14 @@ class MosaicFaceFragment : BaseFragment<FragmentMosaicFaceBinding>(R.layout.frag
                 }
             }
         }
+    }
+
+    companion object {
+        private const val SLIDER_VALUE = 30f
+        private const val SLIDER_FROM = 10f
+        private const val SLIDER_VALUE_TO = 90f
+        private const val SLIDER_STEP_SIZE = 10f
+        private const val SLIDER_HALO_RADIUS = 0
     }
 
 }
