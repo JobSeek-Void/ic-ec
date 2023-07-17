@@ -8,11 +8,13 @@ import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.startActivityWithAnimation
 import team.jsv.icec.ui.camera.CameraActivity
 import team.jsv.icec.ui.main.MainActivity
+import team.jsv.icec.ui.main.start.adapter.RecentImageAdapter
 import team.jsv.icec.util.Extras
 import team.jsv.icec.util.PermissionUtil
 import team.jsv.icec.util.getPathFromUri
@@ -22,32 +24,37 @@ import team.jsv.presentation.databinding.ActivityStartBinding
 
 class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start) {
 
+    private val viewModel: StartViewModel by viewModels()
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
-    private val imagePaths: MutableList<String> = mutableListOf()
-    private val adapter = ImageAdapter(this, imagePaths)
+    private val imageAdapter by lazy {
+        RecentImageAdapter()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestPermissions(PermissionUtil.getPermissions())
         setImagePickerLauncher()
-        initialize()
+        initRecyclerView()
     }
 
     override fun onResume() {
         super.onResume()
         initClickEvent()
-        refreshRecyclerView()
+        updateImageList(fetchRecentImages())
     }
 
-    private fun setupRecyclerView() {
-        binding.rvRecentImage.layoutManager = GridLayoutManager(this, 3)
-        binding.rvRecentImage.adapter = adapter
-        binding.rvRecentImage.addItemDecoration(
-            GridSpacingItemDecoration(spanCount = 3, spacing = 16f.fromDpToPx())
-        )
+    private fun initRecyclerView() {
+        binding.rvRecentImage.apply {
+            layoutManager = GridLayoutManager(context, 3)
+            adapter = imageAdapter
+            itemAnimator = null
+            addItemDecoration(GridSpacingItemDecoration(spanCount = 3, spacing = 16f.fromDpToPx()))
+        }
     }
 
-    private fun fetchRecentImages() {
+    private fun fetchRecentImages(): List<String> {
+        val imagePaths : MutableList<String> = mutableListOf()
+
         val projection =
             arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_MODIFIED)
         val cursor = contentResolver.query(
@@ -71,16 +78,13 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
         }
 
         cursor?.close()
+
+        return imagePaths
     }
 
-    private fun refreshRecyclerView() {
-        fetchRecentImages()
-        adapter.notifyDataSetChanged()
-    }
-
-    private fun initialize() {
-        setupRecyclerView()
-        refreshRecyclerView()
+    private fun updateImageList(imagePaths: List<String>) {
+        viewModel.setImagePaths(imagePaths)
+        imageAdapter.submitList(viewModel.imagePaths.value)
     }
 
     private fun Float.fromDpToPx(): Int =
