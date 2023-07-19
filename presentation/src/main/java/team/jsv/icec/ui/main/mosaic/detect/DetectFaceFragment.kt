@@ -36,6 +36,13 @@ class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.frag
         initRecyclerView()
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        initClickListener()
+        initTouchListener()
+    }
+
     private fun bind() {
         binding.vm = viewModel
 
@@ -51,13 +58,6 @@ class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.frag
             valueTo = sliderValueTo
             stepSize = sliderStepSize
             haloRadius = sliderHaloRadius
-
-            addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-                override fun onStartTrackingTouch(slider: Slider) {}
-                override fun onStopTrackingTouch(slider: Slider) {
-                    viewModel.setDetectStrength(value)
-                }
-            })
         }
     }
 
@@ -96,6 +96,22 @@ class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.frag
                 }
             }
         }
+    }
+
+    private fun initClickListener() {
+        binding.ivRefresh.setOnClickListener {
+            initDetectSlider()
+            viewModel.setDetectStrength(sliderValue)
+        }
+    }
+
+    private fun initTouchListener() {
+        binding.sdDetectFace.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {}
+            override fun onStopTrackingTouch(slider: Slider) {
+                viewModel.setDetectStrength(slider.value)
+            }
+        })
     }
 
     companion object {
