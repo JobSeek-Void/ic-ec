@@ -29,7 +29,6 @@ class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.frag
         super.onViewCreated(view, savedInstanceState)
 
         bind()
-        initView()
     }
 
     override fun initView() {
