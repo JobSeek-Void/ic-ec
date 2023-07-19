@@ -171,6 +171,7 @@ internal class MainViewModel @Inject constructor(
     private fun getFaceList() {
         viewModelScope.launch {
             setDetectFaceLoading(true)
+            setOnClearDetectedFaceIndex()
             with(_detectFaceState.value) {
                 getDetectedFaceUseCase(
                     currentTime = currentTime,
@@ -180,7 +181,6 @@ internal class MainViewModel @Inject constructor(
                     data.toFaceViewItem().also { faceViewItem ->
                         setFaceViewItem(faceViewItem)
                     }
-                    setOnClearDetectedFaceIndex()
                 }.onFailure {
                     handleException(it)
                 }.also { setDetectFaceLoading(false) }
