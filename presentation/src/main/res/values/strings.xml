@@ -23,6 +23,7 @@
     <!-- StartActivity.kt -->
     <string name="gallery_text">Gallery</string>
     <string name="camera_text">Camera</string>
+    <string name="recent_image">최근 항목</string>
 
     <!-- MosaicResultActivity.kt -->
     <string name="snackbar_text">저장이 완료되었습니다~!</string>
