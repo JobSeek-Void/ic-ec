@@ -97,7 +97,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
             visible()
         }
 
-        ObjectAnimator.ofFloat(binding.tvExplanation, "alpha", 1f).apply {
+        ObjectAnimator.ofFloat(binding.tvExplanation, OBJECT_ANIMATOR_PROPERTY_NAME, 1f).apply {
             duration = EXPLANATION_TEXT_DURATION
             start()
         }
@@ -125,6 +125,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
         const val REC_INDICATOR_BOTTOM_MARGIN = 2
         const val REC_INDICATOR_START_DELAY = 2000L
         const val REC_INDICATOR_DURATION = 500L
+        const val OBJECT_ANIMATOR_PROPERTY_NAME = "alpha"
         const val EXPLANATION_TEXT_DURATION = 500L
         const val EXPLANATION_TEXT_DELAY = 500L
         const val TRANSITION_BACKGROUND_DURATION = 1000
