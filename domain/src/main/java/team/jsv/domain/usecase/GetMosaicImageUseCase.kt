@@ -23,7 +23,7 @@ class GetMosaicImageUseCase @Inject constructor(
             )
             MosaicType.Blur -> repository.getBlurImage(
                 currentTime = currentTime,
-                pixelSize = pixelSize,
+                pixelSize = pixelSize / 10,
                 originalImage = originalImage,
                 coordinates = coordinates
             )
