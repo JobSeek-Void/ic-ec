@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
@@ -78,7 +79,7 @@ class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.frag
     private fun collectSelectedItemUpdates() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.detectedFaceIndexes.collect { selectedIndexList ->
+                viewModel.detectedFaceIndexes.collectLatest { selectedIndexList ->
                     detectedFaceAdapter.updateSelection(selectedIndexList)
                     binding.btGroupSelect.changeBackground(selectedIndexList.isNotEmpty())
                 }
