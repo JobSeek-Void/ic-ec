@@ -108,7 +108,7 @@ class MainActivity :
 
     private fun handleEvent() {
         lifecycleScope.launch{
-            viewModel.mainEvent.collect{ mainEvent ->
+            viewModel.mainEvent.flowWithLifecycle(lifecycle).collectLatest { mainEvent ->
                 when (mainEvent) {
                     MainEvent.Finish -> {
                         finish()
