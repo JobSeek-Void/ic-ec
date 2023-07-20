@@ -16,13 +16,13 @@ import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.startActivityWithAnimation
 import team.jsv.icec.ui.main.start.StartActivity
-import team.jsv.icec.util.dp
 import team.jsv.icec.util.getCustomTypefaceSpan
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.hideSystemUI
 import team.jsv.icec.util.setBehaviorSystemUI
 import team.jsv.icec.util.setSystemUITransparent
 import team.jsv.icec.util.showSystemUI
+import team.jsv.icec.util.toPx
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivitySplashBinding
@@ -31,7 +31,6 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setBehaviorSystemUI()
         setSystemUITransparent()
         hideSystemUI()
@@ -44,8 +43,10 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
             override fun onGlobalLayout() {
                 binding.ivSplashLogo.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
-                val endX = binding.ivSplashLogo.x + binding.ivSplashLogo.width + REC_INDICATOR_LEFT_MARGIN.dp
-                val endY = binding.ivSplashLogo.y - binding.ivRecIndicator.height - REC_INDICATOR_BOTTOM_MARGIN.dp
+                val endX =
+                    binding.ivSplashLogo.x + binding.ivSplashLogo.width + REC_INDICATOR_LEFT_MARGIN.toPx
+                val endY =
+                    binding.ivSplashLogo.y - binding.ivRecIndicator.height - REC_INDICATOR_BOTTOM_MARGIN.toPx
                 val xAnimator = ObjectAnimator.ofFloat(binding.ivRecIndicator, "x", endX)
                 val yAnimator = ObjectAnimator.ofFloat(binding.ivRecIndicator, "y", endY)
                 val animatorSet = AnimatorSet()
@@ -62,10 +63,12 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
     }
 
     private fun onTransitionStart() {
-        val transitionDrawable = TransitionDrawable(arrayOf(
-            ContextCompat.getDrawable(this@SplashActivity, R.color.black),
-            ContextCompat.getDrawable(this@SplashActivity, R.drawable.bg_splash_image)
-        ))
+        val transitionDrawable = TransitionDrawable(
+            arrayOf(
+                ContextCompat.getDrawable(this@SplashActivity, R.color.black),
+                ContextCompat.getDrawable(this@SplashActivity, R.drawable.bg_splash_image)
+            )
+        )
 
         binding.root.background = transitionDrawable
 
@@ -94,7 +97,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
             visible()
         }
 
-        ObjectAnimator.ofFloat(binding.tvExplanation, "alpha", 1f).apply {
+        ObjectAnimator.ofFloat(binding.tvExplanation, OBJECT_ANIMATOR_PROPERTY_NAME, 1f).apply {
             duration = EXPLANATION_TEXT_DURATION
             start()
         }
@@ -102,8 +105,18 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
 
     private fun getFormattedExplanationText(): SpannableString {
         return SpannableString(EXPLANATION_TEXT).apply {
-            setSpan(getCustomTypefaceSpan(R.font.pretendard_medium), 0, 24, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-            setSpan(getCustomTypefaceSpan(R.font.pretendard_bold), 26, 37, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+            setSpan(
+                getCustomTypefaceSpan(R.font.pretendard_medium),
+                0,
+                24,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            setSpan(
+                getCustomTypefaceSpan(R.font.pretendard_bold),
+                26,
+                37,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
     }
 
@@ -112,6 +125,7 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
         const val REC_INDICATOR_BOTTOM_MARGIN = 2
         const val REC_INDICATOR_START_DELAY = 2000L
         const val REC_INDICATOR_DURATION = 500L
+        const val OBJECT_ANIMATOR_PROPERTY_NAME = "alpha"
         const val EXPLANATION_TEXT_DURATION = 500L
         const val EXPLANATION_TEXT_DELAY = 500L
         const val TRANSITION_BACKGROUND_DURATION = 1000
