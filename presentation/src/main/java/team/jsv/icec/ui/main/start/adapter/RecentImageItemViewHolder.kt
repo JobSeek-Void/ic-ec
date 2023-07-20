@@ -6,12 +6,16 @@ import team.jsv.presentation.databinding.RecentItemLayoutBinding
 
 class RecentImageItemViewHolder(
     private val binding: RecentItemLayoutBinding,
+    private val onClick: (String) -> Unit
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: String) {
         binding.ivItem.apply {
             Glide.with(binding.root).load(item).into(this)
 
+            setOnClickListener {
+                onClick(item)
+            }
         }
     }
 }

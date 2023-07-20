@@ -2,8 +2,6 @@ package team.jsv.icec.ui.main.start
 
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Resources
-import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
@@ -26,8 +24,15 @@ import team.jsv.presentation.databinding.ActivityStartBinding
 class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start) {
     private val viewModel: StartViewModel by viewModels()
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
-    private val imageAdapter by lazy {
-        RecentImageAdapter()
+    private val recentImageAdapter by lazy {
+        RecentImageAdapter(
+            onClick = { imagePath ->
+                startActivityWithAnimation<MainActivity>(intentBuilder = {
+                    putExtra(Extras.ImagePath, imagePath)
+                })
+
+            }
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +52,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
     private fun initRecentImageRecyclerView() {
         binding.rvRecentImage.apply {
             layoutManager = GridLayoutManager(context, 3)
-            adapter = imageAdapter
+            adapter = recentImageAdapter
             itemAnimator = null
 
             addItemDecoration(
@@ -91,7 +96,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
 
     private fun updateImageList(imagePaths: List<String>) {
         viewModel.setImagePaths(imagePaths)
-        imageAdapter.submitList(viewModel.imagePaths.value)
+        recentImageAdapter.submitList(viewModel.imagePaths.value)
     }
 
     private fun setImagePickerLauncher() {
