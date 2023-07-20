@@ -71,7 +71,10 @@ internal class MainViewModel @Inject constructor(
 
             ScreenStep.MosaicFace -> {
                 backPress()
-                setScreen(ScreenStep.SelectFace)
+                viewModelScope.launch {
+                    setScreen(ScreenStep.SelectFace)
+                    setImageViewType(PictureState.ViewType.Original)
+                }
             }
         }
     }
@@ -111,7 +114,6 @@ internal class MainViewModel @Inject constructor(
                 screenStep = screenStep,
             )
         }
-        setImageViewType(PictureState.ViewType.Original)
     }
 
     fun setOnClickAllSelectButton() {
