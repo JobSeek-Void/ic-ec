@@ -19,6 +19,7 @@ import team.jsv.icec.util.Extras
 import team.jsv.icec.util.PermissionUtil
 import team.jsv.icec.util.getPathFromUri
 import team.jsv.icec.util.requestPermissions
+import team.jsv.icec.util.toPx
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityStartBinding
 
@@ -48,7 +49,13 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
             layoutManager = GridLayoutManager(context, 3)
             adapter = imageAdapter
             itemAnimator = null
-            addItemDecoration(GridSpacingItemDecoration(spanCount = 3, spacing = 16f.fromDpToPx()))
+
+            addItemDecoration(
+                GridSpacingItemDecoration(
+                    spanCount = SPAN_COUNT,
+                    spacing = SPACING.toPx.toInt()
+                )
+            )
         }
     }
 
@@ -118,5 +125,10 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
     private fun openGallery() {
         val galleryIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         imagePickerLauncher.launch(galleryIntent)
+    }
+
+    companion object {
+        const val SPAN_COUNT = 3
+        const val SPACING = 16f
     }
 }

@@ -16,13 +16,13 @@ import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.startActivityWithAnimation
 import team.jsv.icec.ui.main.start.StartActivity
-import team.jsv.icec.util.dp
 import team.jsv.icec.util.getCustomTypefaceSpan
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.hideSystemUI
 import team.jsv.icec.util.setBehaviorSystemUI
 import team.jsv.icec.util.setSystemUITransparent
 import team.jsv.icec.util.showSystemUI
+import team.jsv.icec.util.toPx
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivitySplashBinding
@@ -44,9 +44,9 @@ class SplashActivity : BaseActivity<ActivitySplashBinding>(R.layout.activity_spl
                 binding.ivSplashLogo.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
                 val endX =
-                    binding.ivSplashLogo.x + binding.ivSplashLogo.width + REC_INDICATOR_LEFT_MARGIN.dp
+                    binding.ivSplashLogo.x + binding.ivSplashLogo.width + REC_INDICATOR_LEFT_MARGIN.toPx
                 val endY =
-                    binding.ivSplashLogo.y - binding.ivRecIndicator.height - REC_INDICATOR_BOTTOM_MARGIN.dp
+                    binding.ivSplashLogo.y - binding.ivRecIndicator.height - REC_INDICATOR_BOTTOM_MARGIN.toPx
                 val xAnimator = ObjectAnimator.ofFloat(binding.ivRecIndicator, "x", endX)
                 val yAnimator = ObjectAnimator.ofFloat(binding.ivRecIndicator, "y", endY)
                 val animatorSet = AnimatorSet()

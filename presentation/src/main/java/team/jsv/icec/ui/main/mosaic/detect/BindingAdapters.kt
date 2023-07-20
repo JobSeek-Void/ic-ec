@@ -6,9 +6,9 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.databinding.BindingAdapter
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.imageview.ShapeableImageView
-import team.jsv.icec.util.dp
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.setStokeColor
+import team.jsv.icec.util.toPx
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 
@@ -40,7 +40,7 @@ fun ImageView.setCheckingVisible(isSelect: Boolean) {
 @BindingAdapter("strokeFor")
 fun ShapeableImageView.strokeFor(isSelect: Boolean) {
     if (isSelect) {
-        strokeWidth = 4.dp
+        strokeWidth = 4.toPx
         setStokeColor(R.color.SubColor)
     } else {
         setStokeColor(R.color.transparent)
