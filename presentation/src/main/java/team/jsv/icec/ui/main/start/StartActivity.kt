@@ -24,7 +24,6 @@ import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityStartBinding
 
 class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start) {
-
     private val viewModel: StartViewModel by viewModels()
     private lateinit var imagePickerLauncher: ActivityResultLauncher<Intent>
     private val imageAdapter by lazy {
@@ -34,17 +33,18 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestPermissions(PermissionUtil.getPermissions())
+
         setImagePickerLauncher()
-        initRecyclerView()
+        initRecentImageRecyclerView()
     }
 
     override fun onResume() {
         super.onResume()
         initClickEvent()
-        updateImageList(fetchRecentImages())
+        updateImageList(loadRecentImages())
     }
 
-    private fun initRecyclerView() {
+    private fun initRecentImageRecyclerView() {
         binding.rvRecentImage.apply {
             layoutManager = GridLayoutManager(context, 3)
             adapter = imageAdapter
@@ -59,8 +59,8 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
         }
     }
 
-    private fun fetchRecentImages(): List<String> {
-        val imagePaths : MutableList<String> = mutableListOf()
+    private fun loadRecentImages(): List<String> {
+        val imagePaths: MutableList<String> = mutableListOf()
 
         val projection =
             arrayOf(MediaStore.Images.Media.DATA, MediaStore.Images.Media.DATE_MODIFIED)
@@ -74,13 +74,13 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
 
         cursor?.use {
             val dataIndex = it.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-            var count = 0
             imagePaths.clear()
 
-            while (it.moveToNext() && count < 30) {
+            for (count in 0 until 30) {
+                if (!it.moveToNext()) break
+
                 val imagePath = it.getString(dataIndex)
                 imagePaths.add(imagePath)
-                count++
             }
         }
 
@@ -94,16 +94,12 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
         imageAdapter.submitList(viewModel.imagePaths.value)
     }
 
-    private fun Float.fromDpToPx(): Int =
-        (this * Resources.getSystem().displayMetrics.density).toInt()
-
-
     private fun setImagePickerLauncher() {
         imagePickerLauncher =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
-                    val data: Intent? = result.data
-                    val imageUri: Uri? = data?.data
+                    val data = result.data
+                    val imageUri = data?.data
                     val imagePath = imageUri?.let { getPathFromUri(it) }
 
                     startActivityWithAnimation<MainActivity>(intentBuilder = {
