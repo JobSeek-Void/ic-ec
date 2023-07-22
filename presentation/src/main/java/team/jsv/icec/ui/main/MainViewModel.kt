@@ -71,7 +71,10 @@ internal class MainViewModel @Inject constructor(
 
             ScreenStep.MosaicFace -> {
                 backPress()
-                setScreen(ScreenStep.SelectFace)
+                viewModelScope.launch {
+                    setScreen(ScreenStep.SelectFace)
+                    setImageViewType(PictureState.ViewType.Original)
+                }
             }
         }
     }
@@ -111,7 +114,6 @@ internal class MainViewModel @Inject constructor(
                 screenStep = screenStep,
             )
         }
-        setImageViewType(PictureState.ViewType.Original)
     }
 
     fun setOnClickAllSelectButton() {
@@ -171,6 +173,7 @@ internal class MainViewModel @Inject constructor(
     private fun getFaceList() {
         viewModelScope.launch {
             setDetectFaceLoading(true)
+            setOnClearDetectedFaceIndex()
             with(_detectFaceState.value) {
                 getDetectedFaceUseCase(
                     currentTime = currentTime,
@@ -180,7 +183,6 @@ internal class MainViewModel @Inject constructor(
                     data.toFaceViewItem().also { faceViewItem ->
                         setFaceViewItem(faceViewItem)
                     }
-                    setOnClearDetectedFaceIndex()
                 }.onFailure {
                     handleException(it)
                 }.also { setDetectFaceLoading(false) }

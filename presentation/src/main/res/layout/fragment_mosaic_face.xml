@@ -10,72 +10,68 @@
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_mosaic_figure"
-            android:layout_width="68dp"
-            android:layout_height="68dp"
-            android:layout_marginBottom="30dp"
-            android:layout_marginEnd="30dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="45dp"
             android:src="@drawable/ic_mosaic_figure_50"
-            app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8"
             app:layout_constraintBottom_toTopOf="@id/tv_mosaic_figure"
+            app:layout_constraintDimensionRatio="H, 1:1"
             app:layout_constraintEnd_toStartOf="@id/iv_blur_figure"
-            app:layout_constraintStart_toStartOf="@id/tv_mosaic_figure"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_chainStyle="packed"
-            app:layout_constraintHorizontal_chainStyle="packed" />
-
+            app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_blur_figure"
-            android:layout_width="68dp"
-            android:layout_height="68dp"
-            android:layout_marginStart="30dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:src="@drawable/ic_blur_figure_50"
-            app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8"
             app:layout_constraintBottom_toBottomOf="@id/iv_mosaic_figure"
-            app:layout_constraintEnd_toEndOf="@id/iv_refresh"
+            app:layout_constraintDimensionRatio="H, 1:1"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/iv_mosaic_figure"
-            app:layout_constraintTop_toTopOf="@id/iv_mosaic_figure" />
-
+            app:layout_constraintTop_toTopOf="@id/iv_mosaic_figure"
+            app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8" />
 
         <TextView
             android:id="@+id/tv_mosaic_figure"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="@font/notosans_semibold"
-            android:text="@string/detect_face_text"
-            app:layout_constraintBottom_toTopOf="@id/slider_mosaic_figure"
-            app:layout_constraintEnd_toStartOf="@id/iv_refresh"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="@id/slider_mosaic_figure"
-            app:layout_constraintTop_toBottomOf="@id/iv_mosaic_figure" />
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="21dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="@string/effectiveness_strength_text"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/slider_mosaic_figure"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/iv_refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:src="@drawable/ic_refresh_24"
-            app:layout_constraintBottom_toBottomOf="@id/tv_mosaic_figure"
-            app:layout_constraintEnd_toEndOf="@id/slider_mosaic_figure"
-            app:layout_constraintStart_toEndOf="@id/tv_mosaic_figure" />
+            app:layout_constraintBottom_toBottomOf="@+id/tv_mosaic_figure"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_mosaic_figure" />
 
         <com.google.android.material.slider.Slider
             android:id="@+id/slider_mosaic_figure"
+            style="@style/ICEC.slider"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:stepSize="10"
-            android:valueFrom="0"
-            android:valueTo="100"
+            android:layout_marginBottom="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_mosaic_figure"
-            app:thumbColor="@color/onSurface"
-            app:tickVisible="false"
-            app:trackColorActive="@color/MainColor"
-            app:trackColorInactive="@color/Surface" />
+            tools:value="50"
+            tools:valueFrom="10"
+            tools:valueTo="90" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

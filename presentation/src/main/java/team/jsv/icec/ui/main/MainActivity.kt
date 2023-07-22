@@ -107,8 +107,8 @@ class MainActivity :
     }
 
     private fun handleEvent() {
-        lifecycleScope.launch {
-            viewModel.mainEvent.collect { mainEvent ->
+        lifecycleScope.launch{
+            viewModel.mainEvent.flowWithLifecycle(lifecycle).collectLatest { mainEvent ->
                 when (mainEvent) {
                     MainEvent.Finish -> {
                         finish()
@@ -119,8 +119,7 @@ class MainActivity :
                     }
 
                     MainEvent.NavigateToMosaicResult -> {
-                        val mosaicImageUri =
-                            saveImage(bitmap = binding.ivImage.toBitmap()).toString()
+                        val mosaicImageUri = saveImage(bitmap = binding.ivImage.toBitmap()).toString()
                         startActivityWithAnimation<MosaicResultActivity>(
                             intentBuilder = { putExtra(ResultImageKey, mosaicImageUri) }
                         )

@@ -2,11 +2,14 @@
 
     <string name="app_name">ICEC</string>
 
-    <!-- fragment_select_face.xml -->
+    <!-- fragment_detect_face.xml -->
     <string name="detected_face_count">%d명</string>
     <string name="detect_face_text">얼굴 검출</string>
     <string name="select_all_text">전체 선택</string>
     <string name="deselect_all_text">전체 해제</string>
+
+    <!-- fragment_mosaic_face.xml -->
+    <string name="effectiveness_strength_text">효과 강도</string>
 
     <!-- top_bar.xml -->
     <string name="share_text">공유</string>

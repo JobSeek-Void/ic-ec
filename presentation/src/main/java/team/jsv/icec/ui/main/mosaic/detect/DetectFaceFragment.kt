@@ -3,11 +3,11 @@ package team.jsv.icec.ui.main.mosaic.detect
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.slider.Slider
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseFragment
 import team.jsv.icec.base.EventObserver
@@ -29,12 +29,18 @@ class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.frag
         super.onViewCreated(view, savedInstanceState)
 
         bind()
-        initView()
     }
 
     override fun initView() {
         initDetectSlider()
         initRecyclerView()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        initClickListener()
+        initTouchListener()
     }
 
     private fun bind() {
@@ -52,13 +58,6 @@ class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.frag
             valueTo = sliderValueTo
             stepSize = sliderStepSize
             haloRadius = sliderHaloRadius
-
-            addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
-                override fun onStartTrackingTouch(slider: Slider) {}
-                override fun onStopTrackingTouch(slider: Slider) {
-                    viewModel.setDetectStrength(value)
-                }
-            })
         }
     }
 
@@ -78,25 +77,43 @@ class DetectFaceFragment : BaseFragment<FragmentDetectFaceBinding>(R.layout.frag
 
     private fun collectSelectedItemUpdates() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.detectedFaceIndexes.collect { selectedIndexList ->
+            viewModel.detectedFaceIndexes.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { selectedIndexList ->
                     detectedFaceAdapter.updateSelection(selectedIndexList)
                     binding.btGroupSelect.changeBackground(selectedIndexList.isNotEmpty())
                 }
-            }
         }
     }
 
     private fun collectDetectFaceState() {
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.detectFaceState.collect { state ->
-                when (state.isLoading) {
-                    true -> dialog.show()
-                    false -> dialog.dismiss()
-                        .also { detectedFaceAdapter.submitList(state.faceViewItem.faceList) }
+            viewModel.detectFaceState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .collectLatest { state ->
+                    when (state.isLoading) {
+                        true -> dialog.show()
+                        false -> {
+                            dialog.dismiss()
+                            detectedFaceAdapter.submitList(state.faceViewItem.faceList)
+                        }
+                    }
                 }
-            }
         }
+    }
+
+    private fun initClickListener() {
+        binding.ivRefresh.setOnClickListener {
+            initDetectSlider()
+            viewModel.setDetectStrength(sliderValue)
+        }
+    }
+
+    private fun initTouchListener() {
+        binding.sdDetectFace.addOnSliderTouchListener(object : Slider.OnSliderTouchListener {
+            override fun onStartTrackingTouch(slider: Slider) {}
+            override fun onStopTrackingTouch(slider: Slider) {
+                viewModel.setDetectStrength(slider.value)
+            }
+        })
     }
 
     companion object {
