@@ -3,6 +3,7 @@ package team.jsv.icec.util
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
@@ -52,11 +53,21 @@ fun Context.shareImage(
  * @return [String] 이미지의 절대 경로를 반환합니다. null을 반환할 수 있으니 주의하세요.
  */
 fun Context.getPathFromUri(uri: Uri): String? {
-    val projection = arrayOf(MediaStore.Images.Media.DATA)
-    val cursor = this.contentResolver.query(uri, projection, null, null, null)
-    return cursor?.use {
-        val columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
-        if (cursor.moveToFirst()) cursor.getString(columnIndex) else null
+    return when (uri.scheme) {
+        "file" -> uri.path
+        "content" -> {
+            var cursor: Cursor? = null
+            try {
+                val proj = arrayOf(MediaStore.Images.Media.DATA)
+                cursor = this.contentResolver.query(uri, proj, null, null, null)
+                val columnIndex = cursor?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+                cursor?.moveToFirst()
+                cursor?.getString(columnIndex ?: 0)
+            } finally {
+                cursor?.close()
+            }
+        }
+        else -> null
     }
 }
 
