@@ -3,6 +3,7 @@ package team.jsv.icec.util
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -39,7 +40,7 @@ fun AppCompatActivity.requestPermissions(permission: List<String>) {
             if (it.value) {
                 showToast(getString(R.string.accept_permission, it.key))
             } else {
-                showToast(getString(R.string.reject_permission, it.key))
+                showToast(getString(R.string.reject_permission))
                 finish()
             }
         }

@@ -1,12 +1,16 @@
 package team.jsv.icec.ui.main.start
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.base.startActivityWithAnimation
@@ -31,7 +35,6 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
                 startActivityWithAnimation<MainActivity>(intentBuilder = {
                     putExtra(Extras.ImagePath, imagePath)
                 })
-
             }
         )
     }
@@ -39,8 +42,8 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setICECThemeBottomNavigationColor()
         requestPermissions(PermissionUtil.getPermissions())
+        setICECThemeBottomNavigationColor()
 
         setImagePickerLauncher()
         initRecentImageRecyclerView()
@@ -48,8 +51,21 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
 
     override fun onResume() {
         super.onResume()
+
         initClickEvent()
-        updateImageList(loadRecentImages())
+        if (checkReadStoragePermission()) {
+            updateImageList(loadRecentImages())
+        }
+    }
+
+    private fun checkReadStoragePermission(): Boolean {
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+        val acceptPermission = ContextCompat.checkSelfPermission(this, permission)
+        return acceptPermission == PackageManager.PERMISSION_GRANTED
     }
 
     private fun initRecentImageRecyclerView() {
