@@ -24,7 +24,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_reverse"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/iv_reverse"
-            app:srcCompat="@drawable/ic_close_32" />
+            app:srcCompat="@drawable/ic_close_32"
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/iv_reverse"

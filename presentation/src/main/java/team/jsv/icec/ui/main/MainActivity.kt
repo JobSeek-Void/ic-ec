@@ -17,6 +17,7 @@ import team.jsv.icec.util.Extras.ResultImageKey
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
 import team.jsv.icec.util.saveImage
+import team.jsv.icec.util.setICECThemeBottomNavigationColor
 import team.jsv.icec.util.showToast
 import team.jsv.icec.util.toBitmap
 import team.jsv.icec.util.visible
@@ -36,6 +37,7 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setICECThemeBottomNavigationColor()
         handleState()
         handleEvent()
         initView()
@@ -63,10 +65,6 @@ class MainActivity :
         binding.topBar.btDownload.setOnClickListener {
             viewModel.nextScreenStep()
         }
-
-        binding.topBar.btClose.setOnClickListener {
-            finish()
-        }
     }
 
     private fun handleState() {
@@ -85,9 +83,9 @@ class MainActivity :
                 }
                 when (state.screenStep) {
                     ScreenStep.SelectFace -> {
-                        binding.topBar.btClose.visible()
+                        binding.topBar.btClose.gone()
                         binding.topBar.btDownload.gone()
-                        binding.topBar.btBack.gone()
+                        binding.topBar.btBack.visible()
                         binding.topBar.btNext.visible()
                         binding.topBar.tvTitle.gone()
                         binding.topBar.tvTitle.text = getString(R.string.mosaic_text)

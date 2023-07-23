@@ -17,7 +17,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <ImageView
             android:id="@+id/bt_close"
@@ -29,7 +29,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
         <ImageView
             android:id="@+id/iv_reverse"
@@ -41,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_ratio_1_1"
@@ -65,7 +65,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
         <TextView
             android:id="@+id/tv_title"
@@ -89,14 +89,14 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/pretendard_bold"
             android:text="@string/save_done"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor1"
             android:textSize="16sp"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="gone" />
+            tools:visibility="visible" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/bt_next"
@@ -105,6 +105,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/pretendard_medium"
+            android:outlineSpotShadowColor="@color/transparent"
             android:text="@string/next_text"
             android:textColor="@color/SubColor"
             android:textSize="12sp"
@@ -113,6 +114,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/buttonStrokeColor3"
+            app:strokeWidth="1dp"
             tools:visibility="gone" />
 
         <com.google.android.material.button.MaterialButton
@@ -140,20 +143,20 @@
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/pretendard_medium"
             android:text="@string/use_text"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor1"
             android:textSize="12sp"
             android:visibility="gone"
-            app:backgroundTint="@color/transparent"
+            app:backgroundTint="@color/buttonBackgroundColor1"
             app:icon="@drawable/ic_right_arrow_5_8"
             app:iconGravity="textEnd"
             app:iconPadding="4dp"
-            app:iconTint="@color/white"
+            app:iconTint="@color/iconColor1"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/white"
+            app:strokeColor="@color/buttonStrokeColor1"
             app:strokeWidth="1dp"
-            tools:visibility="visible" />
+            tools:visibility="gone" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

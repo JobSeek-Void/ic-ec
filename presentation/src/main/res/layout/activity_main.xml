@@ -18,7 +18,7 @@
             android:id="@+id/iv_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@color/gray1"
+            android:background="@color/backgroundColor1"
             android:scaleType="fitCenter"
             app:layout_constraintBottom_toTopOf="@+id/fragmentContainerView"
             app:layout_constraintEnd_toEndOf="parent"

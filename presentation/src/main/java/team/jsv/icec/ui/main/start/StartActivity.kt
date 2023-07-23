@@ -17,6 +17,7 @@ import team.jsv.icec.util.Extras
 import team.jsv.icec.util.PermissionUtil
 import team.jsv.icec.util.getPathFromUri
 import team.jsv.icec.util.requestPermissions
+import team.jsv.icec.util.setICECThemeBottomNavigationColor
 import team.jsv.icec.util.toPx
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityStartBinding
@@ -37,6 +38,8 @@ class StartActivity : BaseActivity<ActivityStartBinding>(R.layout.activity_start
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setICECThemeBottomNavigationColor()
         requestPermissions(PermissionUtil.getPermissions())
 
         setImagePickerLauncher()
