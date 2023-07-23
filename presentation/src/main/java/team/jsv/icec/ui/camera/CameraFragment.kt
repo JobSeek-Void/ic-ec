@@ -87,7 +87,7 @@ class CameraFragment : BaseFragment<FragmentCameraBinding>(R.layout.fragment_cam
         }
 
         binding.ivClose.setOnClickListener {
-            popBackStack()
+            requireActivity().finish()
         }
 
         binding.ivRatio.setOnClickListener {
