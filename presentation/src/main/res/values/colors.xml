@@ -12,12 +12,38 @@
     <color name="gray6">#ECECEC</color>
     <color name="dark">#121212</color>
 
-    <color name="MainColor">#FFFA9A85</color>
-    <color name="SubColor">#99FA9A85</color>
+    <color name="MainColor">#E6FA00</color>
+    <color name="SubColor">#3098FF</color>
     <color name="Surface">@color/gray3</color>
     <color name="onSurface">@color/black</color>
     <color name="reverseOnSurface">@color/white</color>
     <color name="transparent">#00000000</color>
+
+    <!-- Custom Color -->
+    <color name="beforeTextColor1">@color/gray1</color>
+
+    <color name="afterTextColor1">@color/white</color>
+
+    <color name="textColor1">@color/gray1</color>
+    <color name="textColor2">@color/gray1</color>
+    <color name="textColor3">@color/black</color>
+
+    <color name="iconColor1">@color/gray1</color>
+
+    <color name="backgroundColor1">@color/gray5</color>
+    <color name="backgroundColor2">@color/white</color>
+
+    <color name="buttonStrokeColor1">@color/gray1</color>
+    <color name="buttonStrokeColor2">@color/gray6</color>
+    <color name="buttonStrokeColor3">@color/SubColor</color>
+
+    <color name="buttonBackgroundColor1">@color/white</color>
+    <color name="buttonBackgroundColor2">@color/white</color>
+
+    <color name="sliderTrackColorInactive">@color/gray5</color>
+    <color name="sliderTrackColorActive">@color/MainColor</color>
+
+    <color name="bottomNavigationColor">@color/white95</color>
 
     <!-- System Theme Color -->
     <color name="SystemColor">#FFFFFFFF</color>
