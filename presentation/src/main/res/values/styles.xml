@@ -9,9 +9,12 @@
     <!-- ICEC.MaterialSlider -->
     <style name="ICEC.slider" parent="@style/Widget.MaterialComponents.Slider">
         <item name="labelStyle">@style/ICEC.slider.Tooltip</item>
-        <item name="trackColorActive">@color/MainColor</item>
-        <item name="trackColorInactive">@color/gray3</item>
+        <item name="trackColorActive">@color/sliderTrackColorActive</item>
+        <item name="trackColorInactive">@color/sliderTrackColorInactive</item>
         <item name="thumbColor">@color/white</item>
+        <item name="thumbElevation">0dp</item>
+        <item name="thumbStrokeWidth">1dp</item>
+        <item name="thumbStrokeColor">@color/gray6</item>
         <item name="tickVisible">false</item>
     </style>
 
