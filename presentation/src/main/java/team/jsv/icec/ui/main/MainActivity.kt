@@ -65,10 +65,6 @@ class MainActivity :
         binding.topBar.btDownload.setOnClickListener {
             viewModel.nextScreenStep()
         }
-
-        binding.topBar.btClose.setOnClickListener {
-            finish()
-        }
     }
 
     private fun handleState() {
@@ -87,9 +83,9 @@ class MainActivity :
                 }
                 when (state.screenStep) {
                     ScreenStep.SelectFace -> {
-                        binding.topBar.btClose.visible()
+                        binding.topBar.btClose.gone()
                         binding.topBar.btDownload.gone()
-                        binding.topBar.btBack.gone()
+                        binding.topBar.btBack.visible()
                         binding.topBar.btNext.visible()
                         binding.topBar.tvTitle.gone()
                         binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
