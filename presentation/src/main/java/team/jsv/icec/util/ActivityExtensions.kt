@@ -6,7 +6,9 @@ import android.view.View
 import android.view.WindowInsets
 import android.view.WindowInsetsController
 import android.view.WindowManager
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import team.jsv.presentation.R
 
 fun Activity.setFullScreen() {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -80,5 +82,13 @@ fun Activity.setBehaviorSystemUI() {
         @Suppress("DEPRECATION")
         window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+    }
+}
+
+fun Activity.setICECThemeBottomNavigationColor() {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.SystemColor)
+    } else {
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.black)
     }
 }
