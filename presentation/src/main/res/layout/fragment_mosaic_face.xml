@@ -45,7 +45,7 @@
             android:layout_marginBottom="21dp"
             android:fontFamily="@font/pretendard_medium"
             android:text="@string/effectiveness_strength_text"
-            android:textColor="@color/white"
+            android:textColor="@color/textColor3"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/slider_mosaic_figure"
             app:layout_constraintStart_toStartOf="parent" />

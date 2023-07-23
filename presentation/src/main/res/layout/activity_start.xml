@@ -45,8 +45,12 @@
             android:layout_height="20dp"
             android:layout_marginTop="24dp"
             android:autoSizeTextType="uniform"
+            android:fontFamily="@font/pretendard_bold"
             android:text="@string/recent_image"
+            android:textColor="@color/textColor1"
             android:textStyle="bold"
+            android:textSize="16sp"
+            android:includeFontPadding="false"
             app:layout_constraintStart_toStartOf="@+id/gl_start"
             app:layout_constraintTop_toBottomOf="@+id/bt_gallery" />
 

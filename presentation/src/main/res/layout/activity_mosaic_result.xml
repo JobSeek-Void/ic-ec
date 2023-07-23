@@ -16,7 +16,7 @@
 
         <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/iv_mosaic_result"
-            android:background="@color/gray1"
+            android:background="@color/backgroundColor1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:scaleType="fitCenter"

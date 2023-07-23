@@ -16,9 +16,11 @@ import team.jsv.presentation.R
 fun MaterialButton.changeBackground(isAllSelect: Boolean) {
     text = if (isAllSelect) {
         setBackgroundColor(ResourcesCompat.getColor(resources, R.color.SubColor, null))
+        setTextColor(ResourcesCompat.getColor(resources, R.color.afterTextColor1, null))
         context.getString(R.string.deselect_all_text)
     } else {
-        setBackgroundColor(ResourcesCompat.getColor(resources, R.color.gray1, null))
+        setBackgroundColor(ResourcesCompat.getColor(resources, R.color.buttonBackgroundColor2, null))
+        setTextColor(ResourcesCompat.getColor(resources, R.color.beforeTextColor1, null))
         context.getString(R.string.select_all_text)
     }
 }
