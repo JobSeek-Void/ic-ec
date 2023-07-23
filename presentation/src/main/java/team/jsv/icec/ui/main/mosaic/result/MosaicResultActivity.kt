@@ -1,22 +1,17 @@
 package team.jsv.icec.ui.main.mosaic.result
 
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.viewModels
-import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
 import team.jsv.icec.util.loadImage
+import team.jsv.icec.util.setICECThemeBottomNavigationColor
 import team.jsv.icec.util.shareImage
 import team.jsv.icec.util.showSnackBarAction
 import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMosaicResultBinding
-import java.io.File
-import java.net.URI
 
 class MosaicResultActivity :
     BaseActivity<ActivityMosaicResultBinding>(R.layout.activity_mosaic_result) {
@@ -25,6 +20,8 @@ class MosaicResultActivity :
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setICECThemeBottomNavigationColor()
 
         initTopBar()
         collectResultImage()

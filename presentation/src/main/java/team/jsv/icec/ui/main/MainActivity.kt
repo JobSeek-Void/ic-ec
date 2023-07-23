@@ -17,6 +17,7 @@ import team.jsv.icec.util.Extras.ResultImageKey
 import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
 import team.jsv.icec.util.saveImage
+import team.jsv.icec.util.setICECThemeBottomNavigationColor
 import team.jsv.icec.util.showToast
 import team.jsv.icec.util.toBitmap
 import team.jsv.icec.util.visible
@@ -36,6 +37,7 @@ class MainActivity :
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setICECThemeBottomNavigationColor()
         handleState()
         handleEvent()
         initView()
