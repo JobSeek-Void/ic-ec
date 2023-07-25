@@ -38,7 +38,7 @@ fun AppCompatActivity.requestPermissions(permission: List<String>) {
     this.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
         result.entries.forEach {
             if (it.value) {
-                showToast(getString(R.string.accept_permission, it.key))
+                showToast(getString(R.string.accept_permission))
             } else {
                 showToast(getString(R.string.reject_permission))
                 finish()

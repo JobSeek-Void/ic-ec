@@ -20,7 +20,7 @@
     <string name="mosaic_text">Mosaic</string>
 
     <!-- MainActivity.kt -->
-    <string name="accept_permission">%s 권한을 허용하였습니다.</string>
+    <string name="accept_permission">권한 설정이 완료되었습니다.</string>
     <string name="reject_permission">모든 권한을 허용해야 사용이 가능합니다.</string>
 
     <!-- StartActivity.kt -->
