@@ -106,5 +106,12 @@ object SettingViewUtil {
             constraintSet.applyTo(constraintLayout)
         }
     }
+}
 
+fun View.setBottomMargin(margin: Int) {
+    val layoutParams =
+        this.layoutParams as ViewGroup.MarginLayoutParams
+    layoutParams.setMargins(
+        0, 0, 0, margin
+    )
 }

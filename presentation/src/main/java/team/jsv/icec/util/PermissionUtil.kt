@@ -6,7 +6,6 @@ import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import team.jsv.presentation.R
 
 object PermissionUtil {
     /**
@@ -30,18 +29,21 @@ object PermissionUtil {
     }
 }
 
-fun AppCompatActivity.requestPermissions(permission: List<String>) {
+inline fun AppCompatActivity.requestPermissions(
+    permission: List<String>,
+    crossinline onPermissionAccepted: () -> Unit,
+    crossinline onPermissionDenied: () -> Unit
+) {
     val requestPermissions = permission.filter {
         ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
     }
-    this.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-        result.entries.forEach {
-            if (it.value) {
-                showToast(getString(R.string.accept_permission, it.key))
+    if(requestPermissions.isNotEmpty()) {
+        this.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            if (result.values.all { it }) {
+                onPermissionAccepted()
             } else {
-                showToast(getString(R.string.reject_permission, it.key))
-                finish()
+                onPermissionDenied()
             }
-        }
-    }.launch(requestPermissions.toTypedArray())
+        }.launch(requestPermissions.toTypedArray())
+    }
 }

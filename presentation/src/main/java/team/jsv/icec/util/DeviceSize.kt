@@ -26,7 +26,7 @@ val Activity.deviceHeight
             windowManager.currentWindowMetrics.bounds.height()
         } else {
             @Suppress("DEPRECATION") val display = windowManager.defaultDisplay
-            @Suppress("DEPRECATION") display.getMetrics(displayMetrics)
+            @Suppress("DEPRECATION") display.getRealMetrics(displayMetrics)
             displayMetrics.heightPixels
         }
     }
