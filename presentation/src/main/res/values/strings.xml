@@ -1,16 +1,36 @@
 <resources>
+
     <string name="app_name">ICEC</string>
 
-    <!-- fragment_select_mosaic_edit.xml -->
-    <string name="edit_text">Edit</string>
-    <string name="mosaic_text">Blur</string>
+    <!-- fragment_detect_face.xml -->
+    <string name="detected_face_count">%d명</string>
+    <string name="detect_face_text">얼굴 검출</string>
+    <string name="select_all_text">전체 선택</string>
+    <string name="deselect_all_text">전체 해제</string>
+
+    <!-- fragment_mosaic_face.xml -->
+    <string name="effectiveness_strength_text">효과 강도</string>
 
     <!-- top_bar.xml -->
     <string name="share_text">공유</string>
     <string name="download_text">저장</string>
+    <string name="next_text">다음</string>
+    <string name="use_text">사용</string>
+    <string name="edit_text">Edit</string>
+    <string name="mosaic_text">Mosaic</string>
 
     <!-- MainActivity.kt -->
-    <string name="accept_permission">%s 권한을 허용하였습니다.</string>
-    <string name="reject_permission">%s 권한을 거부하였습니다.</string>
-    <string name="next_text">다음</string>
+    <string name="accept_permission">권한 설정이 완료되었습니다.</string>
+    <string name="reject_permission">모든 권한을 허용해야 사용이 가능합니다.</string>
+
+    <!-- StartActivity.kt -->
+    <string name="gallery_text">Gallery</string>
+    <string name="camera_text">Camera</string>
+    <string name="recent_image">최근 항목</string>
+
+    <!-- MosaicResultActivity.kt -->
+    <string name="snackbar_text">저장이 완료되었습니다~!</string>
+    <string name="save_done">저장 완료</string>
+    <string name="rec_text">REC</string>
+
 </resources>

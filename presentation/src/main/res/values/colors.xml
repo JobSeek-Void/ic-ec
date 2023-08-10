@@ -1,23 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="black10">#1A000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="Gray100">#FF666666</color>
-    <color name="Gray200">#FFA8A8A8</color>
-    <color name="Gray300">#FFEFEFEF</color>
-    <color name="Gray400">#FFF6F6F6</color>
-    <color name="MainColor">#FFFA9A85</color>
-    <color name="SubColor">#99FA9A85</color>
+    <color name="white95">#F2FFFFFF</color>
+    <color name="gray1">#1E1E1E</color>
+    <color name="gray2">#333333</color>
+    <color name="gray3">#505050</color>
+    <color name="gray4">#808080</color>
+    <color name="gray5">#9F9F9F</color>
+    <color name="gray6">#ECECEC</color>
+    <color name="dark">#121212</color>
+
+    <color name="MainColor">#E6FA00</color>
+    <color name="SubColor">#3098FF</color>
+    <color name="Surface">@color/gray3</color>
+    <color name="onSurface">@color/black</color>
+    <color name="reverseOnSurface">@color/white</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Custom Color -->
+    <color name="beforeTextColor1">@color/gray1</color>
+
+    <color name="afterTextColor1">@color/white</color>
+
+    <color name="textColor1">@color/gray1</color>
+    <color name="textColor2">@color/gray1</color>
+    <color name="textColor3">@color/black</color>
+
+    <color name="iconColor1">@color/gray1</color>
+
+    <color name="backgroundColor1">@color/gray5</color>
+    <color name="backgroundColor2">@color/white</color>
+
+    <color name="buttonStrokeColor1">@color/gray1</color>
+    <color name="buttonStrokeColor2">@color/gray6</color>
+    <color name="buttonStrokeColor3">@color/SubColor</color>
+
+    <color name="buttonBackgroundColor1">@color/white</color>
+    <color name="buttonBackgroundColor2">@color/white</color>
+
+    <color name="sliderTrackColorInactive">@color/gray5</color>
+    <color name="sliderTrackColorActive">@color/MainColor</color>
+
+    <color name="bottomNavigationColor">@color/white95</color>
 
     <!-- System Theme Color -->
-    <color name="WindowBackGroundColor">#FFFFFFFF</color>
-    <color name="StatusBarColor">#121212</color>
+    <color name="SystemColor">#FFFFFFFF</color>
     <!-- Mosaic Button -->
     <color name="MosaicButtonColor">#FFFA9A85</color>
     <!-- Edit Button -->
     <color name="EditButtonColor">#FFFA9A85</color>
     <!-- Common Color -->
     <color name="ButtonIconColor">#FFFFFFFF</color>
-    <color name="ButtonStrokeColor">#333333</color>
 
 </resources>

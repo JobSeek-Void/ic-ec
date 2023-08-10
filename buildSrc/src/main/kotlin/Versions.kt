@@ -32,10 +32,16 @@ object Versions {
         const val Appcompat = "1.5.1"
         const val ConstraintLayout = "2.1.3"
         const val Material = "1.8.0"
+        const val PhotoView = "2.3.0"
     }
 
     object Glide {
         const val Glide = "4.14.2"
+    }
+
+    object FireBase {
+        const val GoogleServices = "4.3.15"
+        const val Bom = "32.0.0"
     }
 
 }

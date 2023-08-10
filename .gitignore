@@ -73,3 +73,10 @@ lint/generated/
 lint/outputs/
 lint/tmp/
 # lint/reports/
+
+# Fire Base
+google-services.json
+
+# Key Store
+keystore.jks
+keystore.properties

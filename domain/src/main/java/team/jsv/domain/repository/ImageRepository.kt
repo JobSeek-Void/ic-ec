@@ -8,6 +8,7 @@ interface ImageRepository {
 
     suspend fun getDetectedFace(
         currentTime: String,
+        threshold: Float,
         image: File
     ): Face
 
@@ -15,7 +16,13 @@ interface ImageRepository {
         currentTime: String,
         pixelSize: Int,
         originalImage: String,
-        coordinates: List<List<Int>>
+        coordinates: List<List<Int>>,
     ): MosaicImage
 
+    suspend fun getBlurImage(
+        currentTime: String,
+        pixelSize: Int,
+        originalImage: String,
+        coordinates: List<List<Int>>,
+    ): MosaicImage
 }

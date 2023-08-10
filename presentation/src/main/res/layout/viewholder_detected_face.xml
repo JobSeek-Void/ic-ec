@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ContentDescription,UnusedAttribute">
+
+    <data>
+        <variable
+            name="data"
+            type="team.jsv.icec.ui.main.mosaic.detect.model.DetectFaceInfoViewItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_face"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeFor="@{data.component3()}"
+            app:shapeAppearanceOverlay="@style/ICEC.RoundedCorner_8"
+            tools:src="@drawable/rv_test_image"
+            tools:strokeColor="@color/SubColor"
+            tools:clipToOutline="true"
+            tools:strokeWidth="4dp" />
+
+        <ImageView
+            android:id="@+id/iv_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="4dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="@+id/iv_face"
+            app:layout_constraintTop_toTopOf="@+id/iv_face"
+            app:checkingVisible="@{data.component3()}"
+            tools:src="@drawable/ic_select_mark_14"
+            tools:visibility="visible" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

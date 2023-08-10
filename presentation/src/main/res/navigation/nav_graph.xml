@@ -1,34 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:id="@+id/nav_graph"
-    app:startDestination="@id/selectMosaicEditFragment">
-
-    <fragment
-        android:id="@+id/selectMosaicEditFragment"
-        android:name="team.jsv.icec.ui.main.SelectMosaicEditFragment"
-        android:label="SelectMosaicEditFragment" >
-        <action
-            android:id="@+id/action_selectMosaicEditFragment_to_faceSelectFragment"
-            app:destination="@id/faceSelectFragment" />
-        <action
-            android:id="@+id/action_selectMosaicEditFragment_to_photoEditFragment"
-            app:destination="@id/photoEditFragment" />
-    </fragment>
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/faceSelectFragment">
 
     <fragment
         android:id="@+id/faceSelectFragment"
-        android:name="team.jsv.icec.ui.main.mosaic.selectFace.SelectFaceFragment"
-        android:label="FaceSelectFragment" >
+        android:name="team.jsv.icec.ui.main.mosaic.detect.DetectFaceFragment"
+        android:label="FaceSelectFragment">
         <action
             android:id="@+id/action_faceSelectFragment_to_faceMosaicFragment"
-            app:destination="@id/faceMosaicFragment" />
+            app:destination="@id/faceMosaicFragment"
+            app:enterAnim="@drawable/anim_slide_from_right"
+            app:exitAnim="@drawable/anim_slide_to_left"
+            app:popEnterAnim="@drawable/anim_slide_from_left"
+            app:popExitAnim="@drawable/anim_slide_to_right" />
     </fragment>
-
-    <fragment
-        android:id="@+id/photoEditFragment"
-        android:name="team.jsv.icec.ui.main.edit.PhotoEditFragment"
-        android:label="PhotoEditFragment" />
 
     <fragment
         android:id="@+id/faceMosaicFragment"

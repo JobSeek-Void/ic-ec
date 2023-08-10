@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         buildConfigField("String", "API_URL",
-            gradleLocalProperties(rootDir).getProperty("server.key"))
+            gradleLocalProperties(rootDir).getProperty("ICEC_SERVER_KEY"))
     }
 }
 

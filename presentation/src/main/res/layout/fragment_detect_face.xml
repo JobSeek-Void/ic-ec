@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="ContentDescription">
+
+    <data>
+
+        <variable
+            name="vm"
+            type="team.jsv.icec.ui.main.MainViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="234dp">
+
+        <TextView
+            android:id="@+id/tv_detected_face_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:textColor="@color/textColor3"
+            android:textSize="14sp"
+            app:detectedFaceCount="@{vm.detectFaceState.component1().component2().size()}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="5명" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_group_select"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:letterSpacing="0"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:onClick="@{() -> vm.setOnClickAllSelectButton()}"
+            android:outlineProvider="none"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="4dp"
+            android:textSize="12sp"
+            app:allSelectBackground="@{false}"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_detected_face_count"
+            app:strokeColor="@color/buttonStrokeColor2"
+            app:strokeWidth="1dp"
+            tools:textColor="@color/textColor2"
+            tools:backgroundTint="@color/buttonBackgroundColor2"
+            tools:text="전체 선택" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_detected_face"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"
+            android:clipToPadding="false"
+            android:orientation="horizontal"
+            android:overScrollMode="never"
+            android:paddingHorizontal="16dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toTopOf="@+id/tv_detect_face"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bt_group_select"
+            tools:listitem="@layout/viewholder_detected_face" />
+
+        <TextView
+            android:id="@+id/tv_detect_face"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="21dp"
+            android:fontFamily="@font/pretendard_medium"
+            android:text="@string/detect_face_text"
+            android:textColor="@color/textColor3"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/sd_detect_face"
+            app:layout_constraintStart_toStartOf="@+id/tv_detected_face_count" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/iv_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_refresh_24"
+
+            app:layout_constraintBottom_toBottomOf="@+id/tv_detect_face"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_detect_face" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/sd_detect_face"
+            style="@style/ICEC.slider"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:value="50"
+            tools:valueFrom="10"
+            tools:valueTo="90" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

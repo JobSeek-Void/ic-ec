@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/reverseOnSurface">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_gallery"
+            style="@style/ICEC.StartActivity.MaterialButton.Gallery"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:autoSizeTextType="uniform"
+            android:outlineSpotShadowColor="@color/black10"
+            android:text="@string/gallery_text"
+            app:icon="@drawable/ic_photo_48"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toStartOf="@+id/bt_camera"
+            app:layout_constraintStart_toStartOf="@+id/gl_start"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bt_camera"
+            style="@style/ICEC.StartActivity.MaterialButton.Gallery"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="16dp"
+            android:autoSizeTextType="uniform"
+            android:outlineSpotShadowColor="@color/black10"
+            android:text="@string/camera_text"
+            app:icon="@drawable/ic_camera_48"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/bt_gallery"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_recent_item"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:layout_marginTop="24dp"
+            android:autoSizeTextType="uniform"
+            android:fontFamily="@font/pretendard_bold"
+            android:text="@string/recent_image"
+            android:textColor="@color/textColor1"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:includeFontPadding="false"
+            app:layout_constraintStart_toStartOf="@+id/gl_start"
+            app:layout_constraintTop_toBottomOf="@+id/bt_gallery" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_recent_image"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_recent_item" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="16dp" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_end="16dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

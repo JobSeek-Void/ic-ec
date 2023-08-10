@@ -9,10 +9,12 @@ class GetDetectedFaceUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(
         currentTime: String,
+        threshold: Float,
         image: File
     ) = runCatching {
         repository.getDetectedFace(
             currentTime = currentTime,
+            threshold = threshold,
             image = image
         )
     }

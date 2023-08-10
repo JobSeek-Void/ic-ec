@@ -6,8 +6,6 @@ import android.os.Build
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import team.jsv.icec.base.showToast
-import team.jsv.presentation.R
 
 object PermissionUtil {
     /**
@@ -23,22 +21,29 @@ object PermissionUtil {
             } else {
                 add(Manifest.permission.READ_EXTERNAL_STORAGE)
             }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            }
         }
     }
 }
 
-fun AppCompatActivity.requestPermissions(permission: List<String>) {
+inline fun AppCompatActivity.requestPermissions(
+    permission: List<String>,
+    crossinline onPermissionAccepted: () -> Unit,
+    crossinline onPermissionDenied: () -> Unit
+) {
     val requestPermissions = permission.filter {
         ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
     }
-    this.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
-        result.entries.forEach {
-            if (it.value) {
-                showToast(getString(R.string.accept_permission, it.key))
+    if(requestPermissions.isNotEmpty()) {
+        this.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { result ->
+            if (result.values.all { it }) {
+                onPermissionAccepted()
             } else {
-                showToast(getString(R.string.reject_permission, it.key))
-                finish()
+                onPermissionDenied()
             }
-        }
-    }.launch(requestPermissions.toTypedArray())
+        }.launch(requestPermissions.toTypedArray())
+    }
 }

@@ -9,15 +9,17 @@ import java.io.File
 import javax.inject.Inject
 
 class ImageRepositoryImpl @Inject constructor(
-    private val imageDataSource: ImageDataSource
+    private val imageDataSource: ImageDataSource,
 ) : ImageRepository {
 
     override suspend fun getDetectedFace(
         currentTime: String,
+        threshold: Float,
         image: File
     ): Face {
         return imageDataSource.getDetectedFace(
             currentTime = currentTime,
+            threshold = threshold,
             image = image
         ).toDomain()
     }
@@ -26,9 +28,23 @@ class ImageRepositoryImpl @Inject constructor(
         currentTime: String,
         pixelSize: Int,
         originalImage: String,
-        coordinates: List<List<Int>>
+        coordinates: List<List<Int>>,
     ): MosaicImage {
         return imageDataSource.getMosaicImage(
+            currentTime = currentTime,
+            pixelSize = pixelSize,
+            originalImage = originalImage,
+            coordinates = coordinates
+        ).toDomain()
+    }
+
+    override suspend fun getBlurImage(
+        currentTime: String,
+        pixelSize: Int,
+        originalImage: String,
+        coordinates: List<List<Int>>,
+    ): MosaicImage {
+        return imageDataSource.getBlurImage(
             currentTime = currentTime,
             pixelSize = pixelSize,
             originalImage = originalImage,

@@ -1,70 +1,144 @@
 package team.jsv.icec.ui.main
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.activity.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import team.jsv.icec.base.BaseActivity
-import team.jsv.icec.base.EventObserver
-import team.jsv.icec.base.showToast
-import team.jsv.icec.ui.main.mosaic.MosaicEvent
-import team.jsv.icec.ui.main.mosaic.MosaicViewModel
-import team.jsv.icec.ui.main.mosaic.PictureState
-import team.jsv.icec.ui.main.mosaic.ScreenStep
+import team.jsv.icec.base.startActivityWithAnimation
+import team.jsv.icec.ui.main.mosaic.result.MosaicResultActivity
+import team.jsv.icec.util.Extras.ResultImageKey
+import team.jsv.icec.util.gone
 import team.jsv.icec.util.loadImage
+import team.jsv.icec.util.saveImage
+import team.jsv.icec.util.setICECThemeBottomNavigationColor
+import team.jsv.icec.util.showToast
+import team.jsv.icec.util.toBitmap
+import team.jsv.icec.util.visible
 import team.jsv.presentation.R
 import team.jsv.presentation.databinding.ActivityMainBinding
-import java.io.File
 
 @AndroidEntryPoint
 class MainActivity :
     BaseActivity<ActivityMainBinding>(R.layout.activity_main) {
 
-    private val viewModel: MosaicViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
+    private val navController by lazy {
+        (supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment).findNavController()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // TODO(ham2174) : 갤러리 혹은 카메라로 찍은 사진 데이터를 가져와야함. TakePictureActivity -> MainActivity 이미지 데이터 전달 필요
-        viewModel.setImage(File("/storage/emulated/0/Pictures/dicdic6.jpg"))
+        setICECThemeBottomNavigationColor()
+        handleState()
+        handleEvent()
+        initView()
+    }
 
-        viewModel.mosaicEvent.observe(this, EventObserver {
-            when (it) {
-                is MosaicEvent.SendToast -> {
-                    binding.root.context.showToast(it.message)
-                }
-            }
-        })
+    override fun onResume() {
+        super.onResume()
 
-        viewModel.state.observe(this) {
-            when (it) {
-                is PictureState.File
-                -> {
-                    viewModel.originalImage.observe(this) { file ->
-                        binding.imageviewImage.loadImage(file)
+        initClickListeners()
+    }
+
+    private fun initView() {
+        setOnBackPressedCallback()
+    }
+
+    private fun initClickListeners() {
+        binding.topBar.btBack.setOnClickListener {
+            viewModel.handleBackPress()
+        }
+
+        binding.topBar.btNext.setOnClickListener {
+            viewModel.nextScreenStep()
+        }
+
+        binding.topBar.btDownload.setOnClickListener {
+            viewModel.nextScreenStep()
+        }
+    }
+
+    private fun handleState() {
+        lifecycleScope.launch {
+            viewModel.mainState.flowWithLifecycle(lifecycle).collectLatest { state ->
+                with(state.pictureState) {
+                    when (viewType) {
+                        PictureState.ViewType.Original -> {
+                            binding.ivImage.loadImage(originalImage)
+                        }
+
+                        PictureState.ViewType.Mosaic -> {
+                            binding.ivImage.loadImage(mosaicImage)
+                        }
                     }
                 }
-                is PictureState.Url
-                -> {
-                    viewModel.mosaicImage.observe(this, EventObserver { url ->
-                        binding.imageviewImage.loadImage(url)
-                    })
+                when (state.screenStep) {
+                    ScreenStep.SelectFace -> {
+                        binding.topBar.btClose.gone()
+                        binding.topBar.btDownload.gone()
+                        binding.topBar.btBack.visible()
+                        binding.topBar.btNext.visible()
+                        binding.topBar.tvTitle.gone()
+                        binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
+                    }
+
+                    ScreenStep.MosaicFace -> {
+                        binding.topBar.btClose.gone()
+                        binding.topBar.btDownload.visible()
+                        binding.topBar.btBack.visible()
+                        binding.topBar.btNext.gone()
+                        binding.topBar.tvTitle.gone()
+                        binding.topBar.tvTitle.text = getString(R.string.mosaic_text)
+                    }
                 }
             }
         }
+    }
 
-        binding.topBar.buttonBack.setOnClickListener {
-            when (viewModel.screenStep.value) {
-                ScreenStep.SelectMosaicEdit ->
-                    finish()
-                else -> {
-                    viewModel.run {
-                        backPress()
-                        setImageAboutScreenStep()
+    private fun handleEvent() {
+        lifecycleScope.launch{
+            viewModel.mainEvent.flowWithLifecycle(lifecycle).collectLatest { mainEvent ->
+                when (mainEvent) {
+                    MainEvent.Finish -> {
+                        finish()
+                    }
+
+                    MainEvent.NavigateToMosaicFace -> {
+                        navController.navigate(R.id.action_faceSelectFragment_to_faceMosaicFragment)
+                    }
+
+                    MainEvent.NavigateToMosaicResult -> {
+                        val mosaicImageUri = saveImage(bitmap = binding.ivImage.toBitmap()).toString()
+                        startActivityWithAnimation<MosaicResultActivity>(
+                            intentBuilder = { putExtra(ResultImageKey, mosaicImageUri) }
+                        )
+                        finish()
+                    }
+
+                    is MainEvent.SendToast -> {
+                        binding.root.context.showToast(mainEvent.message)
                     }
                 }
             }
         }
+    }
 
+    private fun setOnBackPressedCallback() {
+        onBackPressedCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                viewModel.handleBackPress()
+            }
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
     }
 
 }

@@ -1,18 +1,18 @@
 package team.jsv.icec.base
 
-import android.content.Context
 import android.os.Bundle
-import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import team.jsv.icec.util.LoadingDialog
 
 abstract class BaseActivity<T : ViewDataBinding>(
     @LayoutRes private val layoutId: Int
 ) : AppCompatActivity() {
 
     protected lateinit var binding: T
+    protected val dialog by lazy { LoadingDialog(context = binding.root.context) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,8 +24,4 @@ abstract class BaseActivity<T : ViewDataBinding>(
         binding.unbind()
         super.onDestroy()
     }
-}
-
-fun Context.showToast(msg: String) {
-    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 }

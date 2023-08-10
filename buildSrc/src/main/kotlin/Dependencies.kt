@@ -10,6 +10,11 @@ object Dependencies {
         const val Annotation = "com.github.bumptech.glide:compiler:${Versions.Glide.Glide}"
     }
 
+    object FireBase {
+        const val GoogleService = "com.google.gms:google-services:${Versions.FireBase.GoogleServices}"
+        const val Bom = "com.google.firebase:firebase-bom:${Versions.FireBase.Bom}"
+    }
+
     val Essential = listOf(
         "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Essential.Coroutine}"
     )
@@ -48,6 +53,6 @@ object Dependencies {
         "androidx.navigation:navigation-ui-ktx:${Versions.Jetpack.Navigation}",
         "com.github.bumptech.glide:glide:${Versions.Glide.Glide}",
         "com.google.android.material:material:${Versions.UI.Material}",
+        "com.github.chrisbanes:PhotoView:${Versions.UI.PhotoView}",
     )
-
 }
