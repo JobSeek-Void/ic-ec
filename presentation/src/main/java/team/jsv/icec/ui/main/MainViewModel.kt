@@ -24,9 +24,8 @@ import team.jsv.icec.util.Extras
 import team.jsv.icec.util.toThreshold
 import team.jsv.util_kotlin.IcecNetworkException
 import team.jsv.util_kotlin.copy
-import team.jsv.util_kotlin.toFormatString
 import java.io.File
-import java.util.Date
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,7 +35,8 @@ internal class MainViewModel @Inject constructor(
     private val getMosaicImageUseCase: GetMosaicImageUseCase,
 ) : BaseViewModel() {
 
-    private val currentTime: String = Date().toFormatString(DEFAULT_CURRENT_TIME_FORMAT)
+    private val randomSeed: String
+        get() = UUID.randomUUID().toString()
 
     //메인 액티비티 상태
     private val _mainState = MutableStateFlow(MainState())
@@ -176,7 +176,7 @@ internal class MainViewModel @Inject constructor(
             setOnClearDetectedFaceIndex()
             with(_detectFaceState.value) {
                 getDetectedFaceUseCase(
-                    currentTime = currentTime,
+                    randomSeed = randomSeed,
                     threshold = detectStrength.toThreshold,
                     image = _mainState.value.pictureState.originalImage
                 ).onSuccess { data ->
@@ -200,7 +200,7 @@ internal class MainViewModel @Inject constructor(
                     .ifEmpty { listOf(listOf()) }
             with(_mosaicFaceState.value) {
                 getMosaicImageUseCase(
-                    currentTime = currentTime,
+                    randomSeed = randomSeed,
                     pixelSize = pixelSize.toInt(),
                     originalImage = originalImage,
                     coordinates = coordinates,

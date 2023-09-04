@@ -8,12 +8,12 @@ class GetDetectedFaceUseCase @Inject constructor(
     private val repository: ImageRepository
 ) {
     suspend operator fun invoke(
-        currentTime: String,
+        randomSeed: String,
         threshold: Float,
         image: File
     ) = runCatching {
         repository.getDetectedFace(
-            currentTime = currentTime,
+            randomSeed = randomSeed,
             threshold = threshold,
             image = image
         )

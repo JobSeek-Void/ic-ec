@@ -15,13 +15,13 @@ class ImageDataSource @Inject constructor(
 ) {
 
     suspend fun getDetectedFace(
-        currentTime: String,
+        randomSeed: String,
         threshold: Float,
         image: File
     ): FaceResponse {
         try {
             return icecApi.getDetectedFace(
-                currentTime = currentTime,
+                randomSeed = randomSeed,
                 threshold =  threshold,
                 image = image.toMultipartImage()
             )
@@ -34,7 +34,7 @@ class ImageDataSource @Inject constructor(
     }
 
     suspend fun getMosaicImage(
-        currentTime: String,
+        randomSeed: String,
         pixelSize: Int,
         originalImage: String,
         coordinates: List<List<Int>>,
@@ -42,7 +42,7 @@ class ImageDataSource @Inject constructor(
         try {
             return icecApi.getMosaicImage(
                 mosaicRequestBody = MosaicRequestBody(
-                    currentTime = currentTime,
+                    randomSeed = randomSeed,
                     pixelSize = pixelSize,
                     originalImage = originalImage,
                     coordinates = coordinates
@@ -57,7 +57,7 @@ class ImageDataSource @Inject constructor(
     }
 
     suspend fun getBlurImage(
-        currentTime: String,
+        randomSeed: String,
         pixelSize: Int,
         originalImage: String,
         coordinates: List<List<Int>>,
@@ -65,7 +65,7 @@ class ImageDataSource @Inject constructor(
         try {
             return icecApi.getBlurImage(
                 mosaicRequestBody = MosaicRequestBody(
-                    currentTime = currentTime,
+                    randomSeed = randomSeed,
                     pixelSize = pixelSize,
                     originalImage = originalImage,
                     coordinates = coordinates

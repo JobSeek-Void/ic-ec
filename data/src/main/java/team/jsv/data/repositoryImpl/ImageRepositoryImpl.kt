@@ -13,25 +13,25 @@ class ImageRepositoryImpl @Inject constructor(
 ) : ImageRepository {
 
     override suspend fun getDetectedFace(
-        currentTime: String,
+        randomSeed: String,
         threshold: Float,
         image: File
     ): Face {
         return imageDataSource.getDetectedFace(
-            currentTime = currentTime,
+            randomSeed = randomSeed,
             threshold = threshold,
             image = image
         ).toDomain()
     }
 
     override suspend fun getMosaicImage(
-        currentTime: String,
+        randomSeed: String,
         pixelSize: Int,
         originalImage: String,
         coordinates: List<List<Int>>,
     ): MosaicImage {
         return imageDataSource.getMosaicImage(
-            currentTime = currentTime,
+            randomSeed = randomSeed,
             pixelSize = pixelSize,
             originalImage = originalImage,
             coordinates = coordinates
@@ -39,13 +39,13 @@ class ImageRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getBlurImage(
-        currentTime: String,
+        randomSeed: String,
         pixelSize: Int,
         originalImage: String,
         coordinates: List<List<Int>>,
     ): MosaicImage {
         return imageDataSource.getBlurImage(
-            currentTime = currentTime,
+            randomSeed = randomSeed,
             pixelSize = pixelSize,
             originalImage = originalImage,
             coordinates = coordinates

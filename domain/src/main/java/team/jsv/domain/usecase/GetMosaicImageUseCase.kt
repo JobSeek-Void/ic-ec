@@ -8,7 +8,7 @@ class GetMosaicImageUseCase @Inject constructor(
     private val repository: ImageRepository,
 ) {
     suspend operator fun invoke(
-        currentTime: String,
+        randomSeed: String,
         pixelSize: Int,
         originalImage: String,
         coordinates: List<List<Int>>,
@@ -16,13 +16,13 @@ class GetMosaicImageUseCase @Inject constructor(
     ) = runCatching {
         when (mosaicType) {
             MosaicType.Mosaic -> repository.getMosaicImage(
-                currentTime = currentTime,
+                randomSeed = randomSeed,
                 pixelSize = pixelSize,
                 originalImage = originalImage,
                 coordinates = coordinates
             )
             MosaicType.Blur -> repository.getBlurImage(
-                currentTime = currentTime,
+                randomSeed = randomSeed,
                 pixelSize = pixelSize / 10,
                 originalImage = originalImage,
                 coordinates = coordinates
