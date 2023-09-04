@@ -7,20 +7,20 @@ import java.io.File
 interface ImageRepository {
 
     suspend fun getDetectedFace(
-        currentTime: String,
+        randomSeed: String,
         threshold: Float,
         image: File
     ): Face
 
     suspend fun getMosaicImage(
-        currentTime: String,
+        randomSeed: String,
         pixelSize: Int,
         originalImage: String,
         coordinates: List<List<Int>>,
     ): MosaicImage
 
     suspend fun getBlurImage(
-        currentTime: String,
+        randomSeed: String,
         pixelSize: Int,
         originalImage: String,
         coordinates: List<List<Int>>,
